@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv_thesis/
+venv/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+*-checkpoint.ipynb
+*.ipynb.checkpoints
+
+# Data (Pobrane zbiory danych i paczki ZIP)
+data/
+*.zip
+*.csv
+*.dat
+
+# Materials & Thesis Drafts
+Materials/
+*.pdf
+*.docx
+*.doc
+*.pptx
+*.xlsx
+
+# IDE - VS Code
+.vscode/*
+!.vscode/settings.json
+.history/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
