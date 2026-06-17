@@ -1,54 +1,70 @@
-# Porównanie algorytmów rekomendacyjnych - Praca Magisterska
+# Recommender Systems Comparison - Master's Thesis
 
-Repozytorium zawiera kod źródłowy i eksperymenty do pracy magisterskiej dotyczącej porównania algorytmów filtrowania kolaboracyjnego, uczenia głębokiego oraz grafowych sieci neuronowych na przykładzie serwisu VOD.
+This repository contains the source code and experiments for a Master's thesis comparing Collaborative Filtering, Deep Learning, and Graph Neural Networks using a VOD service example.
 
-## Struktura projektu
+## Project Structure
 
-- `Kod/` - Główny pakiet z logiką systemów:
-  - `DataSource/` - Pobieranie i przetwarzanie zbiorów MovieLens (oceny + metadane).
-  - `Models/` - Implementacje modeli (SVD, KNN, planowane NCF, GNN).
-  - `Utils/` - Narzędzia pomocnicze (ładowanie danych, transformacje).
-- `Notebooks/` - Interaktywne eksperymenty i wizualizacje:
-  - `eda_analysis.ipynb` - **Eksploracyjna Analiza Danych (EDA)**, statystyki demograficzne i gatunkowe.
-  - `collaborative_filtering.ipynb` - Implementacja i ewaluacja klasycznych metod CF (SVD, KNN).
-- `data/` - Pobrane dane w formacie CSV (ignorowane przez Git).
-- `venv_thesis/` - Główne środowisko wirtualne projektu (ignorowane przez Git).
+The project is organized into process-oriented stages:
 
-## Instalacja i konfiguracja
+- `0_Raw_Data/` - Original MovieLens CSV datasets (ignored by Git).
+- `1_Preprocessing/` - Data analysis (EDA) and scripts to convert CSVs to RecBole format.
+- `2_Experiments/` - Model configurations and execution scripts:
+  - `Configs/` - YAML files with model hyperparameters (BPR, NCF, GNN).
+- `3_Evaluation/` - Final results and analysis:
+  - `Logs/` - Detailed training logs for each run (ignored by Git).
+  - `Saved/` - Trained model weights (.pth files, ignored by Git).
+  - `Reports/` - Generated tables and charts for the thesis.
+- `Datasets/` - Processed datasets in RecBole `.inter` format (ignored by Git).
+- `Materials/` - Scientific literature, articles, and lecture notes.
+- `Notebooks/` - Jupyter Notebooks for interactive data exploration.
+- `venv/` - Python 3.12 virtual environment.
 
-1. **Tworzenie środowiska:**
+## Installation & Setup
+
+1. **Create the environment:**
    ```bash
-   python -m venv venv_thesis
+   py -3.12 -m venv venv
    ```
 
-2. **Aktywacja środowiska:**
-   - **PowerShell:** `.\venv_thesis\Scripts\Activate.ps1`
-   - **CMD:** `.\venv_thesis\Scripts\activate.bat`
+2. **Activate the environment:**
+   - **PowerShell:** `.\venv\Scripts\Activate.ps1`
+   - **CMD:** `.\venv\Scripts\activate.bat`
 
-3. **Instalacja bibliotek:**
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-## Uruchamianie
+## Workflow
 
-### 1. Pobieranie danych
-Projekt wymaga pobrania danych MovieLens wraz z metadanymi. Uruchom skrypt:
+### 1. Data Preparation
+Download the raw data and convert it to the internal format:
 ```bash
-python Kod/DataSource/import_dataset.py
+python 1_Preprocessing/import_raw_data.py
+python 1_Preprocessing/convert_to_recbole.py
 ```
-Możesz wybrać wersję **100k** (do szybkich testów) lub **1M** (do wyników końcowych).
 
-### 2. Analiza i badania
-Uruchamiaj notebooki w folderze `Notebooks/` w następującej kolejności:
-1. `eda_analysis.ipynb` - Aby zrozumieć strukturę danych i wygenerować wykresy do pracy.
-2. `collaborative_filtering.ipynb` - Aby wytrenować pierwsze modele (SVD/KNN).
+### 2. Running Experiments
+Execute specific models using the provided scripts:
+- **Matrix Factorization (Baseline):**
+  ```bash
+  python 2_Experiments/run_bpr.py
+  ```
+- **Neural Collaborative Filtering (Deep Learning):**
+  ```bash
+  python 2_Experiments/run_ncf.py
+  ```
+- **LightGCN (Graph Neural Networks):**
+  ```bash
+  python 2_Experiments/run_gnn.py
+  ```
 
-**Ważne:** Upewnij się, że w Jupyter Notebook jako Kernel wybrane jest środowisko `venv_thesis`.
+## Compatibility Note (Patch)
+Due to changes in `SciPy 1.11+`, the LightGCN model in RecBole requires a manual patch in the source code. If you recreate the `venv`, apply the patch using:
+```bash
+python -c "path='venv/Lib/site-packages/recbole/model/general_recommender/lightgcn.py'; content=open(path).read().replace('A._update(data_dict)', 'for k, v in data_dict.items(): A[k] = v'); open(path, 'w').write(content)"
+```
 
-## Zarządzanie plikami
-Zbiory danych (`data/`), literatura (`Materials/`) oraz pliki robocze pracy (`*.docx`, `*.pdf`) są ignorowane przez Git, aby utrzymać repozytorium lekkim i chronić treść rozprawy.
-
-## Autor
+## Author
 Jakub Sornat  
-Kierunek: Informatyka i Ekonometria
+Major: Computer Science and Econometrics

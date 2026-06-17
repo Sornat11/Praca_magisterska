@@ -1,60 +1,28 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
-# Virtual Environment
-venv_thesis/
+# Environments
 venv/
-ENV/
+.env
 
-# Jupyter Notebook
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
-*-checkpoint.ipynb
-*.ipynb.checkpoints
+# Data and Models (Excluded to keep repo light)
+0_Raw_Data/
+Datasets/
+3_Evaluation/Logs/
+3_Evaluation/Saved/
+log/
+log_tensorboard/
+saved/
 
-# Data (Pobrane zbiory danych i paczki ZIP)
-data/
-*.zip
-*.csv
-*.dat
-
-# Materials & Thesis Drafts
+# Research Materials
 Materials/
-*.pdf
-*.docx
-*.doc
-*.pptx
-*.xlsx
 
-# IDE - VS Code
-.vscode/*
-!.vscode/settings.json
-.history/
-*.code-workspace
+# IDE files
+.vscode/
+.idea/
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log

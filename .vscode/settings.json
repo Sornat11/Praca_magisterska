@@ -1,9 +1,8 @@
 {
-    "python.defaultInterpreterPath": "venv_thesis/Scripts/python.exe",
+    "python.defaultInterpreterPath": "venv/Scripts/python.exe",
     "python.analysis.extraPaths": [
         "./",
-        "./Kod",
-        "./venv_thesis/Lib/site-packages"
+        "./venv/Lib/site-packages"
     ],
     "cSpell.language": "en, pl",
     "cSpell.enabledFileTypes": {

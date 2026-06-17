@@ -1,1 +1,0 @@
-# Praca magisterska - pakiet Kod
