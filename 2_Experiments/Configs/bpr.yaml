@@ -1,30 +1,30 @@
-# Konfiguracja dla modelu BPR-MF (Bayesian Personalized Ranking - Matrix Factorization)
-model: BPR             # Nazwa modelu (RecBole używa tej nazwy do instancjonowania odpowiedniej klasy)
-dataset: ml-1m         # Nazwa zbioru danych (musi odpowiadać nazwie folderu w data_path)
-data_path: Datasets/   # Ścieżka do katalogu zawierającego przetworzone zbiory danych (.inter)
-checkpoint_dir: '3_Evaluation/Saved/' # Katalog, w którym zapisywane będą wytrenowane wagi modelu (.pth)
+# Zoptymalizowana konfiguracja BPR-MF
+model: BPR
+dataset: ml-1m
+data_path: Datasets/
+checkpoint_dir: '3_Evaluation/Saved/'
 
-# Ustawienia pól danych (mapowanie kolumn z pliku .inter)
-USER_ID_FIELD: user_id    # Nazwa pola identyfikującego użytkownika
-ITEM_ID_FIELD: item_id    # Nazwa pola identyfikującego przedmiot (film)
-RATING_FIELD: rating      # Nazwa pola z oceną (opcjonalne w modelach rankingowych, ale ładowane)
-TIME_FIELD: timestamp     # Nazwa pola ze znacznikiem czasu (używane np. do sortowania chronologicznego)
+# Data settings
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: rating
+TIME_FIELD: timestamp
 load_col:
-    inter: [user_id, item_id, rating, timestamp] # Definicja kolumn do wczytania z pliku interakcji
+    inter: [user_id, item_id, rating, timestamp]
 
-# Ustawienia trenowania (Hyperparameters)
-epochs: 50                # Maksymalna liczba epok (pełnych przejść przez zbiór treningowy)
-train_batch_size: 4096    # Rozmiar paczki danych (batch) podczas treningu
-learning_rate: 0.001      # Współczynnik uczenia (krok optymalizatora Adam)
-embedding_size: 64        # Rozmiar wektorów zanurzeń (embeddingów) dla użytkowników i przedmiotów
+# Zmiany: Zwiększamy embedding_size dla lepszej pojemności modelu na 1M danych
+epochs: 100               # Zwiększamy limit epok, early stopping i tak zadziała
+train_batch_size: 4096
+learning_rate: 0.001      # BPR dobrze działa na tym LR
+embedding_size: 128       # Zwiększono z 64 na 128
 
-# Ustawienia ewaluacji (Metryki i podział danych)
+# Evaluation settings
 eval_args:
-    split: {'RS': [0.8, 0.1, 0.1]} # Podział danych: 80% trening, 10% walidacja, 10% test (Random Split)
-    group_by: user                 # Grupowanie interakcji według użytkownika podczas ewaluacji
-    order: RO                      # Kolejność danych: RO = Random Order (losowa)
-    mode: full                     # Tryb ewaluacji: 'full' oznacza ranking względem wszystkich przedmiotów
-metrics: ['Recall', 'MRR', 'NDCG', 'Hit'] # Metryki oceny skuteczności rekomendacji
-topk: 10                           # Parametr K dla metryk (np. NDCG@10, Recall@10)
-valid_metric: NDCG@10              # Metryka używana do wyboru najlepszego modelu (Early Stopping)
-device: CPU                        # Urządzenie obliczeniowe: 'CPU' lub 'GPU' (jeśli dostępne CUDA)
+    split: {'RS': [0.8, 0.1, 0.1]}
+    group_by: user
+    order: RO
+    mode: full
+metrics: ['Recall', 'MRR', 'NDCG', 'Hit']
+topk: 10
+valid_metric: NDCG@10
+device: CPU

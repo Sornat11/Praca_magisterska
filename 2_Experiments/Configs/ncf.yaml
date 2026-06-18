@@ -1,18 +1,17 @@
-# Konfiguracja dla modelu NCF (Neural Collaborative Filtering / NeuMF)
-model: NeuMF           # Nazwa modelu (łączy Matrix Factorization oraz Multi-Layer Perceptron)
-dataset: ml-1m         # Nazwa zbioru danych
-data_path: Datasets/   # Ścieżka do danych
-checkpoint_dir: '3_Evaluation/Saved/' # Katalog na zapisane modele
+# Zoptymalizowana konfiguracja NeuMF (NCF)
+model: NeuMF
+dataset: ml-1m
+data_path: Datasets/
+checkpoint_dir: '3_Evaluation/Saved/'
 
-# Architektura specyficzna dla NCF/NeuMF
-# layers: lista definiująca strukturę warstw ukrytych w części MLP
-# layers[0] to suma rozmiarów embeddingów MLP dla usera i itemu (np. 64+64=128)
-layers: [128, 64, 32, 16] 
-mf_embedding_size: 64     # Rozmiar embeddingów dla części GMF (Generalized Matrix Factorization)
-mlp_embedding_size: 64    # Rozmiar embeddingów dla części MLP (Multi-Layer Perceptron)
-dropout_prob: 0.1         # Prawdopodobieństwo porzucenia neuronów (regularyzacja Dropout)
+# Architektura
+# layers[0] = mlp_embedding_size * 2 = 128 * 2 = 256
+layers: [256, 128, 64, 32] 
+mf_embedding_size: 128    # Zwiększono z 64 na 128
+mlp_embedding_size: 128   # Zwiększono z 64 na 128
+dropout_prob: 0.2         # Zwiększony dropout dla większej sieci
 
-# Ustawienia pól danych
+# Data settings
 USER_ID_FIELD: user_id
 ITEM_ID_FIELD: item_id
 RATING_FIELD: rating
@@ -20,13 +19,13 @@ TIME_FIELD: timestamp
 load_col:
     inter: [user_id, item_id, rating, timestamp]
 
-# Ustawienia trenowania
-epochs: 50
+# Training settings
+epochs: 100
 train_batch_size: 4096
-learning_rate: 0.001
+learning_rate: 0.0005     # Zmniejszono LR dla lepszej stabilności głębokiej sieci
 learner: adam
 
-# Ustawienia ewaluacji
+# Evaluation settings
 eval_args:
     split: {'RS': [0.8, 0.1, 0.1]}
     group_by: user

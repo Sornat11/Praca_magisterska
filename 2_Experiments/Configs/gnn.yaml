@@ -1,15 +1,15 @@
-# Konfiguracja dla modelu LightGCN (Graph Neural Network - sploty na grafie dwudzielnym)
-model: LightGCN        # Nazwa modelu (oparty na architekturze grafowej, bez nieliniowych aktywacji)
-dataset: ml-1m         # Nazwa zbioru danych
-data_path: Datasets/   # Ścieżka do danych
-checkpoint_dir: '3_Evaluation/Saved/' # Katalog na zapisane modele
+# Zoptymalizowana konfiguracja LightGCN
+model: LightGCN
+dataset: ml-1m
+data_path: Datasets/
+checkpoint_dir: '3_Evaluation/Saved/'
 
-# Architektura specyficzna dla LightGCN
-embedding_size: 64     # Rozmiar embeddingów węzłów (użytkowników i filmów)
-n_layers: 2            # Liczba warstw propagacji w grafie (GCN layers)
-reg_weight: 1e-05      # Waga regularyzacji L2 (zapobiega przeuczeniu)
+# Architektura
+embedding_size: 128    # Zwiększono z 64 na 128
+n_layers: 3            # Zwiększono z 2 na 3 (głębsza propagacja w grafie)
+reg_weight: 1e-04      # Zwiększona regularyzacja dla większych embeddingów
 
-# Ustawienia pól danych
+# Data settings
 USER_ID_FIELD: user_id
 ITEM_ID_FIELD: item_id
 RATING_FIELD: rating
@@ -17,13 +17,13 @@ TIME_FIELD: timestamp
 load_col:
     inter: [user_id, item_id, rating, timestamp]
 
-# Ustawienia trenowania
-epochs: 50
-train_batch_size: 4096
+# Training settings
+epochs: 100
+train_batch_size: 2048 # Mniejszy batch dla dokładniejszego spadku gradientu w GNN
 learning_rate: 0.001
-learner: adam          # Algorytm optymalizacji (Adam jest standardem w DL)
+learner: adam
 
-# Ustawienia ewaluacji
+# Evaluation settings
 eval_args:
     split: {'RS': [0.8, 0.1, 0.1]}
     group_by: user

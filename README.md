@@ -59,6 +59,24 @@ Execute specific models using the provided scripts:
   python 2_Experiments/run_gnn.py
   ```
 
+### 3. Hyperparameter Optimization (HPO)
+To find the best hyperparameters for each model using RecBole's `HyperTuning`:
+
+- **BPR Optimization:**
+  ```bash
+  python 2_Experiments/run_hyper_bpr.py
+  ```
+- **NCF Optimization:**
+  ```bash
+  python 2_Experiments/run_hyper_ncf.py
+  ```
+- **LightGCN Optimization:**
+  ```bash
+  python 2_Experiments/run_hyper_gnn.py
+  ```
+
+Results will be saved in `3_Evaluation/Reports/` as `.result` files.
+
 ## Compatibility Note (Patch)
 Due to changes in `SciPy 1.11+`, the LightGCN model in RecBole requires a manual patch in the source code. If you recreate the `venv`, apply the patch using:
 ```bash
