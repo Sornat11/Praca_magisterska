@@ -1,3 +1,9 @@
+import pkgutil
+if not hasattr(pkgutil, 'ImpImporter'):
+    class ImpImporter:
+        pass
+    pkgutil.ImpImporter = ImpImporter
+
 import numpy as np
 # We subclass the original C implementation of RandomState (numpy.random.mtrand.RandomState)
 # and use a custom metaclass to ensure that isinstance(x, np.random.RandomState) returns True
