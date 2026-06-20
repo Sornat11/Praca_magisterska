@@ -4,6 +4,12 @@ if not hasattr(pkgutil, 'ImpImporter'):
         pass
     pkgutil.ImpImporter = ImpImporter
 
+import importlib.machinery
+if hasattr(importlib.machinery, 'FileFinder') and not hasattr(importlib.machinery.FileFinder, 'find_module'):
+    def find_module(self, fullname, path=None):
+        return None
+    importlib.machinery.FileFinder.find_module = find_module
+
 import numpy as np
 # We subclass the original C implementation of RandomState (numpy.random.mtrand.RandomState)
 # and use a custom metaclass to ensure that isinstance(x, np.random.RandomState) returns True
