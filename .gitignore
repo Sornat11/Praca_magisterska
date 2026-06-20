@@ -16,6 +16,11 @@ log/
 log_tensorboard/
 saved/
 
+# Experiment and HPO results
+*.result
+*.xlsx
+*.csv
+
 # Research Materials
 Materials/
 

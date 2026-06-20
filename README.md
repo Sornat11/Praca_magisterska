@@ -13,7 +13,7 @@ The project is organized into process-oriented stages:
 - `3_Evaluation/` - Final results and analysis:
   - `Logs/` - Detailed training logs for each run (ignored by Git).
   - `Saved/` - Trained model weights (.pth files, ignored by Git).
-  - `Reports/` - Generated tables and charts for the thesis.
+  - `Reports/` - Generated tables, charts, hyperparameter summaries (`hyperparameter_summary.md`), and parsed results (`.csv` and `.result` files).
 - `Datasets/` - Processed datasets in RecBole `.inter` format (ignored by Git).
 - `Materials/` - Scientific literature, articles, and lecture notes.
 - `Notebooks/` - Jupyter Notebooks for interactive data exploration.
@@ -75,7 +75,19 @@ To find the best hyperparameters for each model using RecBole's `HyperTuning`:
   python 2_Experiments/run_hyper_gnn.py
   ```
 
+- **Run all tuning scripts sequentially (PowerShell):**
+  ```powershell
+  .\run_all_hyper.ps1
+  ```
+
 Results will be saved in `3_Evaluation/Reports/` as `.result` files.
+
+Parsed results and a comprehensive summary of the best configurations can be found in:
+- `3_Evaluation/Reports/hyperparameter_summary.md` (detailed markdown report)
+- `3_Evaluation/Reports/hyper_results_bpr_parsed.csv` (parsed CSV table for BPR-MF)
+- `3_Evaluation/Reports/hyper_results_ncf_parsed.csv` (parsed CSV table for NCF/NeuMF)
+
+*Note on GNN (LightGCN) tuning:* Due to the high computational cost of running GNNs (~22.4 hours per single training run on CPU), a full grid search was bypassed. Instead, we use an optimized expert configuration defined in `2_Experiments/Configs/gnn.yaml`.
 
 ## Compatibility Note (Patch)
 Due to changes in `SciPy 1.11+`, the LightGCN model in RecBole requires a manual patch in the source code. If you recreate the `venv`, apply the patch using:
