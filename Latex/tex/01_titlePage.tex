@@ -1,0 +1,68 @@
+\newcommand{\setSupervisor}[1]{
+    \newcommand{\supervisor}{#1}
+}
+\newcommand{\setFaculty}[1]{
+    \newcommand{\faculty}{#1}
+}
+
+\newcommand{\setDepartment}[1]{
+    \newcommand{\department}{#1}
+}
+
+\newcommand{\setReviewer}[1]{
+    \newcommand{\reviewer}{#1}
+}
+
+\newcommand{\setTitleang}[1]{
+    \newcommand{\Titleang}{#1}
+}
+
+\newcommand{\setMajor}[1]{
+    \newcommand{\major}{#1}
+}
+
+
+\makeatletter
+\renewcommand{\maketitle}{\begin{titlepage}
+        \begin{center}
+        \includegraphics[height=60.85mm]{img/agh_nzw_s_pl_1w_wbr_rgb_150ppi.jpg}\\
+        \end{center}
+        %\rule{30mm}{0pt}
+
+        \begin{center}
+        {\normalsize \bf \textsf{\textsc{\faculty}}}\\
+        \vspace{1ex}
+        {\normalsize \textsf{\textsc{\department}}}\\
+        \end{center}
+        \vspace{7.5ex}
+
+        
+        \begin{center}
+            {\Large \textsf{Projekt dyplomowy / Praca dyplomowa}}\\
+            \vspace{8ex} % Zmniejszono z 13ex, żeby podnieść tytuł wyżej
+            %% ------------------------ TYTUL PRACY --------------------------------------
+            {\bf \Large \textsf{\@title}}\\
+            \vspace{3ex}
+            {\large \textsf{\Titleang}}\\
+        \end{center}
+
+        % DODANO \vfill - elastyczna sprężyna, która spycha resztę na sam dół strony
+        \vfill 
+
+        %\begin{left}
+            % --------------------------- IMIE I~NAZWISKO -------------------------------
+            \noindent
+        {\normalsize \bf \textsf{Autor:}} {\normalsize \textsf{\@author}}\\[1.5ex]
+        \noindent
+        {\normalsize \bf \textsf{Kierunek studiów:}} {\normalsize \textsf{\major}}\\[1.5ex]
+        \noindent
+        {\normalsize \bf \textsf{Opiekun:}} {\normalsize \textsf{\supervisor}}
+        \vspace{4ex}
+
+        \begin{center}
+            {\normalsize \textsf{Kraków, 2026}}
+         \end{center}
+         
+    \end{titlepage}%
+}
+\makeatother

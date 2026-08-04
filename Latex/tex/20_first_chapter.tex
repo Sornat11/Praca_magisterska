@@ -1,0 +1,109 @@
+\section{Wprowadzenie do problematyki systemów rekomendacyjnych}
+
+Niniejszy rozdział wprowadza w ramy teoretyczne i uwarunkowania rynkowe systemów rekomendacyjnych, stanowiąc punkt wyjścia dla dalszych analiz algorytmicznych. Analiza obejmuje formalną kategoryzację systemów personalizacji, kognitywne aspekty przeciążenia informacyjnego oraz ewolucyjną ścieżkę paradygmatów od prostych statystyk do przestrzennych struktur grafowych. Ostatnia sekcja rozdziału jest dedykowana przeglądowi literatury naukowej, który definiuje pozycję badawczą pracy.
+
+\subsection{Wybrane definicje}
+
+We współczesnym społeczeństwie informacyjnym gwałtowny rozwój Internetu i technologii cyfrowych doprowadził do sytuacji, w której każdego dnia generowane jest niewyobrażalna ilość danych. Zjawisko to, nazywane często przeładowaniem informacyjnym lub cyfrową "klęską urodzaju" \cite{checinskiSystemyRekomendacjiRemedium2023}, stanowi istotną barierę dla użytkowników poszukujących konkretnych treści. Skalę tego problemu dobrze obrazują twarde statystyki: globalna baza filmowa IMDb zawiera ponad 30 milionów tytułów \cite{PressRoomIMDb}, platforma muzyczna Spotify oferuje ponad 100 milionów utworów oraz 7 milionów podcastów \cite{SpotifySpotify}, a serwis BookBeat udostępnia ponad milion audiobooków i e-booków \cite{Nas}. W tym gąszczu informacji przeciętny człowiek nie jest w stanie samodzielnie przeanalizować wszystkich dostępnych opcji. Systemy rekomendacji (SR) powstały więc jako naturalne filtry danych, których głównym celem jest pomoc w podejmowaniu decyzji oraz drastyczne obniżenie kosztów wyszukiwania i wysiłku poznawczego użytkownika.
+
+Historycznie pojęcie systemów rekomendacji ewoluowało wraz z rozwojem technologii sieciowych. Pierwsze rozwiązania miały charakter ściśle kooperacyjny. Klasycznym przykładem jest stworzony w 1992 roku przez Xerox Palo Alto Research system Tapestry, uznawany za pierwowzór filtrowania kolaboracyjnego. Służył on do filtrowania poczty elektronicznej i opierał się na prostej zasadzie: system agregował manualne adnotacje i reakcje grupy użytkowników, a następnie kierował wiadomości do osób, które mogły być nimi zainteresowane.
+
+Definicja systemu rekomendacyjnego ewoluowała na przestrzeni lat, dostosowując się do postępu technologicznego. Jedna z pierwszych definicji, zaproponowana w 1997 roku przez Resnicka i Variana, kładła nacisk na aspekt współpracy między ludźmi, opisując system rekomendacyjny jako narzędzie, do którego ludzie dostarczają rekomendacje, a system je agreguje i kieruje do odpowiednich odbiorców \cite{parkMakingSenseMeaning2010}. Wraz z rozwojem zautomatyzowanych algorytmów definicja uległa znacznemu rozszerzeniu. Według R. Burke'a (2002), systemem rekomendacji jest każdy program, który generuje zindywidualizowane sugestie lub ma za zadanie kierować użytkownika w spersonalizowany sposób do interesujących, lub użytecznych obiektów w dużej przestrzeni możliwych opcji \cite{burkeTechnologyCustomerInterface2002}.
+
+W ujęciu formalnym, opartym na teorii mnogości i funkcji użyteczności \cite{adomaviciusNextGenerationRecommender2005a}, problem rekomendacji definiuje się następująco: niech $C$ będzie zbiorem użytkowników, a $O$ zbiorem wszystkich możliwych do zarekomendowania obiektów. Funkcja użyteczności:
+\begin{equation}
+    u \colon C \times O \to W
+\end{equation}
+mierzy użyteczność danego obiektu $o \in O$ dla użytkownika $c \in C$, gdzie $W$ jest uporządkowanym zbiorem (np. ocen). Zadaniem algorytmu rekomendacyjnego jest znalezienie dla każdego użytkownika takiego podzbioru obiektów $R_c^*$, który maksymalizuje dla niego funkcję użyteczności, co można zapisać wzorem:
+\begin{equation}
+    R_c^* = \{ r \in O \colon u(c,r) = \max_{o \in O} u(c,o) \}
+\end{equation}
+
+Wyniki działania tych algorytmów mogą być prezentowane użytkownikowi w dwóch głównych formach \cite{malinowskiAlgorytmRekomendacjiBazujacy2022}:
+\begin{enumerate}
+    \item \textbf{Przewidywanie ocen (Rating Prediction):} model próbuje oszacować konkretną wartość liczbową (np. prognoza, że ocenisz dany film na 4,5/5 gwiazdek), bazując na ocenach wystawionych przez innych użytkowników. Podejście to było fundamentem słynnego konkursu Netflix Prize (2006--2009) i algorytmu CineMatch.
+    \item \textbf{Prognoza rankingu (Top-N Ranking):} system generuje uporządkowaną, spersonalizowaną listę $N$ najlepszych pozycji (np. "najlepsze 10 filmów specjalnie dla Ciebie").
+\end{enumerate}
+W systemach rozrywkowych i platformach VOD zdecydowanie preferuje się prognozy rankingowe (Top-N). Jak wykazuje Harald Steck \cite{steckCalibratedRecommendations2018}, dla biznesu kluczowe jest zaprezentowanie właściwych obiektów na ekranie, a nie przewidywanie dokładnych ocen liczbowych, których użytkownicy i tak rzadko udzielają.
+
+\subsection{Środowisko danych i cele biznesowe}
+Skuteczność działania systemów rekomendacji zależy bezpośrednio od dostępu do danych wejściowych, które możemy podzielić na trzy główne wymiary \cite{checinskiSystemyRekomendacjiRemedium2023}:
+\begin{itemize}
+    \item \textbf{Profil Użytkownika:} obejmuje parametry statyczne (dane demograficzne, takie jak płeć, wiek, kraj) oraz dynamiczne (historia interakcji i~preferencji).
+    \item \textbf{Charakterystyka Przedmiotów (Metadane):} opisuje cechy obiektów. W~przypadku portali VOD są to np. gatunki, reżyserzy czy obsada, ale również zaawansowane cechy generowane automatycznie przez systemy rozpoznawania wideo (VCR \foreignlanguage{english}{\textit{Video Content Recognition}}) -- takie jak tempo montażu, dominująca kolorystyka, sceneria czy nastrój.
+    \item \textbf{Logi Transakcyjne (\foreignlanguage{english}{\textit{Clickstream}}):} sekwencyjne zapisy zachowań użytkowników rejestrowane w~czasie rzeczywistym w~logach serwera (np. kliknięcia, dodanie do koszyka czy finalny zakup).
+\end{itemize}
+
+Dane o~zachowaniach użytkowników (tzw. informacja zwrotna) dzielimy na dwie kategorie:
+\begin{itemize}
+    \item \textbf{Jawna (explicit feedback):} to bezpośrednie oceny wystawiane przez użytkowników (np. polubienia, gwiazdki, komentarze). Są one wysoce wiarygodne, ale w~rzeczywistych systemach występują niezwykle rzadko, co prowadzi do problemu rzadkości danych (\foreignlanguage{english}{\textit{sparsity}}).
+    \item \textbf{Dorozumiana (\foreignlanguage{english}{Implicit feedback}):} to dane zbierane pasywnie podczas korzystania z~serwisu (np. kliknięcia, czas oglądania filmu -- tzw. \foreignlanguage{english}{\textit{Dwell time}}, zatrzymania odtwarzania, wyszukiwane frazy). Są one bardzo obfite i~łatwe do pozyskania, ale cechuje je wysoki poziom szumu.
+\end{itemize}
+
+Z punktu widzenia dostawcy multimediów, systemy rekomendacji są kluczowym narzędziem realizacji celów biznesowych: podnoszą współczynnik klikalności (CTR) i~konwersji (retencji widzów), budują lojalność za pomocą przejrzystego interfejsu (\foreignlanguage{english}{\textit{User Experience}}) oraz pozwalają na monetyzację niszowych, mniej popularnych treści z "długiego ogona" (\foreignlanguage{english}{\textit{The long tail}}), co maksymalizuje wykorzystanie posiadanej bazy licencyjnej. Co istotne, wskaźnik konwersji (CR) rośnie adekwatnie do czasu zaangażowania użytkownika na platformie.
+
+\subsubsection{Klasyfikacja algorytmów (Trzy ery technologiczne)}
+Ewolucję systemów rekomendacyjnych możemy podzielić na trzy główne ery technologiczne.
+
+\paragraph{Era Tradycyjna (\foreignlanguage{english}{Foundational RS})}
+W~klasycznym ujęciu wyróżnia się trzy fundamentalne podejścia:
+\begin{itemize}
+    \item \textbf{Filtrowanie oparte na treści (\foreignlanguage{english}{Content-Based Filtering} - CBF):} opiera się na założeniu, że użytkownik polubi obiekty podobne do tych, które wybierał w~przeszłości. Algorytm buduje profil użytkownika $\theta(u)$ oraz wektor cech obiektu $\phi(i)$. Predykcja przydatności jest szacowana np. za pomocą iloczynu skalarnego:
+    \begin{equation}
+        \hat{r}_{ui} = \theta(u)^T \phi(i)
+    \end{equation}
+    Podobieństwo oblicza się za pomocą miar takich jak odległość cosinusowa, współczynnik Jaccarda czy korelacja Pearsona. Główną wadą CBF jest nadmierna specjalizacja (\foreignlanguage{english}{\textit{overspecialization}}) --- system poleca tylko pozycje skrajnie podobne, przez co użytkownik wpada w~tzw. bańkę filtracyjną.
+    
+    \item \textbf{Filtrowanie kolaboracyjne (\foreignlanguage{english}{Collaborative Filtering} -- CF):} ignoruje cechy obiektów i~opiera się na analizie zachowań całej społeczności ((\enquote{mądrość tłumu})), uzupełniając rzadką macierz ocen (\foreignlanguage{english}{\textit{Rating Matrix}} -- RM). Dzieli się na:
+    \begin{itemize}
+        \item Metody oparte na pamięci (\foreignlanguage{english}{Memory-Based}): UBCF (oparte na użytkownikach) i IBCF (oparte na przedmiotach), które wyszukują "najbliższych sąsiadów" przy użyciu algorytmu $k$-NN.
+        \item \textit{Metody oparte na modelach (\foreignlanguage{english}{Model-Based}):} wykorzystujące uczenie maszynowe -- szczególności Faktoryzację Macierzy (dekompozycja SVD czy algorytm ALS), która redukuje wymiarowość rzadkiej macierzy do przestrzeni czynników ukrytych (\foreignlanguage{english}{\textit{Latent factors}}).
+    \end{itemize}
+    
+    \item \textbf{Modele hybrydowe:} łączą podejścia kolaboracyjne i~oparte na zawartości, aby eliminować ich wady (zwłaszcza problem zimnego startu). Burke (2002) wyróżnia 5 głównych technik hybrydyzacji:
+    \begin{itemize}
+        \item \textit{Łączenie wyników (\foreignlanguage{english}{weighted}):} ważona średnia z~predykcji kilku niezależnych modeli.
+        \item \textit{Dodawanie cech (\foreignlanguage{english}{Feature addition}):} integracja atrybutów treści bezpośrednio do modelu kolaboracyjnego (np. SVD++).
+        \item \textit{Podejście łańcuchowe (\foreignlanguage{english}{cascading}):} sekwencyjne zawężanie bazy kandydatów przez kolejne modele.
+        \item \textit{Metamodel:} wyjścia kilku modeli stanowią cechy wejściowe dla modelu nadrzędnego.
+        \item \textit{Przełączanie modeli (\foreignlanguage{english}{switching}):} zmiana algorytmu w~zależności od sytuacji (np. przejście na CBF, gdy użytkownik jest nowy).
+    \end{itemize}
+\end{itemize}
+
+\paragraph{Era Uczenia Głębokiego (\foreignlanguage{english}{Deep Learning-Based RS})}
+Wprowadzenie głębokich sieci neuronowych pozwoliło na automatyczną ekstrakcję cech z~surowych multimediów oraz mapowanie skomplikowanych, nieliniowych interakcji. W~tej erze stosuje się m.in. wielowarstwowe perceptrony (MLP) zastępujące klasyczny iloczyn skalarny, głębokie autoenkodery (VAE) do uczenia reprezentacji, splotowe sieci neuronowe (CNN) do analizy klatek kluczowych wideo oraz sieci rekurencyjne (RNN/LSTM) do modelowania sekwencyjnego.
+
+\paragraph{Zaawansowane techniki modelowania sekwencyjnego i sieciowego}
+Najbardziej zaawansowane współczesne podejścia odchodzą od statycznych modeli na rzecz dynamiki:
+\begin{itemize}
+    \item \textbf{Systemy sekwencyjne i sesyjne (SBR):} modelują intencje użytkownika w~ramach jednej, aktywnej sesji. Wykorzystują łańcuchy Markowa (MC) do szacowania prawdopodobieństw przejść, Reguły Sekwencyjne (SR) nadające wagę czasową zdarzeniom oraz wyspecjalizowane algorytmy takie jak Algorytm Rekomendacji Sesji (ARS), który reprezentuje sesje jako skierowane unigrafy dwudzielne.
+    \item \textbf{Głębokie modele grafowe (GNN):} reprezentują system jako graf heterogeniczny (HIN), w~którym wierzchołkami są użytkownicy, obiekty, kategorie i~grupy, a~krawędzie opisują różnorodne relacje. Modele oparte na grafie preferencji (PGRec / PGRec+) oraz propagacja osadzeń (\foreignlanguage{english}{\textit{Embedding propagation}}) w~modelach takich jak LightGCN pozwalają na modelowanie relacji wyższego rzędu.
+    \item \textbf{Uczenie ze wzmocnieniem (\foreignlanguage{english}{Reinforcement Learning}):} traktuje rekomendację jako dynamiczny proces decyzyjny (podejście agentowe), dążąc do maksymalizacji długoterminowej satysfakcji użytkownika.
+\end{itemize}
+
+Wszystkie zaawansowane koncepcje teoretyczne zderzają się z~twardą rzeczywistością produkcyjną systemów VOD. Platformy streamingowe charakteryzują się gigantycznymi wolumenami danych, które są jednocześnie skrajnie rzadkie (\foreignlanguage{english}{\textit{sparsity}}). Użytkownik w~ciągu swojego życia ogląda jedynie znikomy ułamek procenta dostępnej biblioteki filmowej, co utrudnia tradycyjne wnioskowanie kolaboracyjne.
+
+To zjawisko zmusza projektantów do ciągłego balansowania pomiędzy dwoma kluczowymi kompromisami badawczymi:
+\begin{itemize}
+    \item \textbf{Dokładność predykcji ocen} (\foreignlanguage{english}{pointwise}) \textbf{a jakość rankingu} (\foreignlanguage{english}{Pairwise/listwise}): Klasyczne algorytmy optymalizują błędy \foreignlanguage{english}{pointwise} (RMSE, MAE), próbując idealnie przewidzieć ocenę. Jednak z~perspektywy widza VOD znacznie ważniejsza jest poprawność porządkowania listy (miary NDCG, Precision@k, Recall), co premiuje nowoczesne modele optymalizujące funkcje strat zorientowane na ranking.
+
+
+    \item \textbf{Złożoność obliczeniowa i narzut serwerowy vs. czas odpowiedzi online} (\foreignlanguage{english}{Response Time}): Skomplikowane, głębokie modele sieciowe i~grafowe generują narzut obliczeniowy podczas treningu. Tymczasem komercyjny system produkcyjny online musi zwrócić odpowiedź w~ułamkach sekund --- przyjmuje się, że górna granica czasu generowania rekomendacji wynosi maksymalnie 1 sekundę, aby nie zniechęcić widza. W~branży usług internetowych panuje zasada, że każda milisekunda zwłoki bezpośrednio przekłada się na straty finansowe (\foreignlanguage{english}{\enquote{Milliseconds make millions}}).
+
+\end{itemize}
+
+Te wyzwania w~pełni uzasadniają cel naukowy niniejszej pracy magisterskiej. Przeprowadzone w~dalszych rozdziałach badanie empiryczne ma na celu bezpośrednie porównanie tradycyjnego, stabilnego i~wydajnego baseline'u (Filtrowania Kolaboracyjnego opartego na faktoryzacji macierzy) z~modelami głębokimi (Uczenie Głębokie) oraz strukturalnymi (Grafowe Sieci Neuronowe) pod kątem ich skuteczności (CTR, pokrycie) oraz wydajności obliczeniowej w~czasie rzeczywistym.
+
+
+\subsection{Zjawisko przeciążenia informacyjnego jako bariera poznawcza dla użytkownika VOD}
+
+Przejście od tradycyjnych form konsumpcji mediów do środowiska cyfrowego wywołało bezprecedensową transformację na rynku rozrywkowym. Widzowie systematycznie odchodzą od tradycyjnej telewizji, charakteryzującej się sztywną ramówką, na rzecz platform strumieniujących wideo na żądanie (VOD), które zapewniają asynchroniczny dostęp do materiałów. Serwisy takie jak Netflix, HBO Max, Amazon Prime Video, oraz lokalne Player.pl i TVP VOD dysponują gigantycznymi bibliotekami, oferując natychmiastowy dostęp do setek tysięcy tytułów filmowych i serialowych.
+
+Ta radykalna poprawa dostępności zrodziła jednak nowe wyzwanie. W czasach tak ogromnej różnorodności multimediów użytkownicy konfrontowani są ze zjawiskiem zwanym klęską urodzaju lub przeciążeniem informacyjnym. Podaż setek tysięcy produkcji na pojedynczej platformie generuje efekt, który można określić mianem "paradoksu wyboru". Obszerna baza treści przytłacza użytkownika, przez co fizyczne zapoznanie się z całą ofertą staje się niemożliwe, a podjęcie ostatecznej decyzji staje się dla niego bardzo trudne i wymaga dużego wysiłku intelektualnego. Tego typu przeciążenie poznawcze w skrajnych przypadkach prowadzi do frustracji i zniechęcenia użytkownika, a w konsekwencji -- do porzucenia usługi.
+
+Rozwiązania klasyczne okazują się w tej sytuacji mało skuteczne. Zastosowanie standardowych wyszukiwarek wymaga od użytkownika inicjatywy i precyzyjnego pomysłu na to, co chciałby obejrzeć, co ogranicza się tylko do tytułów, których istnienia jest on już świadomy. Z kolei odgórnie tworzone rankingi i zestawienia redakcyjne, choć promują wartościowe pozycje, są z natury subiektywne i często nie trafiają w indywidualny, unikatowy gust konkretnego widza \cite{krawczukSystemyRekomendacyjne2024}.
+
+Z tego powodu zaawansowane systemy rekomendacyjne stały się absolutnie niezbędnym remedium na cyfrową klęskę urodzaju w branży streamingowej \cite{doligalskiPlatformyCyfroweModel2024}. Ich główną rolą jest filtrowanie gigantycznych zbiorów danych i drastyczne zmniejszenie przeciążenia informacyjnego poprzez dostarczenie użytkownikowi spersonalizowanych, wysoce trafnych propozycji w sposób zautomatyzowany. Na platformach cyfrowych rekomendacje są podstawowym mechanizmem utrzymania uwagi, zwiększającym zaangażowanie. Zjawisko to najlepiej ilustruje przykład platformy Netflix, gdzie szacuje się, że aż 80\% całkowitej aktywności widzów jest napędzane nie przez bezpośrednie wyszukiwania, lecz właśnie przez spersonalizowane rekomendacje wygenerowane przez inteligentne algorytmy.
+
+\subsection{Ewolucja paradygmatu personalizacji: od prostych list do interaktywnych asystentów}
+\subsection{Przegląd literatury naukowej}

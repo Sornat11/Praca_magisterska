@@ -1,66 +1,229 @@
 {
-    "python.defaultInterpreterPath": "venv/Scripts/python.exe",
+    "python.defaultInterpreterPath": "${workspaceFolder}\\venv\\Scripts\\python.exe",
+    "python.pythonPath": "${workspaceFolder}\\venv\\Scripts\\python.exe",
     "python.analysis.extraPaths": [
         "./",
         "./venv/Lib/site-packages"
     ],
-    "cSpell.language": "en, pl",
-    "cSpell.enabledFileTypes": {
-        "markdown": true,
-        "python": true,
-        "jupyter": true,
-        "plaintext": true
+
+    "latex-workshop.latex.recipe.default": "first",
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "lualatexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-lualatex",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "latexmk_rconly",
+            "command": "latexmk",
+            "args": [
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "rnw2tex",
+            "command": "Rscript",
+            "args": [
+                "-e",
+                "knitr::opts_knit$set(concordance = TRUE); knitr::knit('%DOCFILE_EXT%')"
+            ],
+            "env": {}
+        },
+        {
+            "name": "jnw2tex",
+            "command": "julia",
+            "args": [
+                "-e",
+                "using Weave; weave(\"%DOC_EXT%\", doctype=\"tex\")"
+            ],
+            "env": {}
+        },
+        {
+            "name": "jnw2texmintex",
+            "command": "julia",
+            "args": [
+                "-e",
+                "using Weave; weave(\"%DOC_EXT%\", doctype=\"texminted\")"
+            ],
+            "env": {}
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk 🔃",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "latexmk (latexmkrc)",
+            "tools": [
+                "latexmk_rconly"
+            ]
+        },
+        {
+            "name": "latexmk (lualatex)",
+            "tools": [
+                "lualatexmk"
+            ]
+        },
+        {
+            "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "Compile Rnw files",
+            "tools": [
+                "rnw2tex",
+                "latexmk"
+            ]
+        },
+        {
+            "name": "Compile Jnw files",
+            "tools": [
+                "jnw2tex",
+                "latexmk"
+            ]
+        }
+    ],
+    "latex-workshop.view.pdf.viewer": "browser",
+    "latex-workshop.latex.autoClean.run": "onFailed",
+    "ltex.configurationTarget": {
+        "dictionary": "workspaceFolder"
     },
-    "cSpell.words": [
-        "autopct",
-        "axvline",
-        "binarize",
-        "Chua",
-        "Convolutional",
-        "Dutta",
-        "edgecolor",
-        "edgecolors",
-        "facecolor",
-        "faktoryzacji",
-        "figsize",
-        "Girsang",
-        "Graphu",
-        "Horzyk",
-        "ICDM",
-        "implementacyjne",
-        "informedness",
-        "ipynb",
-        "KGCN",
-        "Koren",
-        "labelpad",
-        "labelsize",
-        "linestyle",
-        "markedness",
-        "mathcal",
-        "NDCG",
-        "Netflixa",
-        "PODGRAFU",
-        "rekomendacyjny",
-        "rekomendacyjnych",
-        "rekomendacyjnymi",
-        "RMSE",
-        "SIGIR",
-        "skyblue",
-        "streamingowego",
-        "streamingowych",
-        "testset",
-        "titlepad",
-        "titlesize",
-        "trainset",
-        "venv",
-        "viridis",
-        "Volinsky",
-        "whitegrid",
-        "Wibowo",
-        "xlabel",
-        "xtick",
-        "xticks",
-        "ylabel",
-        "ytick"
-    ]
+    "ltex.language": "pl-PL",
+    "ltex.enabled": [
+        "latex",
+        "markdown"
+    ],
+    "cSpell.ignorePaths": [
+        "**/*.aux",
+        "**/*.bbl",
+        "**/*.blg",
+        "**/*.fls",
+        "**/*.fdb_latexmk",
+        "**/*.toc",
+        "**/*.out",
+        "**/*.log",
+        "**/*.synctex.gz",
+        "**/*.bib"
+    ],
+    "diffEditor.ignoreTrimWhitespace": false,
+    "todo-tree.tree.showScanModeButton": false,
+    "todo-tree.filtering.ignoreGitSubmodules": true,
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "NOTE"
+    ],
+    "todo-tree.regex.regex": "((//|#|<!--|;|/\\*|^|%)\\s*($TAGS)|^\\s*- \\[\\])",
+    "ltex.commands.ignore": [
+        "\\inputminted{}{}",
+        "\\addcontentsline{}{}{}",
+        "\\setminted[]{}",
+        "\\setTitleang{}"
+    ],
+    "editor.fontFamily": "'JetBrains mono', Consolas, 'Courier New', monospace",
+    "ltex.sentenceCacheSize": 4000,
+    "ltex.java.maximumHeapSize": 2048,
+    "ltex.commands.dummy": [
+        "\\cite{}",
+        "\\ref{}",
+        "\\mintinline{}{}"
+    ],
+    "ltex.workspaceFolderDictionary": {
+        "pl-PL": []
+    },
+    "ltex.dictionary": {
+        "pl-PL": [
+            "agentowe",
+            "ALS",
+            "autoenkodery",
+            "baseline",
+            "CBF",
+            "cosinusowa",
+            "Faktoryzację",
+            "faktoryzacji",
+            "GNN",
+            "IBCF",
+            "Jaccarda",
+            "LSTM",
+            "Metamodel",
+            "MLP",
+            "NDCG",
+            "Precision",
+            "Precision@k",
+            "Prediction",
+            "Recall",
+            "Resnicka",
+            "RMSE",
+            "RNN",
+            "SBR",
+            "Steck",
+            "Tapestry",
+            "Top-N",
+            "UBCF",
+            "unigrafy",
+            "Variana"
+        ],
+        "en-US": [
+            "Listwise"
+        ]
+    },
+    "ltex.disabledRules": {
+        "pl-PL": [
+            "VS"
+        ]
+    }
 }
+

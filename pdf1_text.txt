@@ -1,0 +1,1623 @@
+
+--- STRONA 1 ---
+112
+PRZEGLĄD TELEKOMUNIKACYJNY
+  
+l
+  ROCZNIK XCI  
+l
+  
+nr 5/2018
+typu rozwiązaniach neuron jest zasilany nie przez wszystkie 
+sygnały neuronowe (piksele obrazów) warstwy poprzedzającej, 
+jak w
+ 
+sieciach 
+klasycznych, ale przez wybraną małą grupę neu
+-
+ronów (pikseli) tej warstwy, tworzących maskę filtrującą. Analiza 
+całego obrazu następuje przez przesuwanie tej maski z
+ 
+ustalonym
+ 
+krokiem (
+stride
+) wzdłuż i
+ 
+wszerz 
+obrazu. Charakterystyczną cechą 
+jest przy tym używanie identycznych wartości wag przesuwającej 
+się maski filtracyjnej.
+Każdy rodzaj sieci głębokich związany jest z
+ 
+problemem
+ 
+adaptacji ogromnej liczby parametrów sieci w
+ 
+akceptowalnym
+ 
+czasie. Skuteczna implementacja i
+ 
+rozwój 
+koncepcji LeCuna stały 
+się możliwe dzięki olbrzymiemu postępowi w
+ 
+rozwoju 
+technolo
+-
+gii informatycznych, umożliwiającemu ogromne przyśpieszenie 
+obliczeń. Połączenie najnowszych technologii z
+ 
+proponowanymi
+ 
+rozwiązaniami sieci głębokich stworzyło podstawy zastosowań 
+sztucznej inteligencji w
+ 
+życiu codziennym. 
+Realne stało się zaprojektowanie pojazdów samosterujących, 
+których podstawą są rozpoznawanie obrazów i
+ 
+obiektów 
+prezen
+-
+towanych na tych obrazach w
+ 
+czasie 
+rzeczywistym, sterowanie 
+robotami, skuteczne rozpoznawanie głosu, automatyczna gene
+-
+racja tekstu na podstawie wypowiedzi głosowej, segmentacja 
+złożonych obrazów, zwłaszcza biomedycznych, przewidywanie 
+szeregów czasowych (na przykład zapotrzebowania na energię 
+elektryczną). Ważną sferą zastosowań jest wspomaganie diagno
+-
+styki medycznej dzięki skutecznym algorytmom przetwarzania 
+obrazów medycznych, na przykład mikroskopowych, histolo
+-
+gicznych itp. 
+W
+ 
+artykule 
+ograniczono się do przedstawienia trzech najbar
+-
+dziej charakterystycznych rozwiązań głębokich, do których należą 
+sieci CNN, AE oraz LSTM. Przedstawiono zasady ich działania, 
+jak również podstawowe przykłady zastosowań w
+ 
+ro
+związywaniu 
+zagadnień praktycznych.
+SIECI KONWOLUCY
+J
+NE CNN  
+Sieci konwolucyjne powstały jako narzędzie analizy i
+ 
+rozpo
+-
+znawania obrazów wzorowane na sposobie działania naszych 
+zmysłów. Wyeliminowały one kłopotliwy i
+ 
+trudny 
+dla użytkowni
+-
+ka etap manualnego opisu cech charakterystycznych obrazów, 
+stanowiących 
+atrybuty wejściowe dla końcowego etapu klasyfi
+-
+katora bądź układu regresyjnego. W
+ 
+tym rozwiązaniu 
+sieć sama 
+*
+ 
+P
+olitechnika Warszawska, Wojskowa Akademia T echniczna, 
+ 
+e-mail: 
+sto@iem.pw.edu.pl
+    Stanisław OSOWSKI*
+Głębokie sieci neuronowe
+ i ich zastosowania w eksploracji danych
+Deep neural networks in application to data mining
+DOI: 10.15199/59.2018.5.2
+Artykuł dotyczy podstaw działania typowych sieci neuronowych 
+głębokich, do których zalicza się sieci konwolucyjne (CNN), 
+autoenkoder czy sieć LSTM. Omówiono struktury tych sieci, ich 
+algorytmy uczenia oraz dokonano przeglądu podstawowych 
+zastosowań owych sieci w rozwiązywaniu różnego rodzaju zadań eksploracji 
+danych, między innymi klasyfikacji, regresji, segmentacji danych, rekonstrukcji 
+danych i wielu innych. Przedstawiono między innymi wyniki prac dotyczą
+-
+cych bioinżynierii, w szczególności rozpoznawanie i klasyfikację obrazów 
+mammograficznych.
+Słowa kluczowe:
+ głębokie uczenie, sieć CNN, autoenkoder, sieć LSTM, kla
+-
+syfikacja, predykcja
+The paper presents the theoretical fundamentals of deep neu
+-
+ral networks. The basic deep structures are discussed. They 
+include convolutional neural networks (CNN), autoencoder 
+(AE) and recurrent network called LSTM (Long 
+S
+hort
+-
+T
+erm
+ 
+M
+emory). 
+This paper is concerned on presentation of their typical structures 
+and learning algorithms. The review of some chosen applications of these 
+solutions in such tasks as classification, regression, segmentation of data, 
+reconstruction, text and speech recognition, etc., are discussed. Some chosen 
+numerical results concerning classification problems will be also presented 
+and discussed.
+Key words:
+ deep learning, CNN, LSTM, autoencoder, classification, prediction
+W
+ 
+ostatnich 
+latach ogromny postęp w
+ 
+eksploracji 
+danych 
+dokonał się za pośrednictwem tak zwanego głębokiego uczenia. 
+Głębokie uczenie dotyczy wielowarstwowych sieci neuronowych, 
+które pełnią jednocześnie funkcję generatora cech diagnostycz
+-
+nych dla analizowanego procesu oraz finalną funkcję klasyfikatora 
+bądź układu regresyjnego. Uzyskuje się w
+ 
+t
+en sposób doskonałe 
+narzędzie zastępujące człowieka przede wszystkim w
+ 
+trudnej 
+dzie
+-
+dzinie opisu procesu za pomocą specjalizowanych deskryptorów, 
+których stworzenie wymaga dużych zdolności eksperckich. Oka
+-
+zuje się przy tym, że takie podejście do bezinterwencyjnej metody 
+generacji cech jest o
+ 
+wiele 
+skuteczniejsze od stosowanych trady
+-
+cyjnie metod generacji deskryptorów. Umożliwia przy tym poprawę 
+dokładności działania systemu. Z
+ 
+tego 
+powodu technologia sieci 
+głębokich stała się ostatnio bardzo szybko jednym z
+ 
+najbardziej
+ 
+popularnych obszarów w
+ 
+dziedzinie nauk komputerowych. 
+Za protoplastę tych sieci można uznać zdefiniowany na 
+początku lat dziewięćdziesiątych wielowarstwowy neocognitron 
+Fukushimy [1]. Prawdziwy rozwój tych sieci zawdzięcza się jednak 
+profesorowi LeCun [2], który zdefiniował podstawową strukturę 
+i
+ 
+algorytm 
+uczący specjalizowanej sieci wielowarstwowej, zwanej 
+Convolutional Neural Network
+ (
+CNN
+). Obecnie CNN stanowi pod
+-
+stawową strukturę stosowaną na szeroką skalę w
+ 
+przetwarzaniu
+ 
+obrazów. Tymczasem powstało wiele odmian sieci, będących 
+modyfikacją struktury podstawowej CNN (np. UNN), jak również 
+sieci różniących się zasadniczo od CNN. Przykładem mogą być 
+autoenkoder (AE), jako wielowarstwowe, nieliniowe uogólnienie 
+liniowej sieci PCA [3], sieci rekurencyjne typu 
+LSTM
+ (
+Long Short
+-
+-Term Memory
+) [4], stanowiące skuteczne rozwiązanie problemu 
+propagacji wstecznej w
+ 
+czasie 
+lub ograniczona (wielowarstwo
+-
+wa) maszyna Boltzmanna 
+R
+B
+M
+ (
+Restricted Boltzmann Machine
+) 
+używana w
+ 
+sieciach 
+głębokiej wiarygodności 
+D
+B
+N
+ (
+Deep Belief 
+Network
+) [5]. 
+Cechą wspólną tych rozwiązań, zwłaszcza w
+ 
+przypadku 
+CNN, 
+jest wielowarstwowość ułożenia neuronów i
+ 
+ogromna 
+(sięgająca 
+milionów) liczba połączeń wagowych między neuronami. W
+ 
+celu
+ 
+uniknięcia problemu lawinowego narastania liczby adaptowanych 
+wag, stosuje się powszechnie połączenia typu lokalnego. W
+ 
+tego
+ 
+
+--- STRONA 2 ---
+113
+PRZEGLĄD TELEKOMUNIKACYJNY
+  
+l
+  ROCZNIK XCI  
+l
+  
+nr 5/2018
+ 
+                           
+ 
+(1)
+W
+ 
+sieciach CNN wejściem dla pierwszej warstwy ukrytej jest 
+reprezentacja RGB obrazów ustawionych w
+ 
+formie tensora. Ope
+-
+racja konwolucji w
+ 
+pierwszej warstwie konwolucyjnej obejmuje 
+wszystkie trzy kanały RGB obrazu (suma poszczególnych kana
+-
+łów), każdy z
+ 
+innymi przyjętymi wartościami wag jądra w
+ 
+postaci 
+filtru liniowego stanowiącego neuron analizujący. W
+ 
+dalszych 
+warstwach operacja ta obejmuje wiele (ustalonych przez użyt
+-
+kownika) obrazów z
+ 
+warstwy poprzedzającej. 
+Przykład operacji konwolucyjnej dla kroku przesunięcia 
+filtru równego 2 przedstawiono na rys. 3 [6]. Dane wejściowe 
+stanowią 3 kanały RGB obrazu. Każdy kanał jest przetwarzany 
+przez odpowiedni dla niego filtr (neuron), a
+ 
+wyniki przetworzenia 
+podlegają sumowaniu z
+ 
+uwzględnieniem polaryzacji, tworząc 
+obraz wynikowy. W
+ 
+efekcie w
+ 
+każdej warstwie konwolucyjnej filtr 
+jest wielowymiarowy, realizujący operacje tensorowe, przy czym 
+wymiar maski filtrującej jest równy 
+n
+x
+×
+n
+y
+, a
+ 
+liczba tych masek 
+tworzących jeden filtr jest równa liczbie obrazów wejściowych 
+dla danej warstwy podlegających przetworzeniu (maksymalnie 
+liczba obrazów poprzedniej warstwy). W
+ 
+przypadku pierwszej 
+warstwy konwolucyjnej i
+ 
+obrazu reprezentowanego przez 3 kanały 
+RGB każdy filtr składa się z
+ 
+trzech jednostek (filtr W0 lub W1). 
+Liczba obrazów wyjściowych po konwolucji jest równa liczbie 
+zastosowanych filtrów wielokanałowych (w
+ 
+przykładzie są dwa 
+filtry W0 i
+ 
+W1, stąd dwa obrazy wyjściowe reprezentowane przez 
+Output Volume
+).
+odpowiada za generacje cech. Poszczególne warstwy sieci CNN 
+przetwarzają obrazy z
+ 
+warstwy poprzedzającej (na wstępie jest 
+to zbiór obrazów oryginalnych), poszukując prymitywnych cech 
+(np. grupy pikseli o
+ 
+podobnym stopniu szarości, krawędzie, prze
+-
+cinające się linie itp.). Kolejne warstwy ukryte generują pewne 
+uogólnienia cech z
+ 
+warstwy poprzedzającej, organizowane w
+ 
+for
+-
+mie obrazów. Przykład wyników takiego przetworzenia obrazu 
+kolorowego w
+ 
+warstwie ukrytej sieci, zawierającej 48 neuronów 
+(każdy o
+ 
+różnych wartościach wag), pokazano na rys. 1.
+
+ 
+Rys. 1. Przykład wyników przetwarzania obrazu kolorowego w
+ 
+ce
+-
+chy diagnostyczne w
+ 
+jednej warstwie ukrytej o
+ 
+48 neuronach przez 
+sieć CNN [6]
+Obrazy te w
+ 
+niczym nie przypominają oryginałów, ale repre
+-
+zentują cechy charakterystyczne dla nich, wyrażone w
+ 
+formie sza
+-
+rości pikseli. W
+ 
+efekcie ostatnia warstwa konwolucyjna generuje 
+obrazy stosunkowo niewielkich wymiarów, reprezentujące cechy 
+charakterystyczne dla przetwarzanego zbioru. Obrazy te są repre
+-
+zentowane przez tensory, których elementy ulegają następnie 
+przetwarzaniu na postać wektorową, będącą początkiem układu 
+w
+ 
+pełni połączonego, stanowiącego właściwy klasyfikator bądź 
+układ regresyjny. Przykład takiej struktury CNN przedstawiono 
+na rys. 2.
+
+ 
+Rys. 2. Przykład struktury CNN, zawierającej 3 warstwy konwolu
+-
+cyjne o
+ 
+połączeniu lokalnym i
+ 
+w
+ 
+pełni połączoną strukturę końcową 
+stanowiącą właściwy klasyfikator
+Kolejne warstwy sieci mają za zadanie wygenerowanie 
+w
+ 
+sposób automatyczny (bez udziału człowieka) zbioru cech 
+charakterystycznych dla analizowanych wzorców obrazowych, 
+który następnie podlega klasycznemu przetworzeniu w
+ 
+decyzję 
+klasyfikacyjną bądź regresyjną.
+Nazwa sieci CNN pochodzi od operacji splotu (konwo
+-
+lucji), stanowiącej istotny element procesu obliczeniowego. 
+W
+ 
+przypadku obrazów tablica danych jest reprezentowana 
+przez dwuwymiarową macierz 
+I
+ 
+o
+ 
+elementach reprezentu
+-
+jących stopnie jasności pikseli 
+I
+(
+m,n
+), a
+ 
+jądro 
+K
+ jest dwuwy
+-
+miarowe. Operacja splotu dwuwymiarowego jest wówczas 
+zapisana w
+ 
+postaci [6]:
+
+ 
+Rys. 3. Przykład konwolucji obrazu reprezentowanego przez ka
+-
+nały RG
+B
+ z
+ 
+3 jednostkami tworzącymi filtr W0 (wynik obrazowy w
+ 
+po
+-
+staci macierzy o(:,:,0)) oraz 3 jednostkami filtru W1 (wynik obrazowy 
+o(:,:,1)) [6]
+W
+ 
+przetwarzaniu danych operację konwolucji stosowaną 
+w
+ 
+CNN wyróżniają ważne zalety w
+ 
+stosunku do zwykłych operacji 
+macierzowych w
+ 
+sieciach klasycznych. Należą do nich: lokalność 
+połączeń, wspólne (powtarzalne) wartości wag połączeń filtru 
+przesuwającego się po obrazie i
+ 
+powstała dzięki temu niezmien
+-
+niczość (ekwiwariancja) względem przesunięcia.
+Każdy sygnał wyjściowy filtru podlega działaniu nieliniowej 
+funkcji aktywacji, która w
+ 
+przypadku CNN przybiera najczęściej 
+postać 
+ReLU
+ (
+Rectified Linear Unit
+) opisaną wzorem [3].
+                 
+  
+ 
+(2)
+ 
+ 
+
+--- STRONA 3 ---
+114
+PRZEGLĄD TELEKOMUNIKACYJNY
+  
+l
+  ROCZNIK XCI  
+l
+  
+nr 5/2018
+Przejście z
+ 
+r
+eprezentacji tensorowej (wiele obrazów 2-wymia
+-
+rowych) na wektorową (pojedyncze sygnały tworzące wejście dla 
+właściwego klasyfikatora) może odbywać się wieloma sposobami. 
+Jednym z
+ 
+nich 
+jest przyjęcie wszystkich wartości pikselowych 
+poszczególnych obrazów jako cech diagnostycznych i
+ 
+ustawie
+-
+nie ich w
+ 
+formie 
+wektora przez operację tzw. 
+reshape
+. Przy zbyt 
+dużych wymiarach obrazów może być stosowane zmniejszenie 
+rozdzielczości obrazów tensora. Innym rozwiązaniem jest zasto
+-
+sowanie operacji 
+pooling
+ z
+ 
+odpowiednio 
+dużym krokiem 
+stride
+. 
+W
+ 
+niektórych 
+przypadkach można zaprojektować sieć w
+ 
+taki 
+spo
+-
+sób, że ostatnia warstwa konwolucyjna zawiera tylko pojedynczą 
+wartość dla każdego kanału. 
+W
+ 
+większości 
+rozwiązań sieci CNN zamiast klasycznej wielo
+-
+warstwowej sieci neuronowej stosuje się klasyfikator typu 
+softmax
+, 
+w
+ 
+którym 
+sygnały wejściowe są bezpośrednio przetwarzane na 
+prawdopodobieństwo przynależności do określonej klasy [3]. 
+Liczba neuronów wyjściowych jest równa liczbie klas, przy czym 
+każdy neuron podlega adaptacji wag w
+ 
+klasyczny 
+sposób przez 
+optymalizację funkcji celu. Wartość sygnału sumacyjnego neu
+-
+ronu 
+i
+-tego określona jest wówczas wzorem:
+ 
+                       
+u w
+x w
+i i
+j j
+j
+( )
+x
+= +
+∑
+0
+.
+  
+ 
+(4)
+ 
+Prawdopodobieństwo przynależności wektora 
+x
+ do 
+i
+-tej klasy 
+(
+i
+=1, 2, …, 
+M
+) zależy od wartości funkcji 
+softmax
+, obliczanej dla 
+każdej składowej wektora wyjściowego według wzoru:
+                            
+softma
+x(
+)
+exp(
+)
+exp(
+)
+u
+i
+i
+j
+j
+M
+u
+u
+=
+=
+∑
+1
+   
+(5)
+ 
+W
+artość największa wyznacza przynależność do klasy okre
+-
+ślonej wskaźnikiem 
+i
+. 
+Ważnym elementem procesów występujących w
+ 
+CNN 
+jest 
+duża niezależność wyniku od rodzaju przetwarzanych obrazów, 
+gdyż niezależnie od typu obrazu system przetwarzania koncen
+-
+truje się na elementach prymitywnych, występujących w
+ 
+każdym
+ 
+obrazie. Stało się to przyczyną powstania specjalnego sposobu 
+wstępnego uczenia sieci CNN, tzw. 
+Transfer Learning
+ na dowol
+-
+nie dobranym zestawie danych uczących, który podlega jedynie 
+douczeniu 
+na danych użytkownika. Dzięki takiemu rozwiązaniu 
+możliwe jest ogromne skrócenie czasu uczenia, a
+ 
+przy 
+tym znacz
+-
+ne polepszenie zdolności generalizacyjnych sieci.
+T akim prototypem dostępnym w
+ 
+Matlabie 
+(poczynając od wersji 
+z
+ 
+roku 
+2017) jest 
+AlexNet
+ [7], zaprojektowany przez grupę naukow
+-
+ców: Alex Krizhevsky, Ilya Sutskever and Geoff Hinton. W
+ 
+implemen
+-
+tacji Matlaba struktura sieci AlexNet jest następująca [8].
+Funkcja ta charakteryzuje się nieciągłą pochodną. T en fakt 
+utrudnia uczenie sieci metodami gradientowymi. Stąd zazwy
+-
+czaj zastępuje się ją aproksymacją zwaną 
+softplus
+, zdefiniowaną 
+następująco [3]:
+                                    
+y
+(
+x
+) =  In(1+
+e
+x
+).
+   
+(3)
+Jej 
+pochodna jest ciągła i
+ 
+reprezentuje 
+sigmoidę unipolarną. 
+W
+ 
+wyniku 
+konwolucji i
+ 
+działania 
+funkcji ReLU uzyskuje się wartości 
+szarości pikseli obrazu wynikowego. 
+Liczba neuronów konwolucyjnych, filtrujących poszczególne 
+obszary lokalne obrazu, jest ustalana przez użytkownika. Każdy 
+neuron ma określoną przez użytkownika liczbę wag podlegają
+-
+cych doborowi i
+ 
+łączących 
+go z
+ 
+określonym 
+rejonem lokalnym 
+obrazu. Dla typowych wielkości maski 3x3 (małe obrazy) lub 
+15x15 (duże obrazy) liczba wag neuronu staje się więc równa 
+9 lub 225 (plus waga polaryzacji). Przesuwna maska analizy 
+wędrująca po obrazie wejściowym dostarcza do wyjścia neuro
+-
+nu sygnał sumacyjny, będący sumą iloczynów jasności pikseli 
+i
+ 
+odpowiednich, 
+połączonych z
+ 
+nimi, 
+wag neuronu na zasadzie 
+konwolucji. Neuron ze swoimi wagami stanowi więc filtr prze-
+suwany po obrazie z
+ 
+określonym 
+krokiem. Przesuwanie maski 
+filtracyjnej neuronu sterowane jest przez wybór wielkości kroku 
+stride
+. Wielkość
+ stride=
+1 oznacza, że nowa maska przesuwana 
+jest o
+ 
+jeden 
+piksel obrazu (w
+ 
+kierunku 
+x
+ 
+lub 
+y
+) w
+ 
+stosunku 
+do 
+pozycji poprzedniej maski. Rozmiar obrazu wynikowego zależy 
+od wybranego kroku 
+stride
+ i
+ 
+wielkości maski filtrującej.
+W
+ 
+następnym 
+kroku powstały obraz wynikowy poddaje się 
+działaniu operacji łączenia sąsiednich wyników, tzw. operacji 
+pooling
+. Funkcja ta
+ 
+przekształca wynik nieliniowego działania 
+filtracyjnego neuronu w
+ 
+określonym 
+rejonie obrazu przez zde
+-
+finiowaną statystykę dotyczącą najbliższych mu pod względem 
+lokalizacji wyników wyjściowych. Typowe funkcje to: 
+max pooling
+, 
+zwracająca wartość maksymalną wyników neuronów znajdują
+-
+cych się w
+ 
+sąsiedztwie 
+prostokątnym aktualnego wyniku oraz 
+average pooling
+ zwracająca wartość średnią wyników w
+ 
+tym
+ 
+obszarze. Przykład takiej operacji uwzględniającej obszar maski 
+2x2 przedstawiono  na rys. 4.
+  
+Rys. 4. Przykład wyników działania operacji 
+average pooling 
+i
+ 
+max
+ 
+pooling
+ z
+ 
+maską 
+2x2 i
+ 
+krokiem 
+stride
+ =2 na obrazie wynikowym o
+ 
+wy
+-
+miarach 4x4
+Operacja
+ pooling
+ – poza zmniejszeniem wymiaru obrazu – 
+umożliwia uzyskanie reprezentacji bardziej inwariantnej względem 
+niewielkiego przemieszczenia danych. Stanowi pewne uogól
+-
+nienie cech reprezentowanych przez sąsiednie grupy pikseli. 
+Często dla zachowania odpowiednich wymiarów obrazu stosuje 
+się operację uzupełnienia brzegów zerami, tzw. 
+zero padding
+. 
+Zwykle jest to uzupełnienie symetryczne z
+ 
+obu 
+stron obrazu. 
+Dodatkowo stosuje się niekiedy również normalizację stopnia 
+szarości obrazów powstałych w
+ 
+wyniku konwolucji.
+W
+ 
+poszczególnych 
+warstwach ukrytych obrazy wynikowe two
+-
+rzą tensory (strukturę trójwymiarową: dwa wymiary obrazu i
+ 
+li
+czba 
+obrazów). Obrazy (macierze) ostatniej warstwy konwolucyjnej są 
+przetwarzane na postać wektorową, stanowiącą początek sieci 
+w
+ 
+pełni 
+połączonej, w
+ 
+której 
+każdy neuron jest połączony z
+ 
+każ
+-
+dym sygnałem warstwy poprzedniej – połączenia globalne (
+Fully 
+Connected layer
+ – 
+FC
+). Neurony w
+ 
+warstwie 
+o
+ 
+pełnym 
+połączeniu 
+mają unikalne wagi, podlegające adaptacji w
+ 
+procesie uczenia.
+exp(
+j
+M
+=
+=
+∑
+1
+--- STRONA 4 ---
+115
+PRZEGLĄD TELEKOMUNIKACYJNY
+  
+l
+  ROCZNIK XCI  
+l
+  
+nr 5/2018
+tora 
+x
+ w
+ 
+dane 
+zakodowane, reprezentowane przez wektor 
+h=f
+(
+x
+) 
+i
+ 
+d
+ekodera wykonującego działanie odwrotne, rekonstruujące 
+dane wejściowe 
+x’=g
+(
+h
+). Przykład struktury autoenkodera o
+ 
+jed
+-
+nej warstwie sygnałów zakodowanych przedstawiono na rys. 5. 
+Dane wejściowe w
+ 
+postaci 
+wektora 
+x
+ są kodowane w
+ 
+wektor 
+z
+ 
+z
+a 
+pośrednictwem wektora sygnałów ukrytych 
+h 
+(część tworząca 
+enkoder). Dekodowanie odbywa się w
+ 
+strukturze 
+symetrycznej, 
+odtwarzając za pośrednictwem wektora 
+h’
+ wektor 
+x’
+ (część zwana 
+dekoderem).
+Podstawą jego działania jest kompresja danych polegająca na 
+wychwyceniu głównych cech procesu reprezentowanego przez 
+W
+ 
+s
+umie w
+ 
+s
+trukturze tej można wyróżnić 25 podwarstw (włą
+-
+czając w
+ 
+nie 
+konwolucję liniową, operację ReLU, normalizację 
+i
+ 
+p
+ooling
+). Sieć zawiera 5 warstw konwolucyjnych i
+ 
+3
+ warstwy 
+FC. Pierwsza warstwa FC połączona z
+ 
+operacją 
+ReLU jest war
+-
+stwą zawierającą 4096 cech diagnostycznych. Druga warstwa FC 
+(również połączona z
+ 
+operacją 
+ReLU) jest warstwą ukrytą klasyfi
+-
+katora końcowego zasilającą warstwę wyjściową 1000 neuronów 
+(zapewnia rozpoznanie 1000 klas). Zastosowany w
+ 
+strukturze 
+klasyfikator to 
+softmax
+. Stosując transfer 
+learning
+ można wyod
+-
+rębnić sygnały z
+ 
+pierwszej 
+warstwy FC jako cechy diagnostyczne 
+i
+ 
+zasilić nimi dowolnie wybrany klasyfikator, np. SVM czy MLP .
+Istnieje obecnie wiele innych dostępnych struktur CNN, wytre
+-
+nowanych wstępnie i
+ 
+d
+ostosowanych do operacji 
+transfer learning
+. 
+Można tu wymienić między innymi następujące.
+•
+ 
+ZFNet
+ ukształtowany przez Matthew Zeilera i
+ 
+R
+oba Fergusa 
+[9]. Jest to ulepszona wersja AlexNet uzyskana przez rozszerze
+-
+nie wymiarów środkowych warstw konwolucyjnych i
+ 
+z
+mniejszenie 
+parametru 
+stride
+ i
+ 
+w
+ymiarów filtru w
+ 
+p
+ierwszej warstwie. 
+•
+ 
+GoogLeNet
+ – zmniejszona liczba parametrów podlegających 
+uczeniu (z
+ 
+6
+0 milionów w
+ 
+A
+lexNet do 4 milionów) przez wpro
+-
+wadzenie modułu wstępnego przetwarzania. Poza tym stosuje 
+A
+verage Pooling
+ zamiast 
+Max Pooling
+, co zmniejsza utratę infor
+-
+macji w
+ 
+k
+olejnych etapach przetwarzania. 
+•
+ 
+VGGNet 
+ukształtowany przez
+ 
+Karen Simonyana i
+ 
+A
+ndrew 
+Zissermana [10]. Sieć zawiera 15 CONV/FC warstw stosujących 
+zuniformowaną strukturę stosującą filtry konwolucyjne 3x3 i
+ 
+f
+il
+-
+try 2x2 w
+ 
+o
+peracji 
+pooling
+. Model dostępny w
+ 
+b
+ibliotece Caffe.
+•
+ 
+ResNet
+ ukształtowany przez zespół Kaiming He [11]. Główną 
+nowością jest pomijanie pewnych powiązań między sąsiednimi 
+warstwami i
+ 
+występowanie powiązań z
+ 
+dalszą warstwą, jak również 
+zastosowanie tzw. 
+batch normalization
+, czyli normalizacji używa
+-
+nej do małego zbioru próbek uczących (wartość średnia zerowa 
+i
+ 
+j
+ednostkowa wariancja). Taka normalizacja zdecydowanie przy-
+spiesza proces uczenia. Architektura unika również warstw koń
+-
+cowych globalnie połączonych.
+•
+ 
+U-NET – 
+struktura sieci CNN opracowana przez zespół 
+Ronnebergera [12] dostosowana specjalnie do zadań segmen
+-
+tacji obrazów.
+W
+ 
+bibliotece 
+CAFFE [16] są dostępne programy komputero
+-
+we wybranych struktur sieci CNN, gotowych do użycia w
+ 
+trybie
+  
+transfer learning
+.
+SIE
+Ć
+ AUTOENKODERA
+Autoenkoder jest specjalnym rozwiązaniem głębokiej sieci 
+neuronowej, którego zadaniem jest skopiowanie danych wejścio
+-
+wych w
+ 
+wyjściowe 
+z
+ 
+akceptowalnym 
+błędem [3]. Jest to wielo
+-
+warstwowy układ autoasocjacyjny stowarzyszający ze sobą dane 
+wejściowe. Układ składa się z
+ 
+dwu 
+następujących po sobie części: 
+układu kodującego rzutującego dane wejściowe w
+ 
+postaci 
+wek
+-
+  
+Rys. 5. Przykład struktury autoenkodera zawierający część kodu
+-
+jącą (enkoder) i
+ 
+rekonstrukcję sygnałów wejściowych (dekoder)
+zbiór wektorów 
+x
+. Oznacza to, że dane zrekonstruowane 
+x’
+ nie 
+reprezentują dokładnych kopii danych wejściowych, ale ich aprok
+-
+symację. Wektor 
+h
+, stanowiący podstawę kodowania i
+ 
+następnie
+ 
+rekonstrukcji, reprezentuje zatem cechy główne procesu, elimi
+-
+nując elementy nieistotne (szumowe) zawarte w
+ 
+zbiorze 
+danych 
+wejściowych 
+x
+. Autoenkoder jest uogólnieniem dwuwarstwowej 
+sieci liniowej PCA. Różni go od niej liczba warstw, która może 
+być dowolna, jak również nieliniowa funkcja aktywacji neuronów 
+stosowana w
+ 
+przypadku ogólnym. 
+Bezpośrednie, dokładne kopiowanie w
+ 
+siebie 
+danych uczą
+-
+cych 
+x
+ nie ma sensu praktycznego. Nie jest możliwe bowiem 
+wychwycenie najważniejszych cech procesu zawartych w
+ 
+zbiorze
+ 
+danych uczących. Dopiero ograniczenie liczby neuronów warstwy 
+ukrytej definiującej kodowanie danych wejściowych zmusza pro
+-
+ces uczenia do wychwycenia cech najważniejszych i
+ 
+pominięcia
+ 
+cech drugorzędnych, niemających większego wpływu na wynik 
+rekonstrukcji danych. Proces uczenia sieci może być zdefiniowa
+-
+ny jako dobór parametrów (wag neuronowych) prowadzący do 
+minimalizacji funkcji kosztu 
+E=E
+(
+x
+,
+g
+(
+h
+(
+x
+)). 
+Podstawowa definicja funkcji kosztu przyjmowana jest zwykle 
+w
+ 
+postaci 
+wartości błędu średniokwadratowego po wszystkich 
+zmiennych 
+n 
+= 1, 2,…,
+N
+ dla danych uczących przy 
+k 
+= 1, 2, …, 
+p
+, przy czym 
+N
+ jest wymiarem wektora wejściowego, a
+ 
+p
+ 
+liczbą 
+danych uczących (obserwacji). 
+E
+p
+x x
+p
+x g
+h
+n
+k
+n
+k
+k
+p
+n
+N
+n
+k
+n
+k
+k
+p
+n
+= −
+( )
+= −
+( )
+=
+= =
+=
+∑
+∑ ∑
+1 1
+2
+1 1
+2
+1
+( ) ( )
+( )
+( )
+' (
+( )
+x
+1 1
+N
+∑
+ 
+    
+(6)
+W
+ 
+celu 
+uzyskania lepszej odporności autoenkodera na szum 
+w
+ 
+uczeniu 
+stosuje się również wersję zmodyfikowaną, w
+ 
+której
+ 
+zamiast dopasowywać sygnały wyjściowe 
+g
+(
+h
+(
+x
+)) do sygnałów 
+wejściowych 
+x
+ dopasowanie dotyczy odpowiedzi autoenkodera 
+na wersje zaszumione sygnałów wejściowych 
+g
+(
+h
+(
+x
+s
+)), gdzie 
+x
+s
+ 
+reprezentuje wersję zaszumioną 
+x. 
+Układ przetwarza wówczas 
+zbiór wektorów 
+x
+s
+ w
+ 
+taki 
+sposób, aby uzyskać na wyjściu możliwie 
+najlepszą aproksymację wektorów oryginalnych 
+x
+. 
+Zwiększenie zdolności generalizacji autoenkodera może być 
+osiągnięta w
+ 
+procesie 
+uczenia przez włączenie do funkcji kosztu 
+czynnika kary za nadmiernie rozbudowaną strukturę. Wprowadza 
+się również regularyzację, uwzględniającą pochodne sygnałów 
+--- STRONA 5 ---
+116
+PRZEGLĄD TELEKOMUNIKACYJNY
+  
+l
+  ROCZNIK XCI  
+l
+  
+nr 5/2018
+14]. Jest znakomitym narzędziem do przetwarzania złożonych 
+szeregów czasowych, w
+ 
+tym 
+do przetwarzania mowy, generacji 
+tekstu itp. Składa się z
+ 
+wielu 
+rekurencyjnie połączonych bloków, 
+zwanych blokami pamięciowymi. Każdy taki blok zawiera trzy 
+bramki multiplikatywne: wejściową, wyjściową oraz pamięci, peł
+-
+niące role sterowanych zaworów. Typową strukturę komórki bloku 
+pamięciowego używanej w
+ 
+LSTM przedstawiono na rys. 8 [15].
+warstwy ukrytej względem elementów wektora wejściowego 
+x. 
+Taki rodzaj regularyzacji zmusza algorytm uczący do wytworzenia 
+sygnałów wyjściowych sieci, które zmieniają się niewiele przy nie
+-
+wielkich zmianach wartości sygnałów wejściowych. Inne podejście 
+do regularyzacji autoenkodera uwzględnia zgodność średniej sta
+-
+tystycznej aktywacji neuronów
+ 
+r
+i 
+w
+ 
+aktualnym 
+stanie uczenia z
+ 
+jej
+ 
+wartością pożądaną 
+r
+i
+. Mała wartość średniej aktywacji neuronu 
+oznacza, że neuron ten aktywuje się jedynie dla niewielkiej ilości 
+danych wejściowych, specjalizując się w
+ 
+ich
+ reprezentacji. Dodając 
+taki czynnik do minimalizowanej funkcji kosztu, zmusza się neuro
+-
+ny do reprezentowania określonych (specyficznych) cech procesu. 
+W
+ 
+efekcie 
+w
+ 
+procesie 
+uczenia minimalizacji podlega funkcja 
+kosztu zmodyfikowana o
+ 
+poszczególne 
+rodzaje czynników regula
+-
+ryzacyjnych. Taka postać wymusza kompromis między zgodnością 
+zrekonstruowanego sygnału wyjściowego układu z
+ 
+wartościami
+ 
+wejściowymi a
+ 
+z
+łożonością tego układu, uwzględniając jednocze
+-
+śnie wrażliwość na niewielkie zmiany mogące nastąpić w
+ 
+rozkła
+-
+dzie wartości sygnałów wejściowych w
+ 
+trybie odtwarzania.
+Istnieją różne implementacje algorytmu uczącego. Najbardziej 
+popularne podejście polega na stopniowym uczeniu w następują
+-
+cych po sobie warstwach (rys. 6). Proces rozpoczyna się w
+ 
+war
+-
+stwie pierwszej, dla której sygnałami wejściowymi są sygnały 
+oryginalne opisane wektorem 
+x
+, a
+ 
+sygnały 
+wyjściowe oznaczone 
+są jako 
+x
+.
+ 
+Celem uczenia jest dobór liczby neuronów ukrytych 
+i
+ 
+wag 
+tych neuronów, które zapewnią właściwe (zgodnie z
+ 
+regu
+-
+laryzowaną funkcją celu) odtworzenie sygnałów wejściowych 
+w
+ 
+warstwie 
+wyjściowej. W
+ 
+tej 
+sytuacji sygnały warstwy ukrytej 
+stanowią kod sygnałów wejściowych.
+›
+›
+  
+Rys. 6. Ilustracja sposobu uczenia pierwszej warstwy ukrytej
+  
+Rys. 7. Kolejny etap uczenia następnej warstwy autoenkodera
+  
+Rys. 8. Typowa struktura bloku pamięciowego sieci LSTM 
+Po doborze parametrów warstwy ukrytej odrzuca się warstwę 
+rekonstrukcji i
+ 
+sygnały 
+z
+ 
+warstwy 
+ukrytej stają się wejściowymi dla 
+ukształtowania następnej warstwy 
+b
+ (rys. 7), trenowanej w
+ 
+sposób
+ 
+identyczny jak warstwa a.
+Proces uczenia kontynuuje się dla kolejnych warstw, dobie
+-
+rając ich parametry w
+ 
+taki 
+sposób, aby uzyskać możliwie najlep
+-
+sze odwzorowanie sygnałów wejściowych w
+ 
+sygnały 
+wyjściowe. 
+Ostatnia warstwa ukryta autoenkodera zawiera kodowanie na 
+najwyższym poziomie, zwykle o
+ 
+najbardziej 
+ograniczonej licz-
+bie neuronów (po wyeliminowaniu warstw rekonstrukcyjnych). 
+Sygnały wyjściowe tej warstwy stanowią cechy diagnostyczne 
+wyselekcjonowane automatycznie przez strukturę układu w
+ 
+pro
+-
+cesie uczenia z
+ 
+udziałem 
+zbioru danych uczących. Mogą one 
+stanowić atrybuty wejściowe dla końcowego stopnia klasyfikatora 
+bądź układu regresyjnego o
+ 
+dowolnej konstrukcji.
+SIE
+Ć
+ LSTM 
+Sieć 
+LSTM
+ (
+Long Short-Term Memory
+) jest siecią rekurencyjną 
+charakteryzującą się długą pamięcią krótkich wzorców [4, 13, 
+1
+sigm
+1
+sigm
+1
+tgh
+1
+sigm
+h
+t-1
+x
+t
+c
+t-1
+y
+1
+y
+2
+y
+3
+y
+4
+c
+t
+tgh
+h
+t
+h
+t
+Komórka pamięciowa zawiera trzy wejścia. Są to: 
+X
+t
+ – sygnał wejściowy w
+ 
+aktualnej chwili czasowej 
+t,
+C
+t
+-1
+ – sygnał pamięci z
+ 
+chwili 
+t
+-1 poprzedniej komórki pamięci,
+h
+t
+-1
+ – sygnał wyjściowy z
+ 
+chwili 
+t
+-1 
+poprzedniej komórki pamięci.
+Jednocześnie komórka ta wytwarza dwa rodzaje sygnałów 
+wyjściowych istotnych z
+ 
+punktu 
+widzenia współdziałania komó
+-
+rek. Są to:
+C
+t
+ – sygnał pamięci w
+ 
+aktualnej 
+chwili czasowej 
+t
+ danej komórki 
+pamięci,
+h
+t
+ – sygnał wyjściowy w
+ 
+aktualnej 
+chwili czasowej 
+t
+ danej komórki 
+pamięci.
+Komórka przetwarza nieliniowo zarówno aktualny sygnał 
+wejściowy podany na jej wejście, jak i
+ 
+sygnały 
+wyjściowe oraz 
+pamięci z
+ 
+chwili 
+poprzedniej wszystkich bloków, z
+ 
+którymi 
+jest 
+sprzężona. Struktura przepływu sygnałów w
+ 
+czasie 
+dla sieci LSTM 
+złożonej z
+ 
+kilku komórek może być przedstawiona jak na rys. 9.
+Istotną rolę w
+ 
+przetwarzaniu 
+sygnałów odgrywają bramki mul
+-
+tiplikatywne, oznaczone symbolem mnożenia 
+×
+. Górna bramka 
+z
+ 
+l
+ewej strony komórki pełni funkcję sterowanego zaworu pamięci. 
+Decyduje o
+ 
+tym, 
+jaka część pamięci z
+ 
+poprzedniej 
+chwili czaso
+-
+wej przejdzie do chwili następnej. Stanowi zatem regulowany 
+system zaworowy, który przepuszcza w
+ 
+określonym 
+stopniu (od 
+zera do 1) informację zawartą w
+ 
+pamięci 
+z
+ 
+chwili 
+poprzedniej. 
+O
+ 
+poziomie 
+przejścia tej zawartości decyduje sygnał wytworzony 
