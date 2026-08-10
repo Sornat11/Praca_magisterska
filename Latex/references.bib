@@ -1,244 +1,310 @@
 % LTeX: enabled=false
 
-@book{steckCalibratedRecommendations2018,
-	title = {Calibrated recommendations},
-	doi = {10.1145/3240323.3240372},
-	abstract = {When a user has watched, say, 70 romance movies and 30 action movies, then it is reasonable to expect the personalized list of recommended movies to be comprised of about 70\% romance and 30\% action movies as well. This important property is known as calibration, and recently received renewed attention in the context of fairness in machine learning. In the recommended list of items, calibration ensures that the various (past) areas of interest of a user are reflected with their corresponding proportions. Calibration is especially important in light of the fact that recommender systems optimized toward accuracy (e.g., ranking metrics) in the usual offline-setting can easily lead to recommendations where the lesser interests of a user get crowded out by the user's main interests-which we show empirically as well as in thought-experiments. This can be prevented by calibrated recommendations. To this end, we outline metrics for quantifying the degree of calibration, as well as a simple yet effective re-ranking algorithm for post-processing the output of recommender systems.},
-	pagetotal = {154},
-	author = {Steck, Harald},
-	date = {2018-09-27},
-	note = {Pages: 162},
-}
-
-@online{SpotifySpotify,
-	title = {Spotify — About Spotify},
-	url = {https://newsroom.spotify.com/company-info/},
-	titleaddon = {Spotify},
-	urldate = {2026-07-13},
-	langid = {american},
-}
-
-@online{Nas,
-	title = {O nas},
-	url = {https://www.bookbeat.com/pl/about},
-	abstract = {W {BookBeat} znajdziesz ponad 1 milion audiobooków i e-booków w różnych językach. Możesz słuchać i czytać na telefonie lub tablecie. Wypróbuj za darmo!},
-	titleaddon = {{BookBeat}},
-	urldate = {2026-07-13},
-	langid = {polish},
-}
-
-@online{PressRoomIMDb,
-	title = {Press Room - {IMDb}},
-	url = {https://www.imdb.com/pressroom/stats/},
-	abstract = {More about the world's most popular and authoritative source for movie, {TV}, and celebrity content.},
-	urldate = {2026-07-13},
-	langid = {american},
-}
-
-@article{suSurveyCollaborativeFiltering2009,
-	title = {A Survey of Collaborative Filtering Techniques},
-	volume = {2009},
-	doi = {10.1155/2009/421425},
-	abstract = {As one of the most successful approaches to building recommender systems, collaborative filtering (
-{CF}
-) uses the known preferences of a group of users to make recommendations or predictions of the unknown preferences for other users. In this paper, we first introduce {CF} tasks and their main challenges, such as data sparsity, scalability, synonymy, gray sheep, shilling attacks, privacy protection, etc., and their possible solutions. We then present three main categories of {CF} techniques: memory-based, model-based, and hybrid {CF} algorithms (that combine {CF} with other recommendation techniques), with examples for representative algorithms of each category, and analysis of their predictive performance and their ability to address the challenges. From basic techniques to the state-of-the-art, we attempt to present a comprehensive survey for {CF} techniques, which can be served as a roadmap for research and practice in this area.},
-	journaltitle = {Adv. Artificial Intellegence},
-	shortjournal = {Adv. Artificial Intellegence},
-	author = {Su, Xiaoyuan and Khoshgoftaar, Taghi},
-	date = {2009-10-27},
-}
-
-@book{steckEvaluationRecommendationsRatingprediction2013,
-	title = {Evaluation of recommendations: Rating-prediction and ranking},
-	doi = {10.1145/2507157.2507160},
-	shorttitle = {Evaluation of recommendations},
-	abstract = {The literature on recommender systems distinguishes typically between two broad categories of measuring recommendation accuracy: rating prediction, often quantified in terms of the root mean square error ({RMSE}), and ranking, measured in terms of metrics like precision and recall, among others. In this paper, we examine both approaches in detail, and find that the dominating difference lies instead in the training and test data considered: rating prediction is concerned with only the observed ratings, while ranking typically accounts for all items in the collection, whether the user has rated them or not. Furthermore, we show that predicting observed ratings, while popular in the literature, only solves a (small) part of the rating prediction task for any item in the collection, which is a common real-world problem. The reasons are selection bias in the data, combined with data sparsity. We show that the latter rating-prediction task involves the prediction task 'Who rated What' as a sub-problem, which can be cast as a classification or ranking problem. This suggests that solving the ranking problem is not only valuable by itself, but also for predicting the rating value of any item.},
-	pagetotal = {213},
-	author = {Steck, Harald},
-	date = {2013-10-12},
-	note = {Journal Abbreviation: {RecSys} 2013 - Proceedings of the 7th {ACM} Conference on Recommender Systems
-Pages: 220
-Publication Title: {RecSys} 2013 - Proceedings of the 7th {ACM} Conference on Recommender Systems},
-}
-
-@article{RecommenderSystems1997,
-	title = {Recommender systems},
-	volume = {40},
-	issn = {0001-0782},
-	url = {https://scispace.com/papers/recommender-systems-2ftkxb0bqo},
-	doi = {10.1145/245108.245121},
-	abstract = {Recommender systems assist and augment this natural social process. In a typical recommender system people provide recommendations as inputs, which the system then aggregates and directs to appropriate recipients. In some cases the primary transformation is in the aggregation; in others the system’s value lies in its ability to make good matches between the recommenders and those seeking recommendations. The developers of the first recommender system, Tapestry [1], coined the phrase “collaborative filtering” and several others have adopted it. We prefer the more general term “recommender system” for two reasons. First, recommenders may not explictly collaborate with recipients, who may be unknown to each other. Second, recommendations may suggest particularly interesting items, in addition to indicating those that should be filtered out. This special section includes descriptions of five recommender systems. A sixth article analyzes incentives for provision of recommendations. Figure 1 places the systems in a technical design space defined by five dimensions. First, the contents of an evaluation can be anything from a single bit (recommended or not) to unstructured textual annotations. Second, recommendations may be entered explicitly, but several systems gather implicit evaluations: {GroupLens} monitors users’ reading times; {PHOAKS} mines Usenet articles for mentions of {URLs}; and Siteseer mines personal bookmark lists. Third, recommendations may be anonymous, tagged with the source’s identity, or tagged with a pseudonym. The fourth dimension, and one of the richest areas for exploration, is how to aggregate evaluations. {GroupLens}, {PHOAKS}, and Siteseer employ variants on weighted voting. Fab takes that one step further to combine evaluations with content analysis. {ReferralWeb} combines suggested links between people to form longer referral chains. Finally, the (perhaps aggregated) evaluations may be used in several ways: negative recommendations may be filtered out, the items may be sorted according to numeric evaluations, or evaluations may accompany items in a display. Figures 2 and 3 identify dimensions of the domain space: The kinds of items being recommended and the people among whom evaluations are shared. Consider, first, the domain of items. The sheer volume is an important variable: Detailed textual reviews of restaurants or movies may be practical, but applying the same approach to thousands of daily Netnews messages would not. Ephemeral media such as netnews (most news servers throw away articles after one or two weeks) place a premium on gathering and distributing evaluations quickly, while evaluations for 19th century books can be gathered at a more leisurely pace. The last dimension describes the cost structure of choices people make about the items. Is it very costly to miss {IT} {IS} {OFTEN} {NECESSARY} {TO} {MAKE} {CHOICES} {WITHOUT} {SUFFICIENT} personal experience of the alternatives. In everyday life, we rely on},
-	pages = {56--58},
-	number = {3},
-	journaltitle = {Communications of The {ACM}},
-	author = {Resnick, Paul and Varian, Hal R},
-	urldate = {2026-07-13},
-	date = {1997-03-01},
-	langid = {english},
-}
-
-@incollection{malinowskiZastosowanieGrafowSieci2021,
-	title = {Zastosowanie grafów i sieci w systemach rekomendacji},
-	isbn = {978-83-7193-809-2},
-	doi = {10.6084/m9.figshare.17024192},
-	abstract = {Celem niniejszego rozdziału jest przedstawienie wykorzystania teorii grafów i sieci w obszarze rekomendacji, w tym modeli matematycznych stanowiących podstawę do konstruowanych na ich bazie algorytmów i systemów rekomendacji. W pierwszej części rozdziału został zawarty syntetyczny opis obszaru rekomendacji, ze szczególnym uwzględnieniem typów rozwiązań rekomendacyjnych oraz matematycznego opisu problemu. W kolejnej części opracowania zostały przedstawione modele i techniki wykorzystania grafów i sieci oraz przykładowe algorytmy zbudowane na ich bazie.},
-	pages = {77--96},
-	author = {Malinowski, Michał},
-	date = {2021-11-16},
-}
-
-@article{checinskiSystemyRekomendacjiRemedium2023,
-	title = {Systemy rekomendacji. Remedium w cyfrowej klęsce urodzaju},
-	volume = {nr 2},
-	issn = {1230-3496},
-	url = {http://yadda.icm.edu.pl/baztech/element/bwmeta1.element.baztech-4820b103-c8a5-4794-ad60-ba49c964f89c},
-	doi = {10.15199/59.2023.2.4},
-	journaltitle = {Przegląd Telekomunikacyjny + Wiadomości Telekomunikacyjne},
-	author = {Chęciński, Karol and Wawrzusiak, Radosław},
-	urldate = {2026-07-13},
-	date = {2023},
-}
-
-@article{burkeHybridRecommenderSystems2002,
-	title = {Hybrid Recommender Systems: Survey and Experiments},
-	volume = {12},
-	doi = {10.1023/A:1021240730564},
-	shorttitle = {Hybrid Recommender Systems},
-	abstract = {Recommender systems represent user preferences for the purpose of suggesting items to purchase or examine. They have become fundamental applications in electronic commerce and information access, providing suggestions that effectively prune large information spaces so that users are directed toward those items that best meet their needs and preferences. A variety of techniques have been proposed for performing recommendation, including content-based, collaborative, knowledge-based and other techniques. To improve performance, these methods have sometimes been combined in hybrid recommenders. This paper surveys the landscape of actual and possible hybrid recommenders, and introduces a novel hybrid, {EntreeC}, a system that combines knowledge-based recommendation and collaborative filtering to recommend restaurants. Further, we show that semantic ratings obtained from the knowledge-based part of the system enhance the effectiveness of collaborative filtering.},
-	journaltitle = {User Modeling and User-Adapted Interaction},
-	shortjournal = {User Modeling and User-Adapted Interaction},
-	author = {Burke, Robin},
-	date = {2002-11-01},
-}
-
 @article{adomaviciusNextGenerationRecommender2005a,
-	title = {Toward the next generation of recommender systems: a survey of the state-of-the-art and possible extensions},
-	volume = {17},
-	doi = {10.1109/TKDE.2005.99},
-	shorttitle = {Toward the next generation of recommender systems},
-	abstract = {This paper presents an overview of the field of recommender systems and describes the current generation of recommendation methods that are usually classified into the following three main categories: content-based, collaborative, and hybrid recommendation approaches. This paper also describes various limitations of current recommendation methods and discusses possible extensions that can improve recommendation capabilities and make recommender systems applicable to an even broader range of applications. These extensions include, among others, an improvement of understanding of users and items, incorporation of the contextual information into the recommendation process, support for multicriteria ratings, and a provision of more flexible and less intrusive types of recommendations.},
-	pages = {734--749},
-	journaltitle = {{IEEE} Transactions on Knowledge and Data Engineering},
-	shortjournal = {{IEEE} Transactions on Knowledge and Data Engineering},
-	author = {Adomavicius, G. and Tuzhilin, Alexander},
-	date = {2005-07-01},
-}
-
-@book{razaComprehensiveReviewRecommender2024,
-	title = {A Comprehensive Review of Recommender Systems: Transitioning from Theory to Practice},
-	doi = {10.48550/arXiv.2407.13699},
-	shorttitle = {A Comprehensive Review of Recommender Systems},
-	abstract = {Recommender Systems ({RS}) play an integral role in enhancing user experiences by providing personalized item suggestions. This survey reviews the progress in {RS} inclusively from 2017 to 2024, effectively connecting theoretical advances with practical applications. We explore the development from traditional {RS} techniques like content-based and collaborative filtering to advanced methods involving deep learning, graph-based models, reinforcement learning, and large language models. We also discuss specialized systems such as context-aware, review-based, and fairness-aware {RS}. The primary goal of this survey is to bridge theory with practice. It addresses challenges across various sectors, including e-commerce, healthcare, and finance, emphasizing the need for scalable, real-time, and trustworthy solutions. Through this survey, we promote stronger partnerships between academic research and industry practices. The insights offered by this survey aim to guide industry professionals in optimizing {RS} deployment and to inspire future research directions, especially in addressing emerging technological and societal trends},
-	author = {Raza, Shaina and Rahman, Mizanur and Kamawal, Safiullah and Toroghi, Armin and Raval, Ananya and Navah, Farshad and Kazemeini, Amirmohammad},
-	date = {2024-07-18},
-}
-
-@incollection{ricciRecommenderSystemsHandbook2010,
-	title = {Recommender Systems Handbook},
-	volume = {1-35},
-	isbn = {978-0-387-85819-7},
-	doi = {10.1007/978-0-387-85820-3_1},
-	abstract = {Recommender Systems ({RSs}) are software tools and techniques providing suggestions for items to be of use to a user. In this
-introductory chapter we briefly discuss basic {RS} ideas and concepts. Our main goal is to delineate, in a coherent and structured
-way, the chapters included in this handbook and to help the reader navigate the extremely rich and detailed content that the
-handbook offers.},
-	pages = {1--35},
-	booktitle = {Recommender Systems Handbook},
-	author = {Ricci, Francesco and Rokach, Lior and Shapira, Bracha},
-	date = {2010-10-21},
-	note = {Journal Abbreviation: Recommender Systems Handbook},
+  title = {Toward the next Generation of Recommender Systems: A Survey of the State-of-the-Art and Possible Extensions},
+  shorttitle = {Toward the next Generation of Recommender Systems},
+  author = {Adomavicius, G. and Tuzhilin, Alexander},
+  year = 2005,
+  month = jul,
+  journal = {IEEE Transactions on Knowledge and Data Engineering},
+  volume = {17},
+  pages = {734--749},
+  doi = {10.1109/TKDE.2005.99},
+  abstract = {This paper presents an overview of the field of recommender systems and describes the current generation of recommendation methods that are usually classified into the following three main categories: content-based, collaborative, and hybrid recommendation approaches. This paper also describes various limitations of current recommendation methods and discusses possible extensions that can improve recommendation capabilities and make recommender systems applicable to an even broader range of applications. These extensions include, among others, an improvement of understanding of users and items, incorporation of the contextual information into the recommendation process, support for multicriteria ratings, and a provision of more flexible and less intrusive types of recommendations.}
 }
 
 @incollection{Bernardelli2024,
-	title = {Wpływ algorytmów rekomendacyjnych na stopień usieciowienia platform cyfrowych},
-	isbn = {978-83-8030-664-6},
-	booktitle = {Platformy cyfrowe. Model biznesu, zastosowania, użytkownicy (książka do pobrania)},
-	author = {Bernardelli, Michał},
-	date = {2024-04-19},
+  title = {Wp\l yw Algorytm\'ow Rekomendacyjnych Na Stopie\'n Usieciowienia Platform Cyfrowych},
+  booktitle = {Platformy Cyfrowe. {{Model}} Biznesu, Zastosowania, U\.zytkownicy (Ksi\k a\.zka Do Pobrania)},
+  author = {Bernardelli, Micha{\l}},
+  year = 2024,
+  month = apr,
+  isbn = {978-83-8030-664-6}
 }
 
-@book{krawczukSystemyRekomendacyjne2024,
-	title = {Systemy rekomendacyjne},
-	isbn = {978-83-68077-56-8},
-	url = {https://bibliotekanauki.pl/chapters/59445126},
-	abstract = {W erze cyfrowej, w której każda interakcja online – od kliknięć po przewijanie strony – jest rejestrowana, systemy rekomendacyjne stały się kluczowym narzędziem w zestawie nowoczesnych technologii informacyjnych. Te zaawansowane systemy wyróżniają się zdolnością do personalizowania treści, produktów i usług, dostosowując je do indywidualnych potrzeb użytkowników. W tekście przedstawiono metody ich implementacji, ukazano ich złożoność oraz subtelność działania. W rozdziale omówione zostały kluczowe koncepcje stojące za systemami rekomendacyjnymi, w tym dwa podstawowe podejścia: filtrowanie oparte na treści oraz filtrowanie kolaboratywne. To pierwsze analizuje cechy produktów i dopasowuje je do preferencji użytkownika, drugie zaś wykorzystuje dane o interakcjach użytkowników do przewidywania ich preferencji. Opisano zalety i ograniczenia tych metod oraz podejścia hybrydowe, które mogą być remedium na bolączki pojedynczych metod. W rozdziale posłużono się przykładami specjalistycznych metryk stosowanych w ocenie jakości rekomendacji, takich jak Mean Reciprocal Rank oraz Normalized Discounted Cumulative Gain.},
-	author = {Krawczuk, Jerzy},
-	urldate = {2026-07-08},
-	date = {2024},
-	langid = {polish},
-}
-
-@book{doligalskiPlatformyCyfroweModel2024,
-	title = {Platformy cyfrowe. Model biznesu, zastosowania, użytkownicy (książka do pobrania)},
-	isbn = {978-83-8030-664-6},
-	abstract = {Książka do pobrania jako pdf. Kliknij [Download full-text {PDF}], aby pobrać książkę.
-
-Platformy internetowe osiągnęły status centralnych punktów gospodarki cyfrowej w ciągu zaledwie dwóch dekad. Ułatwiły komunikację, współpracę i handel na całym świecie. Wpłynęły na funkcjonowanie rynków, przedsiębiorstw i konsumentów, skłaniając dostawców i użytkowników do działania w ich ekosystemach zgodnie z ustalonymi przez nie regułami. Zmieniły nie tylko gospodarkę, ale i liczne obszary naszej współczesności: kulturę, politykę i nasze codzienne zachowania. Najpotężniejsze z nich, osiągając w swych dziedzinach pozycję monopolistyczną lub silnie dominującą, stały się najdroższymi i niezwykle dochodowymi firmami. Ich potęga zaczęła budzić fascynację, ale i jednocześnie rosnące obawy pozostałych firm, instytucji państwowych oraz nas, użytkowników. Stając się technologiami ogólnego zastosowania, uzależniły od siebie ludzi i istotne obszary naszej współczesności. Z wielu z nich korzystamy codziennie wszyscy.
-
-Niniejsza książka jest efektem konferencji, która odbyła się w grudniu 2022 r. w Szkole Głównej Handlowej w Warszawie przy współpracy z {DELab} Uniwersytetu Warszawskiego. Konferencja ta była okazją do wymiany poglądów rosnącej społeczności badaczy, którzy z rożnych perspektyw i używając różnych metodyk badają tematykę platform cyfrowych w różnorakich kontekstach, takich jak: modele biznesu, nowe zastosowania, skala i skutki oddziaływania, potęga ekonomiczna czy wpływ na użytkowników.
-
-Pełniąc funkcję redaktorów, niczym operatorzy platformy, mieliśmy wpływ na charakter rozdziałów w książce. Zdecydowaliśmy się na teksty krótkie, które przypominają formę komunikacji akademickiej określaną jako research letters. Charakteryzują się one koncentracją na głównej tezie, a mniejszy nacisk kładą na analizę przeglądu literatury. Pragniemy bowiem umożliwić Czytelnikom zapoznanie się z różnymi poglądami i nowatorskimi pomysłami w sposób zwięzły, lecz pełen treści. Z uwagi na dużą liczbę współautorów reprezentujących różne dyscypliny i stosujących różnorakie metodyki badawcze nie dążyliśmy do pełnego ujednolicenia siatki pojęć, ani narzucania jednego, określonego sposobu myślenia o platformach. Wręcz przeciwnie, chcieliśmy stworzyć w naszej książce przestrzeń dla różnorodnych idei, teorii i praktycznych podejść, które pozwalają na lepsze zrozumienie tego obszaru badań. To także odpowiada modelowi platformy, której użytkownicy odgrywają różnorakie, często nawet przeciwstawne role.},
-	author = {Doligalski, Tymoteusz and Goliński, Michał and Bernardelli, Michał and Szpringer, Włodzimierz and Malgorzata, Godlewska and Szulc, Radosław and Piech, Krzysztof and Janowska, Anetta and Koczetkow, Blazej and Lech, Lukasz and Sarna, Nikodem and Mróz, Bogdan and Siejka, Aneta and Szymkiewicz, Weronika and Kowalczyk, Justyna and Trzebiński, Wojciech and Niedziółka, Tomasz and Zdunkiewicz, Wojciech and Kowalczyk, Marcin and Sobolewska, Sylwia},
-	date = {2024-04-19},
+@article{burkeHybridRecommenderSystems2002,
+  title = {Hybrid {{Recommender Systems}}: {{Survey}} and {{Experiments}}},
+  shorttitle = {Hybrid {{Recommender Systems}}},
+  author = {Burke, Robin},
+  year = 2002,
+  month = nov,
+  journal = {User Modeling and User-Adapted Interaction},
+  volume = {12},
+  doi = {10.1023/A:1021240730564},
+  abstract = {Recommender systems represent user preferences for the purpose of suggesting items to purchase or examine. They have become fundamental applications in electronic commerce and information access, providing suggestions that effectively prune large information spaces so that users are directed toward those items that best meet their needs and preferences. A variety of techniques have been proposed for performing recommendation, including content-based, collaborative, knowledge-based and other techniques. To improve performance, these methods have sometimes been combined in hybrid recommenders. This paper surveys the landscape of actual and possible hybrid recommenders, and introduces a novel hybrid, EntreeC, a system that combines knowledge-based recommendation and collaborative filtering to recommend restaurants. Further, we show that semantic ratings obtained from the knowledge-based part of the system enhance the effectiveness of collaborative filtering.},
+  file = {C:\Users\jakub\Zotero\storage\7FD5XF4Z\Burke - 2002 - Hybrid Recommender Systems Survey and Experiments.pdf}
 }
 
 @article{burkeTechnologyCustomerInterface2002,
-	title = {Technology and the Customer Interface: What Consumers Want in the Physical and Virtual Store},
-	volume = {30},
-	doi = {10.1177/009207002236914},
-	shorttitle = {Technology and the Customer Interface},
-	abstract = {For companies to realize the benefits of recent innovations in customer interface technology, they need to understand the
-value consumers place on technology as part of the shopping process. A national survey of 2,120 online consumers was conducted
-to explore how people want to shop in both online and in-store environments and determine how interactive and conventional
-media work together to move consumers through the purchase process. The study investigated 128 different aspects of the shopping
-experience, from common elements to recent innovations. The results indicated that consumers are generally satisfied with
-the convenience, quality, selection, and value provided by retailers today. They are less satisfied with the level of service
-provided, the availability of product information, and the speed of the shopping process. The findings suggest that new technologies
-can enhance the shopping experience, but applications must be tailored to the unique requirements of consumer segments and
-product categories.},
-	pages = {411--432},
-	journaltitle = {Journal of The Academy of Marketing Science - J {ACAD} {MARK} {SCI}},
-	shortjournal = {Journal of The Academy of Marketing Science - J {ACAD} {MARK} {SCI}},
-	author = {Burke, Raymond},
-	date = {2002-10-01},
+  title = {Technology and the {{Customer Interface}}: {{What Consumers Want}} in the {{Physical}} and {{Virtual Store}}},
+  shorttitle = {Technology and the {{Customer Interface}}},
+  author = {Burke, Raymond},
+  year = 2002,
+  month = oct,
+  journal = {Journal of The Academy of Marketing Science - J ACAD MARK SCI},
+  volume = {30},
+  pages = {411--432},
+  doi = {10.1177/009207002236914},
+  abstract = {For companies to realize the benefits of recent innovations in customer interface technology, they need to understand the value consumers place on technology as part of the shopping process. A national survey of 2,120 online consumers was conducted to explore how people want to shop in both online and in-store environments and determine how interactive and conventional media work together to move consumers through the purchase process. The study investigated 128 different aspects of the shopping experience, from common elements to recent innovations. The results indicated that consumers are generally satisfied with the convenience, quality, selection, and value provided by retailers today. They are less satisfied with the level of service provided, the availability of product information, and the speed of the shopping process. The findings suggest that new technologies can enhance the shopping experience, but applications must be tailored to the unique requirements of consumer segments and product categories.},
+  file = {C:\Users\jakub\Zotero\storage\7MV58YKR\Burke - 2002 - Technology and the Customer Interface What Consumers Want in the Physical and Virtual Store.pdf}
+}
+
+@article{checinskiSystemyRekomendacjiRemedium2023,
+  title = {{Systemy rekomendacji. Remedium w cyfrowej kl\k esce urodzaju}},
+  author = {Ch{\k e}ci{\'n}ski, Karol and Wawrzusiak, Rados{\l}aw},
+  year = 2023,
+  journal = {Przegl\k ad Telekomunikacyjny + Wiadomo\'sci Telekomunikacyjne},
+  volume = {nr 2},
+  issn = {1230-3496},
+  doi = {10.15199/59.2023.2.4},
+  urldate = {2026-07-13},
+  langid = {polish},
+  file = {C:\Users\jakub\Zotero\storage\V32IWT6S\bwmeta1.element.html}
+}
+
+@book{doligalskiPlatformyCyfroweModel2024,
+  title = {Platformy Cyfrowe. {{Model}} Biznesu, Zastosowania, U\.zytkownicy (Ksi\k a\.zka Do Pobrania)},
+  author = {Doligalski, Tymoteusz and Goli{\'n}ski, Micha{\l} and Bernardelli, Micha{\l} and Szpringer, W{\l}odzimierz and Malgorzata, Godlewska and Szulc, Rados{\l}aw and Piech, Krzysztof and Janowska, Anetta and Koczetkow, Blazej and Lech, Lukasz and Sarna, Nikodem and Mr{\'o}z, Bogdan and Siejka, Aneta and Szymkiewicz, Weronika and Kowalczyk, Justyna and Trzebi{\'n}ski, Wojciech and Niedzi{\'o}{\l}ka, Tomasz and Zdunkiewicz, Wojciech and Kowalczyk, Marcin and Sobolewska, Sylwia},
+  year = 2024,
+  month = apr,
+  abstract = {Ksi\k a\.zka do pobrania jako pdf. Kliknij [Download full-text PDF], aby pobra\'c ksi\k a\.zk\k e. Platformy internetowe osi\k agn\k e\l y status centralnych punkt\'ow gospodarki cyfrowej w ci\k agu zaledwie dw\'och dekad. U\l atwi\l y komunikacj\k e, wsp\'o\l prac\k e i handel na ca\l ym \'swiecie. Wp\l yn\k e\l y na funkcjonowanie rynk\'ow, przedsi\k ebiorstw i konsument\'ow, sk\l aniaj\k ac dostawc\'ow i u\.zytkownik\'ow do dzia\l ania w ich ekosystemach zgodnie z ustalonymi przez nie regu\l ami. Zmieni\l y nie tylko gospodark\k e, ale i liczne obszary naszej wsp\'o\l czesno\'sci: kultur\k e, polityk\k e i nasze codzienne zachowania. Najpot\k e\.zniejsze z nich, osi\k agaj\k ac w swych dziedzinach pozycj\k e monopolistyczn\k a lub silnie dominuj\k ac\k a, sta\l y si\k e najdro\.zszymi i niezwykle dochodowymi firmami. Ich pot\k ega zacz\k e\l a budzi\'c fascynacj\k e, ale i jednocze\'snie rosn\k ace obawy pozosta\l ych firm, instytucji pa\'nstwowych oraz nas, u\.zytkownik\'ow. Staj\k ac si\k e technologiami og\'olnego zastosowania, uzale\.zni\l y od siebie ludzi i istotne obszary naszej wsp\'o\l czesno\'sci. Z wielu z nich korzystamy codziennie wszyscy. Niniejsza ksi\k a\.zka jest efektem konferencji, kt\'ora odby\l a si\k e w grudniu 2022 r. w Szkole G\l\'ownej Handlowej w Warszawie przy wsp\'o\l pracy z DELab Uniwersytetu Warszawskiego. Konferencja ta by\l a okazj\k a do wymiany pogl\k ad\'ow rosn\k acej spo\l eczno\'sci badaczy, kt\'orzy z ro\.znych perspektyw i u\.zywaj\k ac r\'o\.znych metodyk badaj\k a tematyk\k e platform cyfrowych w r\'o\.znorakich kontekstach, takich jak: modele biznesu, nowe zastosowania, skala i skutki oddzia\l ywania, pot\k ega ekonomiczna czy wp\l yw na u\.zytkownik\'ow. Pe\l ni\k ac funkcj\k e redaktor\'ow, niczym operatorzy platformy, mieli\'smy wp\l yw na charakter rozdzia\l\'ow w ksi\k a\.zce. Zdecydowali\'smy si\k e na teksty kr\'otkie, kt\'ore przypominaj\k a form\k e komunikacji akademickiej okre\'slan\k a jako research letters. Charakteryzuj\k a si\k e one koncentracj\k a na g\l\'ownej tezie, a mniejszy nacisk k\l ad\k a na analiz\k e przegl\k adu literatury. Pragniemy bowiem umo\.zliwi\'c Czytelnikom zapoznanie si\k e z r\'o\.znymi pogl\k adami i nowatorskimi pomys\l ami w spos\'ob zwi\k ez\l y, lecz pe\l en tre\'sci. Z uwagi na du\.z\k a liczb\k e wsp\'o\l autor\'ow reprezentuj\k acych r\'o\.zne dyscypliny i stosuj\k acych r\'o\.znorakie metodyki badawcze nie d\k a\.zyli\'smy do pe\l nego ujednolicenia siatki poj\k e\'c, ani narzucania jednego, okre\'slonego sposobu my\'slenia o platformach. Wr\k ecz przeciwnie, chcieli\'smy stworzy\'c w naszej ksi\k a\.zce przestrze\'n dla r\'o\.znorodnych idei, teorii i praktycznych podej\'s\'c, kt\'ore pozwalaj\k a na lepsze zrozumienie tego obszaru bada\'n. To tak\.ze odpowiada modelowi platformy, kt\'orej u\.zytkownicy odgrywaj\k a r\'o\.znorakie, cz\k esto nawet przeciwstawne role.},
+  isbn = {978-83-8030-664-6},
+  file = {C:\Users\jakub\Zotero\storage\RDPUK3YB\Doligalski et al. - 2024 - Platformy cyfrowe. Model biznesu, zastosowania, użytkownicy (książka do pobrania).pdf}
+}
+
+@article{gomez-uribeNetflixRecommenderSystem2015,
+  title = {The {{Netflix Recommender System}}},
+  author = {{G{\'o}mez-Uribe}, Carlos and Hunt, Neil},
+  year = 2015,
+  month = dec,
+  journal = {ACM Transactions on Management Information Systems},
+  volume = {6},
+  pages = {1--19},
+  doi = {10.1145/2843948},
+  abstract = {This article discusses the various algorithms that make up the Netflix recommender system, and describes its business purpose. We also describe the role of search and related algorithms, which for us turns into a recommendations problem as well. We explain the motivations behind and review the approach that we use to improve the recommendation algorithms, combining A/B testing focused on improving member retention and medium term engagement, as well as offline experimentation using historical member engagement data. We discuss some of the issues in designing and interpreting A/B tests. Finally, we describe some current areas of focused innovation, which include making our recommender system global and language aware.},
+  file = {C:\Users\jakub\Zotero\storage\V3HY8HW9\Gómez-Uribe i Hunt - 2015 - The Netflix Recommender System.pdf}
+}
+
+@book{krawczukSystemyRekomendacyjne2024,
+  title = {{Systemy rekomendacyjne}},
+  author = {Krawczuk, Jerzy},
+  year = 2024,
+  urldate = {2026-07-08},
+  abstract = {W erze cyfrowej, w kt\'orej ka\.zda interakcja online -- od klikni\k e\'c po przewijanie strony -- jest rejestrowana, systemy rekomendacyjne sta\l y si\k e kluczowym narz\k edziem w zestawie nowoczesnych technologii informacyjnych. Te zaawansowane systemy wyr\'o\.zniaj\k a si\k e zdolno\'sci\k a do personalizowania tre\'sci, produkt\'ow i us\l ug, dostosowuj\k ac je do indywidualnych potrzeb u\.zytkownik\'ow. W tek\'scie przedstawiono metody ich implementacji, ukazano ich z\l o\.zono\'s\'c oraz subtelno\'s\'c dzia\l ania. W rozdziale om\'owione zosta\l y kluczowe koncepcje stoj\k ace za systemami rekomendacyjnymi, w tym dwa podstawowe podej\'scia: filtrowanie oparte na tre\'sci oraz filtrowanie kolaboratywne. To pierwsze analizuje cechy produkt\'ow i dopasowuje je do preferencji u\.zytkownika, drugie za\'s wykorzystuje dane o interakcjach u\.zytkownik\'ow do przewidywania ich preferencji. Opisano zalety i ograniczenia tych metod oraz podej\'scia hybrydowe, kt\'ore mog\k a by\'c remedium na bol\k aczki pojedynczych metod. W rozdziale pos\l u\.zono si\k e przyk\l adami specjalistycznych metryk stosowanych w ocenie jako\'sci rekomendacji, takich jak Mean Reciprocal Rank oraz Normalized Discounted Cumulative Gain.},
+  isbn = {978-83-68077-56-8},
+  langid = {polish},
+  file = {C:\Users\jakub\Zotero\storage\5JM4DCQW\Krawczuk - 2024 - Systemy rekomendacyjne.pdf}
+}
+
+@phdthesis{malinowskiAlgorytmRekomendacjiBazujacy2022,
+  title = {Algorytm Rekomendacji Bazuj\k acy Na Sesjach Rekomendacji  Dzia\l aj\k acy Na Podstawie Zachowa\'n U\.zytkownik\'ow   Oraz Atrybut\'ow Obiekt\'ow w Systemie E-{{Commerce}}},
+  author = {Malinowski, Micha{\l}},
+  year = 2022,
+  address = {Warszawa},
+  school = {Wojskowa Akademia Techniczna im. Jaros\l awa D\k abrowskiego},
+  file = {C:\Users\jakub\Zotero\storage\T9CYJ59U\Malinowski - 2022 - Algorytm rekomendacji bazujący na sesjach rekomendacji  działający na podstawie zachowań użytkownikó.pdf}
+}
+
+@incollection{malinowskiZastosowanieGrafowSieci2021,
+  title = {Zastosowanie Graf\'ow i Sieci w Systemach Rekomendacji},
+  author = {Malinowski, Micha{\l}},
+  year = 2021,
+  month = nov,
+  pages = {77--96},
+  doi = {10.6084/m9.figshare.17024192},
+  abstract = {Celem niniejszego rozdzia\l u jest przedstawienie wykorzystania teorii graf\'ow i sieci w obszarze rekomendacji, w tym modeli matematycznych stanowi\k acych podstaw\k e do konstruowanych na ich bazie algorytm\'ow i system\'ow rekomendacji. W pierwszej cz\k e\'sci rozdzia\l u zosta\l{} zawarty syntetyczny opis obszaru rekomendacji, ze szczeg\'olnym uwzgl\k ednieniem typ\'ow rozwi\k aza\'n rekomendacyjnych oraz matematycznego opisu problemu. W kolejnej cz\k e\'sci opracowania zosta\l y przedstawione modele i techniki wykorzystania graf\'ow i sieci oraz przyk\l adowe algorytmy zbudowane na ich bazie.},
+  isbn = {978-83-7193-809-2},
+  file = {C:\Users\jakub\Zotero\storage\REE39Z8W\Malinowski - 2021 - Zastosowanie grafów i sieci w systemach rekomendacji.pdf}
+}
+
+@misc{Nas,
+  title = {{O nas}},
+  journal = {BookBeat},
+  urldate = {2026-07-13},
+  abstract = {W BookBeat znajdziesz ponad 1 milion audiobook\'ow i e-book\'ow w r\'o\.znych j\k ezykach. Mo\.zesz s\l ucha\'c i czyta\'c na telefonie lub tablecie. Wypr\'obuj za darmo!},
+  howpublished = {https://www.bookbeat.com/pl/about},
+  langid = {polish},
+  file = {C:\Users\jakub\Zotero\storage\3AMSZFA4\about.html}
 }
 
 @article{parkMakingSenseMeaning2010,
-	title = {Making Sense of the Meaning Literature: An Integrative Review of Meaning Making and Its Effects on Adjustment to Stressful Life Events},
-	volume = {136},
-	doi = {10.1037/a0018301},
-	shorttitle = {Making Sense of the Meaning Literature},
-	abstract = {Interest in meaning and meaning making in the context of stressful life events continues to grow, but research is hampered by conceptual and methodological limitations. Drawing on current theories, the author first presents an integrated model of meaning making. This model distinguishes between the constructs of global and situational meaning and between “meaning-making efforts” and “meaning made,” and it elaborates subconstructs within these constructs. Using this model, the author reviews the empirical research regarding meaning in the context of adjustment to stressful events, outlining what has been established to date and evaluating the strengths and weaknesses of current empirical work. Results suggest that theory on meaning and meaning making has developed apace, but empirical research has failed to keep up with these developments, creating a significant gap between the rich but abstract theories and empirical tests of them. Given current empirical findings, some aspects of the meaning-making model appear to be well supported but others are not, and the quality of meaning-making efforts and meanings made may be at least as important as their quantity. This article concludes with specific suggestions for future research.},
-	pages = {257--301},
-	journaltitle = {Psychological Bulletin},
-	shortjournal = {Psychological Bulletin},
-	author = {Park, Crystal},
-	date = {2010-03-01},
+  title = {Making {{Sense}} of the {{Meaning Literature}}: {{An Integrative Review}} of {{Meaning Making}} and {{Its Effects}} on {{Adjustment}} to {{Stressful Life Events}}},
+  shorttitle = {Making {{Sense}} of the {{Meaning Literature}}},
+  author = {Park, Crystal},
+  year = 2010,
+  month = mar,
+  journal = {Psychological Bulletin},
+  volume = {136},
+  pages = {257--301},
+  doi = {10.1037/a0018301},
+  abstract = {Interest in meaning and meaning making in the context of stressful life events continues to grow, but research is hampered by conceptual and methodological limitations. Drawing on current theories, the author first presents an integrated model of meaning making. This model distinguishes between the constructs of global and situational meaning and between ``meaning-making efforts'' and ``meaning made,'' and it elaborates subconstructs within these constructs. Using this model, the author reviews the empirical research regarding meaning in the context of adjustment to stressful events, outlining what has been established to date and evaluating the strengths and weaknesses of current empirical work. Results suggest that theory on meaning and meaning making has developed apace, but empirical research has failed to keep up with these developments, creating a significant gap between the rich but abstract theories and empirical tests of them. Given current empirical findings, some aspects of the meaning-making model appear to be well supported but others are not, and the quality of meaning-making efforts and meanings made may be at least as important as their quantity. This article concludes with specific suggestions for future research.}
 }
 
-@thesis{malinowskiAlgorytmRekomendacjiBazujacy2022,
-	location = {Warszawa},
-	title = {Algorytm rekomendacji bazujący na sesjach rekomendacji  działający na podstawie zachowań użytkowników   oraz atrybutów obiektów w systemie e-Commerce},
-	institution = {Wojskowa Akademia Techniczna im. Jarosława Dąbrowskiego},
-	type = {phdthesis},
-	author = {Malinowski, Michał},
-	date = {2022},
+@misc{PressRoomIMDb,
+  title = {Press {{Room}} - {{IMDb}}},
+  urldate = {2026-07-13},
+  abstract = {More about the world's most popular and authoritative source for movie, TV, and celebrity content.},
+  howpublished = {https://www.imdb.com/pressroom/stats/},
+  langid = {american},
+  file = {C:\Users\jakub\Zotero\storage\26SB5Z3X\stats.html}
+}
+
+@book{razaComprehensiveReviewRecommender2024,
+  title = {A {{Comprehensive Review}} of {{Recommender Systems}}: {{Transitioning}} from {{Theory}} to {{Practice}}},
+  shorttitle = {A {{Comprehensive Review}} of {{Recommender Systems}}},
+  author = {Raza, Shaina and Rahman, Mizanur and Kamawal, Safiullah and Toroghi, Armin and Raval, Ananya and Navah, Farshad and Kazemeini, Amirmohammad},
+  year = 2024,
+  month = jul,
+  doi = {10.48550/arXiv.2407.13699},
+  abstract = {Recommender Systems (RS) play an integral role in enhancing user experiences by providing personalized item suggestions. This survey reviews the progress in RS inclusively from 2017 to 2024, effectively connecting theoretical advances with practical applications. We explore the development from traditional RS techniques like content-based and collaborative filtering to advanced methods involving deep learning, graph-based models, reinforcement learning, and large language models. We also discuss specialized systems such as context-aware, review-based, and fairness-aware RS. The primary goal of this survey is to bridge theory with practice. It addresses challenges across various sectors, including e-commerce, healthcare, and finance, emphasizing the need for scalable, real-time, and trustworthy solutions. Through this survey, we promote stronger partnerships between academic research and industry practices. The insights offered by this survey aim to guide industry professionals in optimizing RS deployment and to inspire future research directions, especially in addressing emerging technological and societal trends},
+  file = {C:\Users\jakub\Zotero\storage\K3K7IYFR\Raza et al. - 2024 - A Comprehensive Review of Recommender Systems Transitioning from Theory to Practice.pdf}
+}
+
+@article{RecommenderSystems1997,
+  title = {Recommender Systems},
+  author = {Resnick, Paul and Varian, Hal R},
+  year = 1997,
+  month = mar,
+  journal = {Communications of The ACM},
+  volume = {40},
+  number = {3},
+  pages = {56--58},
+  issn = {0001-0782},
+  doi = {10.1145/245108.245121},
+  urldate = {2026-07-13},
+  abstract = {Recommender systems assist and augment this natural social process. In a typical recommender system people provide recommendations as inputs, which the system then aggregates and directs to appropriate recipients. In some cases the primary transformation is in the aggregation; in others the system's value lies in its ability to make good matches between the recommenders and those seeking recommendations. The developers of the first recommender system, Tapestry [1], coined the phrase ``collaborative filtering'' and several others have adopted it. We prefer the more general term ``recommender system'' for two reasons. First, recommenders may not explictly collaborate with recipients, who may be unknown to each other. Second, recommendations may suggest particularly interesting items, in addition to indicating those that should be filtered out. This special section includes descriptions of five recommender systems. A sixth article analyzes incentives for provision of recommendations. Figure 1 places the systems in a technical design space defined by five dimensions. First, the contents of an evaluation can be anything from a single bit (recommended or not) to unstructured textual annotations. Second, recommendations may be entered explicitly, but several systems gather implicit evaluations: GroupLens monitors users' reading times; PHOAKS mines Usenet articles for mentions of URLs; and Siteseer mines personal bookmark lists. Third, recommendations may be anonymous, tagged with the source's identity, or tagged with a pseudonym. The fourth dimension, and one of the richest areas for exploration, is how to aggregate evaluations. GroupLens, PHOAKS, and Siteseer employ variants on weighted voting. Fab takes that one step further to combine evaluations with content analysis. ReferralWeb combines suggested links between people to form longer referral chains. Finally, the (perhaps aggregated) evaluations may be used in several ways: negative recommendations may be filtered out, the items may be sorted according to numeric evaluations, or evaluations may accompany items in a display. Figures 2 and 3 identify dimensions of the domain space: The kinds of items being recommended and the people among whom evaluations are shared. Consider, first, the domain of items. The sheer volume is an important variable: Detailed textual reviews of restaurants or movies may be practical, but applying the same approach to thousands of daily Netnews messages would not. Ephemeral media such as netnews (most news servers throw away articles after one or two weeks) place a premium on gathering and distributing evaluations quickly, while evaluations for 19th century books can be gathered at a more leisurely pace. The last dimension describes the cost structure of choices people make about the items. Is it very costly to miss IT IS OFTEN NECESSARY TO MAKE CHOICES WITHOUT SUFFICIENT personal experience of the alternatives. In everyday life, we rely on},
+  langid = {english},
+  file = {C\:\\Users\\jakub\\Zotero\\storage\\MBHZAP2P\\Resnick i Varian - 1997 - Recommender systems.pdf;C\:\\Users\\jakub\\Zotero\\storage\\RSTQIWEM\\recommender-systems-2ftkxb0bqo.html}
+}
+
+@incollection{ricciRecommenderSystemsHandbook2010,
+  title = {Recommender {{Systems Handbook}}},
+  booktitle = {Recommender {{Systems Handbook}}},
+  author = {Ricci, Francesco and Rokach, Lior and Shapira, Bracha},
+  year = 2010,
+  month = oct,
+  volume = {1--35},
+  pages = {1--35},
+  doi = {10.1007/978-0-387-85820-3_1},
+  abstract = {Recommender Systems (RSs) are software tools and techniques providing suggestions for items to be of use to a user. In this introductory chapter we briefly discuss basic RS ideas and concepts. Our main goal is to delineate, in a coherent and structured way, the chapters included in this handbook and to help the reader navigate the extremely rich and detailed content that the handbook offers.},
+  isbn = {978-0-387-85819-7},
+  file = {C:\Users\jakub\Zotero\storage\7K3JQHSW\Ricci et al. - 2010 - Recommender Systems Handbook.pdf}
+}
+
+@misc{SpotifySpotify,
+  title = {Spotify --- {{About Spotify}}},
+  journal = {Spotify},
+  urldate = {2026-07-13},
+  langid = {american},
+  file = {C:\Users\jakub\Zotero\storage\FWQXV4FA\company-info.html}
+}
+
+@book{steckCalibratedRecommendations2018,
+  title = {Calibrated Recommendations},
+  author = {Steck, Harald},
+  year = 2018,
+  month = sep,
+  pages = {162},
+  doi = {10.1145/3240323.3240372},
+  abstract = {When a user has watched, say, 70 romance movies and 30 action movies, then it is reasonable to expect the personalized list of recommended movies to be comprised of about 70\% romance and 30\% action movies as well. This important property is known as calibration, and recently received renewed attention in the context of fairness in machine learning. In the recommended list of items, calibration ensures that the various (past) areas of interest of a user are reflected with their corresponding proportions. Calibration is especially important in light of the fact that recommender systems optimized toward accuracy (e.g., ranking metrics) in the usual offline-setting can easily lead to recommendations where the lesser interests of a user get crowded out by the user's main interests-which we show empirically as well as in thought-experiments. This can be prevented by calibrated recommendations. To this end, we outline metrics for quantifying the degree of calibration, as well as a simple yet effective re-ranking algorithm for post-processing the output of recommender systems.},
+  file = {C:\Users\jakub\Zotero\storage\6MJTQ94L\Steck - 2018 - Calibrated recommendations.pdf}
+}
+
+@book{steckEvaluationRecommendationsRatingprediction2013,
+  title = {Evaluation of Recommendations: {{Rating-prediction}} and Ranking},
+  shorttitle = {Evaluation of Recommendations},
+  author = {Steck, Harald},
+  year = 2013,
+  month = oct,
+  journal = {RecSys 2013 - Proceedings of the 7th ACM Conference on Recommender Systems},
+  pages = {220},
+  doi = {10.1145/2507157.2507160},
+  abstract = {The literature on recommender systems distinguishes typically between two broad categories of measuring recommendation accuracy: rating prediction, often quantified in terms of the root mean square error (RMSE), and ranking, measured in terms of metrics like precision and recall, among others. In this paper, we examine both approaches in detail, and find that the dominating difference lies instead in the training and test data considered: rating prediction is concerned with only the observed ratings, while ranking typically accounts for all items in the collection, whether the user has rated them or not. Furthermore, we show that predicting observed ratings, while popular in the literature, only solves a (small) part of the rating prediction task for any item in the collection, which is a common real-world problem. The reasons are selection bias in the data, combined with data sparsity. We show that the latter rating-prediction task involves the prediction task 'Who rated What' as a sub-problem, which can be cast as a classification or ranking problem. This suggests that solving the ranking problem is not only valuable by itself, but also for predicting the rating value of any item.},
+  file = {C:\Users\jakub\Zotero\storage\U65JGVEV\Steck - 2013 - Evaluation of recommendations Rating-prediction and ranking.pdf}
+}
+
+@article{suSurveyCollaborativeFiltering2009,
+  title = {A {{Survey}} of {{Collaborative Filtering Techniques}}},
+  author = {Su, Xiaoyuan and Khoshgoftaar, Taghi},
+  year = 2009,
+  month = oct,
+  journal = {Adv. Artificial Intellegence},
+  volume = {2009},
+  doi = {10.1155/2009/421425},
+  abstract = {As one of the most successful approaches to building recommender systems, collaborative filtering ( CF ) uses the known preferences of a group of users to make recommendations or predictions of the unknown preferences for other users. In this paper, we first introduce CF tasks and their main challenges, such as data sparsity, scalability, synonymy, gray sheep, shilling attacks, privacy protection, etc., and their possible solutions. We then present three main categories of CF techniques: memory-based, model-based, and hybrid CF algorithms (that combine CF with other recommendation techniques), with examples for representative algorithms of each category, and analysis of their predictive performance and their ability to address the challenges. From basic techniques to the state-of-the-art, we attempt to present a comprehensive survey for CF techniques, which can be served as a roadmap for research and practice in this area.},
+  file = {C:\Users\jakub\Zotero\storage\PPBVI5WA\Su i Khoshgoftaar - 2009 - A Survey of Collaborative Filtering Techniques.pdf}
 }
 
 @article{zhangDeepLearningBased2020,
-	title = {Deep Learning Based Recommender System: A Survey and New Perspectives},
-	volume = {52},
-	issn = {0360-0300, 1557-7341},
-	url = {https://dl.acm.org/doi/10.1145/3285029},
-	doi = {10.1145/3285029},
-	shorttitle = {Deep Learning Based Recommender System},
-	abstract = {With the growing volume of online information, recommender systems have been an effective strategy to overcome information overload. The utility of recommender systems cannot be overstated, given their widespread adoption in many web applications, along with their potential impact to ameliorate many problems related to over-choice. In recent years, deep learning has garnered considerable interest in many research fields such as computer vision and natural language processing, owing not only to stellar performance but also to the attractive property of learning feature representations from scratch. The influence of deep learning is also pervasive, recently demonstrating its effectiveness when applied to information retrieval and recommender systems research. The field of deep learning in recommender system is flourishing. This article aims to provide a comprehensive review of recent research efforts on deep learning-based recommender systems. More concretely, we provide and devise a taxonomy of deep learning-based recommendation models, along with a comprehensive summary of the state of the art. Finally, we expand on current trends and provide new perspectives pertaining to this new and exciting development of the field.},
-	pages = {1--38},
-	number = {1},
-	journaltitle = {{ACM} Computing Surveys},
-	shortjournal = {{ACM} Comput. Surv.},
-	author = {Zhang, Shuai and Yao, Lina and Sun, Aixin and Tay, Yi},
-	urldate = {2026-06-18},
-	date = {2020-01-31},
-	langid = {english},
+  title = {Deep {{Learning Based Recommender System}}: {{A Survey}} and {{New Perspectives}}},
+  shorttitle = {Deep {{Learning Based Recommender System}}},
+  author = {Zhang, Shuai and Yao, Lina and Sun, Aixin and Tay, Yi},
+  year = 2020,
+  month = jan,
+  journal = {ACM Computing Surveys},
+  volume = {52},
+  number = {1},
+  pages = {1--38},
+  issn = {0360-0300, 1557-7341},
+  doi = {10.1145/3285029},
+  urldate = {2026-06-18},
+  abstract = {With the growing volume of online information, recommender systems have been an effective strategy to overcome information overload. The utility of recommender systems cannot be overstated, given their widespread adoption in many web applications, along with their potential impact to ameliorate many problems related to over-choice. In recent years, deep learning has garnered considerable interest in many research fields such as computer vision and natural language processing, owing not only to stellar performance but also to the attractive property of learning feature representations from scratch. The influence of deep learning is also pervasive, recently demonstrating its effectiveness when applied to information retrieval and recommender systems research. The field of deep learning in recommender system is flourishing. This article aims to provide a comprehensive review of recent research efforts on deep learning-based recommender systems. More concretely, we provide and devise a taxonomy of deep learning-based recommendation models, along with a comprehensive summary of the state of the art. Finally, we expand on current trends and provide new perspectives pertaining to this new and exciting development of the field.},
+  langid = {english},
+  file = {C:\Users\jakub\Zotero\storage\9GBEHVCY\Zhang et al. - 2020 - Deep Learning Based Recommender System A Survey and New Perspectives.pdf}
 }
+
+@article{hallinanRecommendedYouNetflix2016,
+  title = {Recommended for you: The Netflix Prize and the production of algorithmic culture},
+  author = {Hallinan, Blake and Striphas, Ted},
+  journal = {New Media \& Society},
+  volume = {18},
+  number = {1},
+  pages = {117--137},
+  year = {2016},
+  doi = {10.1177/1461444814538646}
+}
+
+@inproceedings{heLightGCNSimplifyingPowering2020,
+  title = {LightGCN: Simplifying and Powering Graph Convolution Network for Recommendation},
+  author = {He, Xiangnan and Deng, Kuan and Wang, Xiang and Li, Yongdong and Zhang, Yongdong and Wang, Meng},
+  booktitle = {Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  pages = {639--648},
+  year = {2020},
+  doi = {10.1145/3397271.3401063}
+}
+
+@inproceedings{heNeuralCollaborativeFilteringKwiecien032017,
+  title = {Neural Collaborative Filtering},
+  author = {He, Xiangnan and Liao, Lizi and Zhang, Hanwang and Nie, Liqiang and Hu, Xiaodong and Tat-Seng, Chua},
+  booktitle = {Proceedings of the 26th International Conference on World Wide Web},
+  pages = {173--182},
+  year = {2017},
+  doi = {10.1145/3038912.3052569}
+}
+
+@article{guoSurveyKnowledgeGraphBased2021,
+  title = {A Survey on Knowledge Graph-Based Recommender Systems},
+  author = {Guo, Qingyu and Zhuang, Fuzhen and Qin, Chuan and Heng, Xiang and Xie, Xing and Xiong, Hui and He, Qing},
+  journal = {IEEE Transactions on Knowledge and Data Engineering},
+  volume = {34},
+  number = {8},
+  pages = {3549--3568},
+  year = {2022},
+  doi = {10.1109/TKDE.2020.3028705}
+}
+
+@article{tammQualityMetricsRecommender2022,
+  title = {Quality Metrics in Recommender Systems: Do We Calculate Metrics Consistently?},
+  author = {Tamm, Yan-Martin and Vasile, Flavian and Arian, Ramin and Bronner, Martin},
+  journal = {arXiv preprint arXiv:2103.01602},
+  year = {2021}
+}
+
+@inproceedings{zhaoRecBoleUnifiedComprehensive2020,
+  title = {RecBole: A Unified, Comprehensive and Efficient Recommendation Library},
+  author = {Zhao, Wayne Xin and Mu, Shanlei and Hou, Yupeng and Lin, Zihan and Chen, Yali and Pan, Xinyan and Li, Kai and Lu, Yujie and Wang, Hui and Tian, Changxin and Min, Yingqian and Zhou, Kun and Zhao, Zhichao and Xu, Zheng and Ren, Yali and He, Ji-Rong},
+  booktitle = {Proceedings of the 30th ACM International Conference on Information and Knowledge Management},
+  pages = {4653--4664},
+  year = {2021}
+}
+

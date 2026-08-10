@@ -21,11 +21,16 @@ Jesteś dedykowanym asystentem naukowo-badawczym wspierającym Jakuba Sornata w 
 ---
 
 ## 3. Komunikacja i Styl
-* **Język:** Język polski, styl precyzyjny, techniczny i merytoryczny.
-* **Format wyjściowy:** Wszystkie wyniki, zestawienia tabelaryczne i raporty badawcze generuj w czytelnym formacie Markdown (.md). Unikaj generowania surowego kodu LaTeX, chyba że użytkownik o to wyraźnie poprosi.
+* **Brak samowolnej edycji tekstu pracy (Latex/):** NIE modyfikuj ani nie podmieniaj bezpośrednio zawartości plików tekstu pracy magisterskiej w katalogu `Latex/`, dopóki użytkownik nie wyda wyraźnego i jednoznacznego polecenia wprowadzania zmian w plikach. Propozycje tekstu prezentuj w odpowiedzi na czacie.
 
 ---
 
 ## 4. Dedykowane Subagenty
 * **`thesis_coherence_checker`** ([pliki definicji](file:///.agents/subagents/thesis_coherence_checker.md)): Subagent audytorski odpowiedzialny za weryfikację spójności pojęciowej, logiki argumentacji, poprawności cytowań oraz zgodności celów i hipotez pracy magisterskiej z planem badań.
+* **`thesis_text_verifier`** ([pliki definicji](file:///.agents/subagents/thesis_text_verifier.md)): Subagent recenzencki odpowiedzialny za pasywną (read-only) weryfikację napisanych tekstów pod kątem poprawności językowej, zgodności z literaturą naukową oraz logiki i sensu w kontekście pracy magisterskiej.
+* **`paper_note_generator`** ([pliki definicji](file:///.agents/subagents/paper_note_generator.md)): Subagent dedykowany do tworzenia skondensowanych, przystępnych streszczeń artykułów naukowych, rozdziałów książek i monografii (z tabelami i schematami Mermaid), zdejmujący z autora obowiązek czytania całego tekstu.
+
+
+
+
 

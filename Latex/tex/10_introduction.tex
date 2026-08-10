@@ -1,10 +1,35 @@
 \section*{Wstęp} \addcontentsline{toc}{section}{Wstęp}
 
-We wstępie formułujemy \textbf{problem badawczy}, czyli jasno przedstawiamy, czym Autor zajmuje się w pracy. Można krótko wspomnieć skąd się wziął pomysł i motywacja do podjęcia problemu -- np. praca zawodowa Autora/Autorki, praktyki zawodowe, zainteresowanie tematem ważnym dla gospodarki, lokalnej społeczności, firmy z którą się współpracuje itp. Jeżeli Autor/Autorka pracuje w danej branży lub z innych powodów zna ją na wylot, należy o tym wspomnieć, bo jest to dodatkowy atut jeżeli chodzi o znajomość problemu. 
+Wyznaczanie spersonalizowanych rekomendacji w cyfrowych usługach rozrywkowych stanowi jedno z kluczowych wyzwań współczesnej informatyki stosowanej i ekonometrii. Dynamiczny rozwój metod uczenia maszynowego doprowadził do powstania odmiennych paradygmatów obliczeniowych – od klasycznej algebry macierzowej, przez głębokie sieci neuronowe, po algorytmy wykorzystujące osadzenia na strukturach grafowych. W literaturze naukowej brakuje jednak bezpośrednich, ujednoliconych badań porównawczych weryfikujących zarówno jakość porządkowania rankingowego, jak i czystą wydajność obliczeniową tych podejść w specyficznych warunkach konsumpcji mediów.
 
-Na tej podstawie definiujemy hipotezę badawczą oraz stawiamy cel pracy. Cel pracy, np. przeprowadzenie symulacji Monte Carlo dla procesu produkcji czegoś przy różnych wielkościach partii w celu zbadania zależności między wielkością partii a produktywnością. Cel musi być skwantyfikowany (patrz: metodyka wyznaczania celów SMART), czyli trzeba określic miary oceny rozwiązania (KPI), np. zbudowanie, zweryfikowanie i zwalidowanie modelu symulacyjnego, zdefiniowanie scenariuszy badawczych, przeprowadzenie XX uruchmień symulacji w każdym scenariuszu itp. - wszystko w celu uzyskania instancji danych input-output pozwalających przeprowadzić wnioskowania statystyczne.
-Hipoteza badawcza (teza), czyli podejrzenie, że istnieje jakiś związek między zmiennymi w problemie i chcemy jego istnienie potwierdzić lub mu zaprzeczyć, np. wielkość partii produkcyjnej ma wpływ na średnią dobową produktywność. 
+Powyższe uwarunkowania definiują \textbf{problem badawczy} niniejszej pracy magisterskiej, którym jest empiryczna ewaluacja relatywnej skuteczności personalizacji oraz narzutu serwerowego algorytmów reprezentujących trzy generacje technologiczne systemów rekomendacyjnych (faktoryzacji macierzy SVD/BPR, głębokiej architektury NCF oraz grafowych modeli LightGCN/KGCN) na zbiorze danych interakcji z dorozumianą informacją zwrotną (\foreignlanguage{english}{\textit{implicit feedback}}).
 
-Metodą badawczą będzie tutaj eksperyment obliczeniowy z wykorzystaniem modelu symulacyjnego, czyli przeprowadzenie symulacji MC w programie X albo rozwiazanie problemu z wykorzystaniem modelu MIP.
+\textbf{Jako cel główny pracy} przyjęto zbudowanie ujednoliconego środowiska badawczego przy użyciu pakietu RecBole, przeprowadzenie kompleksowej optymalizacji hiperparametrów oraz ilościową ocenę porównawczą dokładności rankingowej i wydajności trzech reprezentatywnych klas modeli na zbiorze danych z obszaru VOD.
 
-Dalej idzie standardowa formułka, że układ pracy jest następujący. W rozdziale 1 przedstawiono ....... W rozdziale 2 ..... W rozdziale 3 .....
+
+Dla realizacji celu głównego wyznaczono następujące \textbf{cele szczegółowe}:
+\begin{enumerate}
+    \item Przygotowanie oraz analiza eksploracyjna (EDA) zbioru danych interakcji typu \foreignlanguage{english}{\textit{implicit feedback}}.
+    \item Skonfigurowanie powtarzalnego środowiska eksperymentalnego w języku Python z wykorzystaniem frameworka RecBole.
+    \item Przeprowadzenie procesu strojenia hiperparametrów (\foreignlanguage{english}{\textit{hyperparameter tuning}}) dla każdego z badanych modeli w celu wyznaczenia ich optymalnych konfiguracji.
+    \item Ilościowa ewaluacja wyników za pomocą metryk jakości rankingu (NDCG@k, Recall@k), miary błędu RMSE oraz pomiaru czasu uczenia i wnioskowania online.
+\end{enumerate}
+
+W pracy sformułowano \textbf{hipotezę badawczą główną ($H_1$)}:
+\begin{quote}
+    Zastosowanie modeli Grafowych Sieci Neuronowych (LightGCN oraz KGCN) pozwala na osiągnięcie statystycznie istotnie wyższej trafności rekomendacji rankingowych Top-N (mierzonej wskaźnikami NDCG@k oraz Recall@k) na zbiorze danych VOD w porównaniu do klasycznej faktoryzacji macierzy SVD oraz głębokiej sieci NCF.
+\end{quote}
+
+Sformułowano również \textbf{hipotezę pomocniczą ($H_2$)}:
+\begin{quote}
+    Wzrost dokładności rekomendacji uzyskiwany przez modele grafowe wiąże się z większym narzutem obliczeniowym w fazie treningu, jednak czas generowania predykcji w fazie wnioskowania online (\foreignlanguage{english}{\textit{inference}}) dla modeli LightGCN oraz KGCN mieści się w granicach akceptowalnych dla systemów czasu rzeczywistego VOD (poniżej 1 sekundy).
+\end{quote}
+
+
+Podstawową \textbf{metodą badawczą} wykorzystaną w pracy jest eksperyment obliczeniowy przeprowadzony w środowisku Python 3.12 przy użyciu frameworka RecBole oraz bibliotek PyTorch i SciPy.
+
+Układ pracy jest następujący:
+W \textbf{Rozdziale 1} omówiono uwarunkowania rynkowe VOD, formalizm matematyczny rekomendacji, ewolucję er algorytmicznych oraz kompromisy wdrożeniowe.
+W \textbf{Rozdziale 2} przedstawiono przyjętą metodykę badań, ścisłe sformułowania algorytmów (SVD, NCF, LightGCN/KGCN), zbiór danych oraz wskaźniki oceny.
+W \textbf{Rozdziale 3} zamieszczono przebieg eksperymentów obliczeniowych, zestawienie wyników ilościowych oraz dyskusję w kontekście wymagań produkcyjnych.
+Pracę zamyka \textbf{Podsumowanie}, zawierające syntezę wniosków oraz weryfikację postawionych hipotez badawczych.
