@@ -185,7 +185,8 @@
     },
     "ltex.dictionary": {
         "pl-PL": [
-            ":${workspaceFolder}/.vscode/ltex.dictionary.pl-PL.txt"
+            ":${workspaceFolder}/.vscode/ltex.dictionary.pl-PL.txt",
+            "binarizacji"
         ],
         "en-US": [
             ":${workspaceFolder}/.vscode/ltex.dictionary.en-US.txt"

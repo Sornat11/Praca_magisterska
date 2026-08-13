@@ -1,12 +1,151 @@
-\section{Tytuł rozdziału 2}
+\section{Metodyka Badań}
 
-W rozdziale 2 zwykle przedstawia się problem badawczy - należy opisać szczegółowo problem, wskazać jego znaczenie dla przedsiębiorstwa/procesu będącego przedmiotem badania, można przedstawić przedsiębiorstwo i jego pozycję na rynku, specyfikę branży (można wspomnieć o znajomości branży przez Autora/Autorkę, jeżeli jest to ważne).
+W niniejszym rozdziale przedstawiono kompleksowy protokół badawczy oraz szczegółowy aparat matematyczny wykorzystanych algorytmów rekomendacyjnych. Omówiono również specyfikę  środowiska wykonawczego, proces przygotowania i binarizacji zbioru danych oraz zastosowaną procedurę walidacji i ewaluacji jakości proponowanych propozycji rankingowych.
 
-Nalezy przedstawić metodologię badania: plan badania (czyli research protocol), czyli jak zostanie zamodelowany problem (opis + model matematyczny/symulacyjny), sposób generowania zestawów danych, sposób weryfikacji i walidacji modelu.
+\subsection{Środowisko wykonawcze}
 
-Tutaj też przezentujemy model matematyczny. Formuły matematyczne w Latex wyglądają daleko lepiej niż w Wordzie :). Poza tym można się do każdej formuły łatwo odwołac, np. do formuły (\ref{formula_01}).
+W celu standaryzacji protokołu ewaluacji wyników i przygotowania danych oraz dla zapewnienia maksymalnej powtarzalności wykorzystywanych algorytmów eksperymenty badawcze zdecydowano przeprowadzić z wykorzystaniem zunifikowanej biblioteki \foreignlanguage{english}{RecBole} (wersja 1.1.1) \cite{zhaoRecBoleUnifiedComprehensive2020}. Biblioteka ta, oparta na frameworku \foreignlanguage{english}{PyTorch}, stanowi współcześnie standard badawczy w dziedzinie systemów rekomendacyjnych, łącząc w ramach jednolitej architektury modułowej cztery kluczowe komponenty: moduł konfiguracji, moduł danych, interfejsy modeli oraz zoptymalizowany moduł ewaluacji.
 
+Sposób funkcjonowania ramki \foreignlanguage{english}{RecBole} opiera się na ściśle zdematerializowanej i zorientowanej na obliczenia GPU architekturze potokowej (ang. \foreignlanguage{english}{\textit{pipeline architecture}}). Przepływ danych i wykonanie eksperymentu wewnątrz biblioteki realizowane jest w następujących etapach:
+
+\begin{enumerate}
+    \item Moduł Konfiguracji (\foreignlanguage{english}{\textit{Configuration Module}}): Odpowiada za scalanie ustawień eksperymentalnych z hierarchicznie nakładanych źródeł: plików konfiguracyjnych \foreignlanguage{english}{YAML}, parametrów przekazywanych z wiersza poleceń oraz bezpośrednich słowników języka Python. Moduł ten kontroluje rozmiar batcha, stopę uczenia, użyty optymalizator (np. Adam, SGD) oraz szczegółowe parametry poszczególnych modeli.
+    \item Moduł Danych i Struktura Interaction (\foreignlanguage{english}{\textit{Data Module}}): Surowe zbiory danych przekształcane są w uniwersalny format tzw. plików atomowych (ang. \foreignlanguage{english}{\textit{Atomic Files}}) z rozszerzeniem .inter (zawierających relacje użytkownik-obiekt) oraz opcjonalnie .user, .item czy .kg (dla metadanych i grafów wiedzy). Wewnątrz środowiska dane są reprezentowane przez wyspecjalizowany obiekt Interaction, będący opakowaniem na słownik tensorów \foreignlanguage{english}{PyTorch} (torch.Tensor). Zapewnia to bezpośrednie i bezkosztowe przenoszenie całych pakietów danych do pamięci VRAM karty graficznej (.to(device)), eliminując wąskie gardła transferu pamięci RAM-VRAM.
+    \item Moduł Modelu (\foreignlanguage{english}{\textit{Model Module}}): Wszystkie zaimplementowane algorytmy dziedziczą po zunifikowanych klasach bazowych (np. GeneralRecommender dla modeli filtracji kolaboracyjnej oraz KnowledgeRecommender dla modeli z grafami wiedzy). Wymaga to od każdego algorytmu zdefiniowania dwóch zunifikowanych interfejsów:
+          \begin{itemize}
+              \item calculate\_loss(interaction) -- wyliczanie wartości funkcji straty (np. \foreignlanguage{english}{BPR Loss} lub \foreignlanguage{english}{Binary Cross-Entropy}) w fazie propagacji wprzód podczas uczenia,
+              \item predict(interaction) / full\_sort\_predict(interaction) -- wyznaczanie punktacji relewancji (\foreignlanguage{english}{\textit{scores}}) dla par użytkownik-obiekt w fazie predykcji.
+          \end{itemize}
+    \item Moduł Wykonania i Akceleracji Ewaluacji (\foreignlanguage{english}{\textit{Execution \& Evaluation Module}}): Pętla uczenia zarządzana jest przez obiekt Trainer, odpowiadający za automatyczny zapis punktów kontrolnych (\foreignlanguage{english}{\textit{checkpoints}}), wczesne zatrzymanie (\foreignlanguage{english}{\textit{early stopping}}) oraz optymalizację hiperparametrów.
+\end{enumerate}
+
+Środowisko uruchomieniowe przygotowano na podstawie systemu operacyjnego Windows 11 oraz interpretera języka Python (wersja 3.12) działającego w odizolowanym środowisku wirtualnym. Wszystkie parametry modeli oraz ustawienia eksperymentalne zostały natomiast zdefiniowane w postaci deklaratywnych plików konfiguracji \foreignlanguage{english}{YAML}. Rozwiązanie to gwarantuje pełną separację logiki eksperymentalnej od kodu źródłowego, ułatwiając rekonfigurowalność hiperparametrów, kontrolę wersji eksperymentów oraz bezproblemową powtarzalność uzyskanych wyników. Zastosowanie jednolitej ramki \foreignlanguage{english}{RecBole} eliminuje ponadto tzw. błędy niespójności implementacyjnej (ang. \foreignlanguage{english}{\textit{reproducibility crisis}}), gwarantując, że obserwowane różnice w wynikach wynikają wyłącznie z właściwości samych algorytmów \subsection{Opis i przygotowanie danych}
+
+W części empirycznej niniejszej pracy do ewaluacji modeli z grupy klasycznego filtrowania kolaboracyjnego (SVD/BPR), głębokiego uczenia (NCF) oraz grafowych sieci neuronowych (LightGCN, KGCN) wykorzystano zbiór danych \foreignlanguage{english}{MovieLens 1M}, udostępniany przez grupę badawczą \foreignlanguage{english}{GroupLens Research} z \foreignlanguage{english}{University of Minnesota}. Wybór tego zbioru jest podyktowany jego powszechnym uznaniem w literaturze naukowej jako kanonicznego benchmarku w dziedzinie systemów rekomendacyjnych \cite{harperMovieLensDatasetsHistory2015, heNeuralCollaborativeFilteringKwiecien032017, zhaoRecBoleUnifiedComprehensive2020}.
+
+Przestrzeń badawczą definiuje trójka uporządkowana obejmująca:
+\begin{itemize}
+    \item zbiór wszystkich zarejestrowanych użytkowników, oznaczany symbolem $\mathcal{U}$,
+    \item zbiór wszystkich dostępnych w katalogu obiektów (filmów), oznaczany symbolem $\mathcal{I}$,
+    \item zbiór zaobserwowanych historycznych interakcji, oznaczany symbolem $\mathcal{E}$, będący podzbiorem iloczynu kartezjańskiego zbiorów użytkowników i obiektów ($\mathcal{E} \subseteq \mathcal{U} \times \mathcal{I}$).
+\end{itemize}
+Liczebności (moce) poszczególnych zbiorów oznaczamy odpowiednio jako $|\mathcal{U}|$ (łączna liczba użytkowników), $|\mathcal{I}|$ (łączna liczba filmów) oraz $|\mathcal{E}|$ (łączna liczba zaobserwowanych zdarzeń). W analizowanym zbiorze dane te przyjmują wartości: $|\mathcal{U}| = 6\,040$, $|\mathcal{I}| = 3\,706$ oraz $|\mathcal{E}| = 1\,000\,209$. Dokładne ustalenie tych wymiarów jest kluczowe z punktu widzenia uczenia maszynowego, gdyż determinują one bezpośrednio rozmiary warstw osadzeń (\foreignlanguage{english}{\textit{embedding layers}}) w architekturach neuronowych i grafowych \cite{zhangDeepLearningBased2020}.
+
+\subsubsection{Zjawisko rzadkości macierzy interakcji (Data Sparsity)}
+
+Tradycyjny model danych rekomendacyjnych reprezentuje się jako dwuwymiarową macierz $R \in \mathbb{R}^{|\mathcal{U}| \times |\mathcal{I}|}$, w której wiersze odpowiadają poszczególnym użytkownikom ($u \in \mathcal{U}$), a kolumny poszczególnym obiektom ($i \in \mathcal{I}$) \cite{suSurveyCollaborativeFiltering2009}. Stopień braku wypełnienia tej macierzy opisuje wskaźnik rzadkości (\foreignlanguage{english}{\textit{sparsity rate}}), oznaczany symbolem $S$. 
+
+Przed przedstawieniem zależności matematycznej określmy znaczenie poszczególnych zmiennych występujących we wzorze:
+\begin{itemize}
+    \item $S$ --- wskaźnik rzadkości macierzy interakcji (wyrażany jako ułamek z przedziału $[0, 1]$ lub w procentach),
+    \item $|\mathcal{E}|$ --- liczba faktycznie zaobserwowanych i zarejestrowanych interakcji w systemie,
+    \item $|\mathcal{U}| \times |\mathcal{I}|$ --- teoretyczna maksymalna liczba wszystkich możliwych relacji w macierzy przy założeniu, że każdy użytkownik wszedłby w interakcję z każdym filmem w katalogu.
+\end{itemize}
+
+Biorąc pod uwagę powyższe oznaczenia, wskaźnik rzadkości $S$ definiuje się wzorem:
 \begin{equation}
-\label{formula_01}
-    \sum_{i \in I}(a_i*x_{ij}+b_i) \leq c_j, \quad j \in J;
+    S = 1 - \frac{|\mathcal{E}|}{|\mathcal{U}| \times |\mathcal{I}|}
 \end{equation}
+
+Dla wybranego zbioru danych stopień rzadkości wynosi $S = 95{,}53\%$, co oznacza, że jedynie $4{,}47\%$ komórek macierzy zawiera zaobserwowane wpisy. W środowisku VOD skrajna rzadkość jest zjawiskiem naturalnym --- pojedynczy widz jest w stanie zapoznać się jedynie z ułamkiem procenta całkowitej oferty platformy \cite{checinskiSystemyRekomendacjiRemedium2023}. Skrajnie wysoki wskaźnik rzadkości stanowi podstawowe uzasadnienie metodologiczne dla odrzucenia prostych algorytmów pamięciowych ($k$-NN), które zmagają się z problemem braku wspólnych sąsiadów, na rzecz metod czynników ukrytych (SVD) \cite{korenMatrixFactorizationTechniques2009} oraz propagacji osadzeń w sieciach grafowych.
+
+\subsubsection{Rozkład popularności treści i zjawisko długiego ogona (Long-Tail)}
+
+Interakcje na platformach streamingowych podlegają silnej asymetrii popytu opisanej rozkładem potęgowym (\foreignlanguage{english}{\textit{Power Law}}) \cite{celmaMusicRecommendationDiscovery2010}. Badana przestrzeń danych jednoznacznie wykazuje zjawisko tzw. długiego ogona (\foreignlanguage{english}{\textit{Long-Tail Distribution}}), zaprezentowane na Rysunku \ref{fig:long_tail}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{img/movielens_long_tail.pdf}
+    \caption{Rozkład popularności filmów w zbiorze MovieLens 1M przedstawiający zjawisko długiego ogona (\foreignlanguage{english}{\textit{Long-Tail Distribution}}).}
+    \label{fig:long_tail}
+\end{figure}
+
+Katalog filmowy dzieli się na dwie wyraźne strefy \cite{celmaMusicRecommendationDiscovery2010, krawczukSystemyRekomendacyjne2024}:
+\begin{itemize}
+    \item \textbf{Głowę popytu (\foreignlanguage{english}{\textit{Head}}):} wąską grupę najpopularniejszych produkcji kinowych, które skupiają przeważającą część całkowitej liczby ocen w systemie.
+    \item \textbf{Długi ogon (\foreignlanguage{english}{\textit{Tail}}):} obszerną listę niszowych tytułów o niskiej częstotliwości odtworzeń.
+\end{itemize}
+Z biznesowego punktu widzenia spersonalizowany system rekomendacyjny na rynku VOD musi potrafić trafnie proponować pozycje z długiego ogona, zapobiegając zjawisku monopolizacji uwagi widza wyłącznie przez najpopularniejsze hity \cite{doligalskiPlatformyCyfroweModel2024}.
+
+\subsubsection{Transformacja ocen jawnych w sygnał dorozumiany (Implicit Feedback)}
+
+Oryginalny zbiór MovieLens zawiera oceny jawne (\foreignlanguage{english}{\textit{explicit feedback}}) wyrażone w 5-stopniowej skali dyskretnej (od 1 do 5 gwiazdek). W rzeczywistych systemach rekomendacyjnych platform wideo (VOD/OTT) oceny jawne występują jednak niezwykle rzadko --- użytkownicy rzadko oceniają obejrzane materiały, a głównym źródłem informacji stają się ślady cyfrowe i interakcje dorozumiane (\foreignlanguage{english}{\textit{implicit feedback}}), takie jak odtworzenie filmu, czas oglądania czy kliknięcie \cite{adomaviciusNextGenerationRecommender2005a, rendleBPRBayesianPersonalized2009, checinskiSystemyRekomendacjiRemedium2023}.
+
+Ponadto analiza rozkładu ocen jawnych wykazuje silne skrzywienie pozytywne (\foreignlanguage{english}{\textit{positivity bias}}) --- użytkownicy znacznie chętniej oceniają filmy, które im się podobały (oceny 3, 4 i 5 stanowią ponad $80\%$ wszystkich wpisów).
+
+Zgodnie z metodologią zaproponowaną przez He i in. \cite{heNeuralCollaborativeFilteringKwiecien032017}, w celu dostosowania danych do realiów platform streamingowych dokonuje się przekształcenia binarnego oryginalnej macierzy ocen w macierz interakcji dorozumianych, oznaczaną jako $Y \in \mathbb{R}^{M \times N}$ (gdzie $M = |\mathcal{U}|$ oznacza liczbę użytkowników, a $N = |\mathcal{I}|$ liczbę filmów). 
+
+Przed przedstawieniem reguły dyskryminacyjnej zdefiniujmy elementy składowe wzoru:
+\begin{itemize}
+    \item $y_{ui}$ --- wartość wskaźnikowa określająca obecność zaobserwowanej relacji pomiędzy użytkownikiem $u \in \mathcal{U}$ a obiektem $i \in \mathcal{I}$,
+    \item $y_{ui} = 1$ --- stan dodatni, oznaczający zarejestrowanie interakcji (np. wystawienie oceny lub obejrzenie filmu),
+    \item $y_{ui} = 0$ --- stan nieobserwowany, oznaczający brak zarejestrowanej akcji w logach.
+\end{itemize}
+
+Sformułowanie matematyczne funkcji binarnej przyjmuje postać:
+\begin{equation}
+    y_{ui} = \begin{cases} 1, & \text{jeśli zaobserwowano interakcję (użytkownik } u \text{ ocenił/obejrzał film } i\text{)} \\ 0, & \text{w przeciwnym razie (brak obserwacji)} \end{cases}
+\end{equation}
+
+Warto podkreślić, że wartość $y_{ui} = 0$ nie oznacza jawnej niechęci użytkownika do danego tytułu, lecz jedynie brak wiedzy o wchodzeniu w interakcję (efekt braku ekspozycji lub braku znajomości danego filmu w katalogu) \cite{rendleBPRBayesianPersonalized2009}.
+
+\subsubsection{Filtrowanie gęstości danych (k-core filtering) i aktywność użytkowników}
+
+Rozkład aktywności użytkowników wykazuje duże zróżnicowanie --- od profilów okazjonalnych po użytkowników o skrajnie wysokiej liczbie obejrzanych pozycji. Aby wyeliminować zaburzenia wynikające ze skrajnie rzadkich profilów oraz pozycji znikających z katalogu bez historii ocen, zastosowano procedurę filtrowania typu $k$-\foreignlanguage{english}{\textit{core}} ($k = 5$) \cite{heNeuralCollaborativeFilteringKwiecien032017}. 
+
+Odrzucono wszystkich użytkowników oraz filmy posiadające mniej niż 5 zarejestrowanych interakcji. Operacja ta zapobiega występowaniu niemożliwych do wyuczenia trywialnych wektorów zerowych w warstwach embeddingów oraz stabilizuje proces wyznaczania normalizacji macierzy sąsiedztwa grafu dwudzielnego w modelach GNN.
+
+\subsubsection{Reprezentacja w postaci grafu dwudzielnego}
+
+Na potrzeby modeli z grupy Grafowych Sieci Neuronowych (LightGCN oraz KGCN) zbiór interakcji zinterpretowano jako nieskierowany graf dwudzielny \cite{heLightGCNSimplifyingPowering2020, wangKnowledgeGraphConvolutional2019, malinowskiZastosowanieGrafowSieci2021}. Graf ten oznaczamy symbolem $G = (\mathcal{V}, \mathcal{E})$, w którym zbiór węzłów $\mathcal{V}$ oraz zbiór krawędzi $\mathcal{E}$ definiuje się następująco:
+\begin{itemize}
+    \item $\mathcal{V} = \mathcal{U} \cup \mathcal{I}$ --- zbiór wierzchołków stanowiący sumę dwóch rozłącznych podzbiorów: użytkowników $\mathcal{U}$ oraz filmów $\mathcal{I}$ ($\mathcal{U} \cap \mathcal{I} = \emptyset$),
+    \item $\mathcal{E} = \{ (u, i) \mid u \in \mathcal{U}, i \in \mathcal{I}, y_{ui} = 1 \}$ --- zbiór nieskierowanych krawędzi łączących węzeł użytkownika $u$ z węzłem filmu $i$ wtedy i tylko wtedy, gdy zaobserwowano dodatnią interakcję ($y_{ui} = 1$),
+    \item $d(u)$ oraz $d(i)$ --- stopień węzła (\foreignlanguage{english}{\textit{node degree}}), określający odpowiednio liczbę krawędzi incydentnych do użytkownika $u$ (liczba obejrzanych filmów) oraz do filmu $i$ (liczba widzów).
+\end{itemize}
+
+Struktura ta pozwala na jawne modelowanie połączeń wyższego rzędu (\foreignlanguage{english}{\textit{high-order connectivity}}). Informacja o preferencjach użytkownika propagowana jest przez sąsiednie węzły obiektów do innych użytkowników o podobnych gustach, co stanowi fundament działania algorytmu LightGCN omawianego w dalszej części pracy \cite{heLightGCNSimplifyingPowering2020}.
+
+\subsubsection{Konwersja do formatu plików atomowych frameworka RecBole}
+
+W celu zapewnienia ścisłej reprodukowalności eksperymentów i eliminacji błędów implementacyjnych, oczyszczone zbiory danych przekonwertowano do formatu Plików Atomowych (ang. \foreignlanguage{english}{\textit{Atomic Files}}) z rozszerzeniem \texttt{.inter}, stanowiącego standard wejściowy biblioteki RecBole \cite{zhaoRecBoleUnifiedComprehensive2020}. Plik \texttt{.inter} przechowuje relacje w strukturze tabularycznej ze zdefiniowanymi typami pól:
+\begin{itemize}
+    \item \texttt{user\_id:token} --- unikalny identyfikator użytkownika (sekwencja dyskretna),
+    \item \texttt{item\_id:token} --- unikalny identyfikator filmu (sekwencja dyskretna),
+    \item \texttt{rating:float} --- oryginalna ocena użytkownika (wykorzystywana pomocniczo),
+    \item \texttt{timestamp:float} --- znacznik czasu interakcji.
+\end{itemize}
+
+Przykładowa konfiguracja transformacji została zrealizowana przy użyciu autorskiego potoku w języku Python (\texttt{convert\_to\_recbole.py}).
+
+\subsubsection{Protokół podziału danych i próbkowanie negatywne}
+
+Ewaluację modeli przeprowadzono w oparciu o proporcjonalny losowy podział danych (\foreignlanguage{english}{\textit{Ratio Splitting}}) w stosunku 80\% : 10\% : 10\% (odpowiednio: zbiór treningowy, walidacyjny i testowy).
+
+Do trenowania modeli punktowych i parowych (Log Loss w NCF oraz BPR Loss w SVD/LightGCN) zastosowano procedurę próbkowania negatywnego (\foreignlanguage{english}{\textit{negative sampling}}). Dla każdej dodatniej pary $(u, i) \in \mathcal{Y}$ losowano jednostajnie ze zbioru nieobserwowane pozycji zestaw próbek negatywnych $(u, j) \in \mathcal{Y}^-$ (gdzie $y_{uj} = 0$), przy zachowaniu stosunku 1:4 (4 próbki negatywne na 1 pozycję dodatnią), co stanowi optymalny kompromis między stabilnością gradientu a czasem obliczeń \cite{heNeuralCollaborativeFilteringKwiecien032017}.
+
+\subsubsection{Charakterystyka statystyczna przetworzonych zbiorów}
+
+Tabela \ref{tab:movielens_stats} przedstawia zbiorcze zestawienie parametrów statystycznych przygotowanych zbiorów danych po przeprowadzeniu potoku przetwarzania.
+
+\begin{table}[h!]
+    \centering
+    \caption{Podsumowanie statystyczne zbiorów danych wykorzystanych w eksperymentach}
+    \label{tab:movielens_stats}
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Parametr / Zbiór danych}    & \textbf{MovieLens 100k (\texttt{ml-100k})} & \textbf{MovieLens 1M (\texttt{ml-1m})} \\ \hline
+        Liczba użytkowników ($|U|$)         & 943                                        & 6 040                                  \\ \hline
+        Liczba filmów ($|I|$)               & 1 682                                      & 3 706                                  \\ \hline
+        Liczba interakcji ($|\mathcal{Y}|$) & 100 000                                    & 1 000 209                              \\ \hline
+        Średnia liczba ocen na użytkownika  & 106,04                                     & 165,60                                 \\ \hline
+        Gęstość macierzy (Density)          & 6,30\%                                     & 4,47\%                                 \\ \hline
+        Rzadkość macierzy (Sparsity)        & 93,70\%                                    & 95,53\%                                \\ \hline
+        Typ informacji zwrotnej             & Implicit Feedback                          & Implicit Feedback                      \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Algorytmy filtrowania kolaboracyjnego}
+\subsection{Algorytmy uczenia głębokiego}
+\subsection{Algorytmy grafowych sieci neuronowych}
+\subsection{Metryki oceny}
