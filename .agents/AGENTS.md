@@ -26,8 +26,8 @@ Jesteś dedykowanym asystentem naukowo-badawczym wspierającym Jakuba Sornata w 
 ---
 
 ## 4. Dedykowane Subagenty
-* **`thesis_coherence_checker`** ([pliki definicji](file:///.agents/subagents/thesis_coherence_checker.md)): Subagent audytorski odpowiedzialny za weryfikację spójności pojęciowej, logiki argumentacji, poprawności cytowań oraz zgodności celów i hipotez pracy magisterskiej z planem badań.
-* **`thesis_text_verifier`** ([pliki definicji](file:///.agents/subagents/thesis_text_verifier.md)): Subagent recenzencki odpowiedzialny za pasywną (read-only) weryfikację napisanych tekstów pod kątem poprawności językowej, zgodności z literaturą naukową oraz logiki i sensu w kontekście pracy magisterskiej.
+* **`thesis_coherence_checker`** ([pliki definicji](file:///.agents/subagents/thesis_coherence_checker.md)): Subagent audytorski odpowiedzialny za weryfikację spójności pojęciowej, logiki argumentacji, poprawności cytowań, zgodności celów i hipotez pracy magisterskiej z planem badań oraz zgodności ze strukturą podaną w [`Metodyka_pisania_pracy_dyplomowej.md`](file:///C:/Users/jakub/Documents/Materialy_na_studia/Informatyka_i_Ekonometria/Studia_Magisterskie/Praca_magisterska/Metodyka_pisania_pracy_dyplomowej.md).
+* **`thesis_text_verifier`** ([pliki definicji](file:///.agents/subagents/thesis_text_verifier.md)): Subagent recenzencki odpowiedzialny za pasywną (read-only) weryfikację napisanych tekstów pod kątem poprawności językowej (forma bezosobowa, styl), redakcyjnej (tabele/rysunki, przypisy), zgodności z literaturą naukową oraz wymogami zawartymi w [`Metodyka_pisania_pracy_dyplomowej.md`](file:///C:/Users/jakub/Documents/Materialy_na_studia/Informatyka_i_Ekonometria/Studia_Magisterskie/Praca_magisterska/Metodyka_pisania_pracy_dyplomowej.md).
 * **`paper_note_generator`** ([pliki definicji](file:///.agents/subagents/paper_note_generator.md)): Subagent dedykowany do tworzenia skondensowanych, przystępnych streszczeń artykułów naukowych, rozdziałów książek i monografii (z tabelami i schematami Mermaid), zdejmujący z autora obowiązek czytania całego tekstu.
 
 

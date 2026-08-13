@@ -62,6 +62,14 @@
             "env": {}
         },
         {
+            "name": "biber",
+            "command": "biber",
+            "args": [
+                "%DOCFILE%"
+            ],
+            "env": {}
+        },
+        {
             "name": "rnw2tex",
             "command": "Rscript",
             "args": [
@@ -109,6 +117,15 @@
             ]
         },
         {
+            "name": "pdflatex ➞ biber ➞ pdflatex × 2",
+            "tools": [
+                "pdflatex",
+                "biber",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
             "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
             "tools": [
                 "pdflatex",
@@ -143,6 +160,8 @@
         "markdown"
     ],
     "cSpell.ignorePaths": [
+        "**/*.ipynb",
+        "**/Notebooks/**",
         "**/*.aux",
         "**/*.bbl",
         "**/*.blg",
@@ -154,6 +173,14 @@
         "**/*.synctex.gz",
         "**/*.bib"
     ],
+    "[ipynb]": {
+        "ltex.enabled": false,
+        "cSpell.enabled": false
+    },
+    "[jupyter]": {
+        "ltex.enabled": false,
+        "cSpell.enabled": false
+    },
     "diffEditor.ignoreTrimWhitespace": false,
     "todo-tree.tree.showScanModeButton": false,
     "todo-tree.filtering.ignoreGitSubmodules": true,
