@@ -34,7 +34,8 @@ Thumbs.db
 
 # LaTeX build and auxiliary files
 *.aux
-*.bbl
+*.bbl*
+*.bcf
 *.blg
 *.fdb_latexmk
 *.fls
@@ -56,4 +57,7 @@ Thumbs.db
 *.synctex.gz
 *.toc
 *.vrb
+*.run.xml
+*-SAVE-ERROR*
+
 

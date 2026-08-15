@@ -159,6 +159,10 @@
         "latex",
         "markdown"
     ],
+    "ltex.disabledFilePatterns": [
+        "**/*.ipynb",
+        "**/Notebooks/**"
+    ],
     "cSpell.ignorePaths": [
         "**/*.ipynb",
         "**/Notebooks/**",

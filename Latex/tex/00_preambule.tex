@@ -24,6 +24,7 @@
     autocite=footnote,
     sorting=nyt,
     giveninits=true,
+    date=year,
     doi=false,
     isbn=false,
     url=false,
@@ -44,10 +45,16 @@
 \DeclareFieldFormat[incollection]{title}{#1}
 \DeclareFieldFormat[incollection]{booktitle}{(w:) #1}
 
-% 3. Formatowanie stron w przypisach i bibliografii
-\AtEveryCitekey{\clearfield{pages}}
-\DeclareFieldFormat{postnote}{zob.~s.~#1}
+% 3. Formatowanie stron, dat i symboli w przypisach
+\AtEveryCitekey{\clearfield{pages}\clearfield{month}\clearfield{day}}
+\AtEveryBibitem{\clearfield{month}\clearfield{day}}
+\DeclareFieldFormat{postnote}{s.~#1}
 \DeclareFieldFormat{pages}{s.~#1}
+
+\DefineBibliographyStrings{polish}{
+  ibidem = {Ibidem},
+  loccit = {Ibidem}
+}
 
 
 

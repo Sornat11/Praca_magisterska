@@ -93,7 +93,15 @@ Sformułowanie matematyczne funkcji binarnej przyjmuje postać:
 Warto podkreślić, że wartość $y_{ui} = 0$ ma charakter wysoce niejednoznaczny semantycznie. Nie oznacza ona bowiem jawnej niechęci użytkownika do danego tytułu, lecz jedynie brak wiedzy o wchodzeniu w interakcję \footcite[2]{heNeuralCollaborativeFilteringKwiecien032017}. Użytkownik mógł nie obejrzeć filmu z powodów zupełnie niezależnych od jego gustu: mógł go nie zauważyć w katalogu, nie zostać na niego wyeksponowany przez interfejs platformy, bądź po prostu jeszcze na niego nie trafić \footcite[2]{heNeuralCollaborativeFilteringKwiecien032017, rendleBPRBayesianPersonalized2009}. Struktura ta stanowi fundamentalne wyzwanie w uczeniu maszynowym, gdyż zbiór danych nieobserwowanych ($y_{ui} = 0$) de facto reprezentuje jednocześnie rzeczywiste negatywne preferencje (użytkownik zna film, ale nie chce go obejrzeć), jak i potencjalne przyszłe interakcje dodatnie (użytkownik chętnie obejrzałby film, gdyby tylko dowiedział się o jego istnieniu), które model powinien poprawnie zidentyfikować i wybić na górę listy rekomendacji \footcite[453]{rendleBPRBayesianPersonalized2009}.
 
 
-Rozkład aktywności użytkowników wykazuje duże zróżnicowanie -- od profilów okazjonalnych po użytkowników o skrajnie wysokiej liczbie obejrzanych pozycji. Aby wyeliminować zaburzenia wynikające ze skrajnie rzadkich profilów oraz pozycji znikających z katalogu bez historii ocen, zastosowano procedurę filtrowania typu $k$-\foreignlanguage{english}{\textit{core}} ($k = 5$) \footcite[7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}. Odrzucono wszystkich użytkowników oraz filmy posiadające mniej niż 5 zarejestrowanych interakcji. Operacja ta zapobiega występowaniu niemożliwych do wyuczenia trywialnych wektorów zerowych w warstwach embeddingów oraz stabilizuje proces wyznaczania normalizacji macierzy sąsiedztwa grafu dwudzielnego w modelach GNN \footcite[6, sekcja 2.1.1]{zhaoRecBoleUnifiedComprehensive2020}.
+Rozkład aktywności użytkowników wykazuje duże zróżnicowanie -- od profilów okazjonalnych po użytkowników o skrajnie wysokiej liczbie obejrzanych pozycji. Rozkład liczby ocen przypadających na pojedynczego użytkownika w analizowanym zbiorze zaprezentowano na Rysunku \ref{fig:user_activity}. Aby wyeliminować zaburzenia wynikające ze skrajnie rzadkich profilów oraz pozycji znikających z katalogu bez historii ocen, zastosowano procedurę filtrowania typu $k$-\foreignlanguage{english}{\textit{core}} ($k = 5$) \footcite[7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}. Odrzucono wszystkich użytkowników oraz filmy posiadające mniej niż 5 zarejestrowanych interakcji. Operacja ta zapobiega występowaniu niemożliwych do wyuczenia trywialnych wektorów zerowych w warstwach embeddingów oraz stabilizuje proces wyznaczania normalizacji macierzy sąsiedztwa grafu dwudzielnego w modelach GNN \footcite[6, sekcja 2.1.1]{zhaoRecBoleUnifiedComprehensive2020}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.82\linewidth]{img/movielens_user_activity.pdf}
+    \caption{Rozkład liczby wystawionych ocen per użytkownik w zbiorze MovieLens 1M}
+    \label{fig:user_activity}
+    {\raggedright \small \textbf{Źródło:} opracowanie własne na podstawie danych z zestawu MovieLens 1M.\par}
+\end{figure}
 
 W celu zapewnienia ścisłej reprodukowalności eksperymentów i eliminacji błędów implementacyjnych, oczyszczone zbiory danych przekonwertowano do formatu Plików Atomowych (ang. \foreignlanguage{english}{\textit{Atomic Files}}) z rozszerzeniem \texttt{.inter}, stanowiącego standard wejściowy biblioteki RecBole \footcite[6, sekcja 2.1.2]{zhaoRecBoleUnifiedComprehensive2020}. Plik \texttt{.inter} przechowuje relacje w strukturze tabularycznej ze zdefiniowanymi typami pól \footcite[6, Tabela 3]{zhaoRecBoleUnifiedComprehensive2020}:
 \begin{itemize}
@@ -108,9 +116,6 @@ Ewaluację modeli przeprowadzono w oparciu o proporcjonalny losowy podział dany
 
 Do trenowania modeli punktowych i parowych (Log Loss w NCF oraz BPR Loss w SVD/LightGCN) zastosowano procedurę próbkowania negatywnego (\foreignlanguage{english}{\textit{negative sampling}}). Dla każdej dodatniej pary $(u, i) \in \mathcal{E}$ losowano jednostajnie ze zbioru pozycji nieobserwowanych zestaw próbek negatywnych $(u, j) \in \mathcal{E}^-$ (gdzie $y_{uj} = 0$), przy zachowaniu stosunku $1:4$ (4 próbki negatywne na 1 pozycję dodatnią), co stanowi optymalny kompromis między stabilnością gradientu a czasem obliczeń \footcite[7, sekcja 4.1.2]{heNeuralCollaborativeFilteringKwiecien032017}. Zastosowanie elastycznej liczby próbek negatywnych (w optymalnym przedziale od 3 do 6) pozwala modelom optymalizowanym punktową stratą logarytmicznej na znaczące przełamanie ograniczeń klasycznych strat parowych typu BPR, które z natury parują wyłącznie jedną próbkę negatywną z dodatnią \footcite[8, sekcja 4.3]{heNeuralCollaborativeFilteringKwiecien032017}.
 
-
-
-\newpage
 Tabela \ref{tab:movielens_stats} przedstawia zbiorcze zestawienie parametrów statystycznych przygotowanego zbioru danych MovieLens 1M po przeprowadzeniu potoku przetwarzania.
 
 \begin{table}[H]
@@ -121,21 +126,69 @@ Tabela \ref{tab:movielens_stats} przedstawia zbiorcze zestawienie parametrów st
     \label{tab:movielens_stats}
     \begin{tabular}{|l|c|}
         \hline
-        \textbf{Parametr statystyczny}             & \textbf{Wartość dla zbioru MovieLens 1M (\texttt{ml-1m})} \\ \hline
-        Liczba użytkowników ($|\mathcal{U}|$)      & 6\,040                                                    \\ \hline
-        Liczba filmów ($|\mathcal{I}|$)            & 3\,706                                                    \\ \hline
-        Liczba interakcji ($|\mathcal{E}|$)        & 1\,000\,209                                                \\ \hline
-        Średnia liczba ocen na użytkownika         & 165{,}60                                                  \\ \hline
-        Gęstość macierzy (\textit{Density})         & 4{,}47\%                                                  \\ \hline
-        Rzadkość macierzy (\textit{Sparsity})       & 95{,}53\%                                                 \\ \hline
-        Typ informacji zwrotnej                    & Interakcje dorozumiane (\textit{Implicit Feedback})       \\ \hline
+        \textbf{Parametr statystyczny}        & \textbf{Wartość dla zbioru MovieLens 1M (\texttt{ml-1m})} \\ \hline
+        Liczba użytkowników ($|\mathcal{U}|$) & 6\,040                                                    \\ \hline
+        Liczba filmów ($|\mathcal{I}|$)       & 3\,706                                                    \\ \hline
+        Liczba interakcji ($|\mathcal{E}|$)   & 1\,000\,209                                               \\ \hline
+        Średnia liczba ocen na użytkownika    & 165{,}60                                                  \\ \hline
+        Gęstość macierzy (\textit{Density})   & 4{,}47\%                                                  \\ \hline
+        Rzadkość macierzy (\textit{Sparsity}) & 95{,}53\%                                                 \\ \hline
+        Typ informacji zwrotnej               & Interakcje dorozumiane (\textit{Implicit Feedback})       \\ \hline
     \end{tabular}
     \vspace{1.5mm}
 
-    {\raggedright \small \textbf{Źródło:} opracowanie własne na podstawie danych MovieLens 1M.\par}
+    {\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{table}
 
 \subsection{Algorytmy filtrowania kolaboracyjnego}
+
+
 \subsection{Algorytmy uczenia głębokiego}
 \subsection{Algorytmy grafowych sieci neuronowych}
 \subsection{Metryki oceny}
+Ewaluacja modeli rekomendacyjnych w warunkach interakcji dorozumianych (\foreignlanguage{english}{\textit{implicit feedback}}) różni się fundamentalnie od tradycyjnej oceny systemów ukierunkowanych na przewidywanie ocen jawnych. W klasycznym ujęciu regresyjnym celem algorytmu jest minimalizacja błędu predykcji wartości ciągłej, wyrażanej najczęściej za pomocą średniego błędu kwadratowego (ang. \foreignlanguage{english}{\textit{Root Mean Squared Error, RMSE}}) lub średniego błędu bezwzględnego (ang. \foreignlanguage{english}{\textit{Mean Absolute Error, MAE}}) \footcite[15--16]{shaniEvaluatingRecommendationSystems2011}.
+
+W rzeczywistych platformach VOD/OTT kluczowe znaczenie ma jednak zdolność systemu do wyselekcjonowania i trafnego uporządkowania spersonalizowanej listy $K$ najwłaściwszych obiektów (tzw. rekomendacja góry listy, ang. \foreignlanguage{english}{\textit{Top-K Recommendation}}) \footcite[220]{steckEvaluationRecommendationsRatingprediction2013}. Skuteczność dopasowania listy do preferencji użytkownika mierzy się za pomocą metryk rangowych. W przeciwieństwie do miar regresyjnych uwzględniają one fakt, że w warunkach rzadkości danych oraz przytłaczającej liczby tytułów w katalogu, użytkownik zapoznaje się wyłącznie z czołowymi pozycjami rekomendowanej listy, ignorując pozostałą, nienadrzędną część asortymentu platformy \footcite[16--20]{shaniEvaluatingRecommendationSystems2011}.
+
+W badaniach eksperymentalnych zastosowano zestaw czterech komplementarnych metryk rangowych poddawanych ewaluacji na zbiorze testowym dla progu $K = 10$: Czułość (\foreignlanguage{english}{\textit{Recall@K}}), Wskaźnik Trafień (\foreignlanguage{english}{\textit{Hit Rate@K}}), Znormalizowany Zdyskontowany Zysk Skumulowany (\foreignlanguage{english}{\textit{Normalized Discounted Cumulative Gain, NDCG@K}}) oraz Średnią Odwrotność Rangi (\foreignlanguage{english}{\textit{Mean Reciprocal Rank, MRR@K}}) \footcite[zob. s. 6, sekcja 2.3.1]{zhaoRecBoleUnifiedComprehensive2020}.
+
+Niech $\mathcal{U}$ oznacza zbiór użytkowników poddawanych ewaluacji, $\mathcal{R}_u(K)$ uporządkowany zbiór $K$ obiektów rekomendowanych użytkownikowi $u \in \mathcal{U}$ przez analizowany model, natomiast $\mathcal{T}_u$ zbiór obiektów faktycznie zaobserwowanych (relewantnych) w zbiorze testowym dla tego użytkownika. Każda z wymienionych metryk mierzy odmienny aspekt jakości dopasowania listy rekomendacyjnej:
+
+\begin{itemize}
+    \item \textbf{Czułość (ang. \foreignlanguage{english}{\textit{Recall at K, Recall@K}}):} określa, jaki ułamek wszystkich relewantnych dla użytkownika obiektów ze zbioru testowego znalazł się na wygenerowanej liście rekomendacji, ignorując kolejność ich ułożenia \footcite[264]{shaniEvaluatingRecommendationSystems2011}. Obliczany jako iloraz trafnych wskazań algorytmu (wyrażonych jako przecięcie zbioru rekomendacji ze zbiorem testowym) i łącznej liczby pożądanych przez użytkownika elementów:
+          \begin{equation}
+              \text{Recall@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \frac{|\mathcal{R}_u(K) \cap \mathcal{T}_u|}{|\mathcal{T}_u|}
+          \end{equation}
+
+    \item \textbf{Wskaźnik Trafień (ang. \foreignlanguage{english}{\textit{Hit Rate at K, Hit Rate@K}}):} reprezentuje prawdopodobieństwo, że na rekomendowanej liście o długości $K$ znajdzie się co najmniej jeden obiekt poszukiwany przez użytkownika w zbiorze testowym \footcite[7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}:
+          \begin{equation}
+              \text{HR@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \mathbb{I}\left( \mathcal{R}_u(K) \cap \mathcal{T}_u \neq \emptyset \right)
+          \end{equation}
+          gdzie $\mathbb{I}(\cdot)$ oznacza funkcję wskaźnikową, przyjmującą wartość $1$, gdy warunek logiczny jest spełniony, oraz $0$ w przeciwnym razie.
+
+    \item \textbf{Znormalizowany Zdyskontowany Zysk Skumulowany (ang. \foreignlanguage{english}{\textit{Normalized Discounted Cumulative Gain, NDCG@K}}):} w przeciwieństwie do czułości i wskaźnika trafień, metryka NDCG@K uwzględnia dokładną pozycję (rangę) trafionych obiektów. Odzwierciedla to rzeczywiste zachowanie użytkowników platform streamingowych, których uwaga drastycznie maleje wraz z oddalaniem się od początku zestawienia. Dyskonto pozycjonalne nakłada najwyższą wagę na trafienia na najwyższych miejscach (np. pozycje 1--3), stosując logarytmiczne osłabienie wag dla pozycji dalszych, co pozwala na precyzyjną ocenę zdolności modelu do pozycjonowania najlepszych propozycji na samym szczycie listy \footcite[35]{krawczukSystemyRekomendacyjne2024}.
+
+          Zysk zdyskontowany (DCG@K) dla użytkownika $u$ wyraża się wzorem \footcite[270]{shaniEvaluatingRecommendationSystems2011}:
+          \begin{equation}
+              \text{DCG@K}(u) = \sum_{i=1}^K \frac{rel_u(i)}{\log_2(i + 1)}
+          \end{equation}
+          gdzie $rel_u(i) \in \{0, 1\}$ oznacza wskaźnik trafienia obiektu znajdującego się na $i$-tej pozycji rekomendowanej listy $\mathcal{R}_u(K)$ (przyjmując wartość 1, jeśli obiekt należy do zbioru testowego $\mathcal{T}_u$, oraz 0 w przeciwnym razie). Idealny zysk zdyskontowany (IDCG@K) odpowiada hipotetycznemu, bezbłędnemu uszeregowaniu, w którym wszystkie rzeczywiste obiekty ze zbioru testowego umieszczono na najwyższych możliwych pozycjach listy rekomendacyjnej \footcite[35]{krawczukSystemyRekomendacyjne2024}:
+          \begin{equation}
+              \text{IDCG@K}(u) = \sum_{i=1}^{\min(|\mathcal{T}_u|, K)} \frac{1}{\log_2(i + 1)}
+          \end{equation}
+          Znormalizowana wartość NDCG@K stanowi stosunek zysku rzeczywistego do idealnego, a jej uśrednienie po całym zbiorze użytkowników pozwala na uzyskanie syntetycznej oceny jakości rankingu generowanego przez model \footcite[270--271]{shaniEvaluatingRecommendationSystems2011, krawczukSystemyRekomendacyjne2024}:
+          \begin{equation}
+              \text{NDCG@K}(u) = \frac{\text{DCG@K}(u)}{\text{IDCG@K}(u)} \quad \implies \quad \text{NDCG@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \text{NDCG@K}(u)
+          \end{equation}
+
+    \item \textbf{Średnia Odwrotność Rangi (ang. \foreignlanguage{english}{\textit{Mean Reciprocal Rank, MRR@K}}):} mierzy zdolność systemu do jak najszybszego dostarczenia pierwszej trafnej rekomendacji. Z punktu widzenia platform VOD wskaźnik ten ma fundamentalne znaczenie użytkowe, gdyż symuluje scenariusz, w którym widz poszukuje pojedynczego, satysfakcjonującego filmu na dany wieczór, a jego proces interakcji z interfejsem kończy się w momencie odnalezienia pierwszej interesującej pozycji. Jakość systemu ocenia się tu przez pryzmat odwrotności pozycji, na której pojawił się pierwszy obiekt ze zbioru testowego \footcite[34]{krawczukSystemyRekomendacyjne2024}:
+          \begin{equation}
+              \text{MRR@K}(u) = \frac{1}{\text{rank}_u^*}
+          \end{equation}
+          gdzie $\text{rank}_u^*$ oznacza rangę pierwszej trafnej rekomendacji na liście $\mathcal{R}_u(K)$ (przyjmując $\text{MRR@K}(u) = 0$, jeśli w obrębie $K$ pozycji nie wystąpiło żadne trafienie). Ostateczna wartość MRR@K stanowi średnią arytmetyczną odwrotności rang obliczoną dla wszystkich analizowanych użytkowników \footcite[34]{krawczukSystemyRekomendacyjne2024}:
+          \begin{equation}
+              \text{MRR@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \text{MRR@K}(u)
+          \end{equation}
+\end{itemize}
+
+Wartość $\text{NDCG@10}$ przyjęto w badaniach jako główną metrykę walidacyjną (\foreignlanguage{english}{\textit{target metric}}), decydującą o zatrzymaniu procesu trenowania (procedura \foreignlanguage{english}{\textit{early stopping}}) oraz wyznaczaniu optymalnych zestawów hiperparametrów analizowanych modeli. Takie podejście jest w pełni spójne z powszechną praktyką eksperymentalną w dziedzinie głębokich systemów rekomendacyjnych, gdzie to właśnie jakość uporządkowania czołówki listy rekomendacji decyduje o finalnej użyteczności modelu dla widza \footcite[zob. s. 7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}.
