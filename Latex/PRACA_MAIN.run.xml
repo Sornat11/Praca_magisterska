@@ -81,7 +81,7 @@
       <file>PRACA_MAIN.bcf</file>
     </requires>
     <requires type="editable">
-      <file>references.bib</file>
+      <file>Moja biblioteka.bib</file>
     </requires>
   </external>
 </requests>

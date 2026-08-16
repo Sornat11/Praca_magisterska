@@ -1,5 +1,5 @@
 % !TEX root = ../PRACA_MAIN.tex
-\section{Metodyka Badań}
+\section{Środowisko, dane i metodyka badań}
 
 W niniejszym rozdziale przedstawiono kompleksowy protokół badawczy oraz szczegółowy aparat matematyczny wykorzystanych algorytmów rekomendacyjnych. Omówiono również specyfikę  środowiska wykonawczego, proces przygotowania i binarizacji zbioru danych oraz zastosowaną procedurę walidacji i ewaluacji jakości proponowanych propozycji rankingowych.
 
@@ -33,7 +33,7 @@ Przestrzeń badawczą definiuje trójka uporządkowana obejmująca:
     \item zbiór zaobserwowanych historycznych interakcji, oznaczany symbolem $\mathcal{E}$ ($\mathcal{E} \subseteq \mathcal{U} \times \mathcal{I}$), reprezentujący zaobserwowane zdarzenia o liczebności $|\mathcal{E}|$.
 \end{itemize}
 
-W analizowanym zbiorze dane te przyjmują wartości: $M = 6\,040$, $N = 3\,706$ oraz $|\mathcal{E}| = 1\,000\,209$. Dokładne ustalenie wymiarów $M$ i $N$ jest kluczowe z punktu widzenia uczenia maszynowego, gdyż determinują one bezpośrednio rozmiary wejściowych słowników dla warstw osadzeń (\foreignlanguage{english}{\textit{embedding layers}}) w architekturach neuronowych i grafowych \footcite[sekcje 2.1, 3.2 oraz 3.4]{zhangDeepLearningBased2020}. W klasycznym ujęciu rzadkie wektory identyfikatorów użytkowników $\mathbf{v}_u \in \{0, 1\}^M$ (typu \foreignlanguage{english}{\textit{one-hot}}) oraz obiektów $\mathbf{v}_i \in \{0, 1\}^N$ są mapowane na gęste reprezentacje wektorowe $\mathbf{e}_u \in \mathbb{R}^k$ i $\mathbf{e}_i \in \mathbb{R}^k$ (gdzie $k \ll \min(M, N)$) poprzez mnożenie przez macierze wag osadzeń odpowiednio $\mathbf{P} \in \mathbb{R}^{M \times k}$ oraz $\mathbf{Q} \in \mathbb{R}^{N \times k}$.
+W analizowanym zbiorze dane te przyjmują wartości: $M = 6\,040$, $N = 3\,706$ oraz $|\mathcal{E}| = 1\,000\,209$. Dokładne ustalenie wymiarów $M$ i $N$ jest kluczowe z punktu widzenia uczenia maszynowego, gdyż determinują one bezpośrednio rozmiary wejściowych słowników dla warstw osadzeń (\foreignlanguage{english}{\textit{embedding layers}}) w architekturach neuronowych i grafowych \footcite[sekcje 2.1, 3.2 oraz 3.4]{zhangDeepLearningBased2020}. W klasycznym ujęciu rzadkie wektory identyfikatorów użytkowników $\mathbf{v}_u \in \{0, 1\}^M$ (typu \foreignlanguage{english}{\textit{one-hot}}) oraz obiektów $\mathbf{v}_i \in \{0, 1\}^N$ są mapowane na gęste reprezentacje wektorowe $\mathbf{p}_u \in \mathbb{R}^k$ i $\mathbf{q}_i \in \mathbb{R}^k$ (gdzie $k \ll \min(M, N)$) poprzez mnożenie przez macierze wag osadzeń odpowiednio $\mathbf{P} \in \mathbb{R}^{M \times k}$ oraz $\mathbf{Q} \in \mathbb{R}^{N \times k}$.
 
 Tradycyjny model danych rekomendacyjnych reprezentuje się jako dwuwymiarową macierz interakcji $\mathbf{R} \in \mathbb{R}^{M \times N}$, w której wiersze odpowiadają poszczególnym użytkownikom ($u \in \mathcal{U}$), a kolumny poszczególnym obiektom ($i \in \mathcal{I}$) \footcite[2]{suSurveyCollaborativeFiltering2009}. Stopień braku wypełnienia tej struktury opisuje wskaźnik rzadkości (\foreignlanguage{english}{\textit{sparsity rate}}), oznaczany symbolem $S \in [0, 1]$. Definiuje się go jako dopełnienie stosunku liczby faktycznie zaobserwowanych interakcji do teoretycznej maksymalnej liczby wszystkich możliwych powiązań w macierzy:
 \begin{equation}
@@ -103,7 +103,7 @@ Rozkład aktywności użytkowników wykazuje duże zróżnicowanie -- od profil�
     {\raggedright \small \textbf{Źródło:} opracowanie własne na podstawie danych z zestawu MovieLens 1M.\par}
 \end{figure}
 
-W celu zapewnienia ścisłej reprodukowalności eksperymentów i eliminacji błędów implementacyjnych, oczyszczone zbiory danych przekonwertowano do formatu Plików Atomowych (ang. \foreignlanguage{english}{\textit{Atomic Files}}) z rozszerzeniem \texttt{.inter}, stanowiącego standard wejściowy biblioteki RecBole \footcite[6, sekcja 2.1.2]{zhaoRecBoleUnifiedComprehensive2020}. Plik \texttt{.inter} przechowuje relacje w strukturze tabularycznej ze zdefiniowanymi typami pól \footcite[6, Tabela 3]{zhaoRecBoleUnifiedComprehensive2020}:
+W celu zapewnienia ścisłej reprodukowalności eksperymentów i eliminacji błędów implementacyjnych oczyszczone zbiory danych przekonwertowano do formatu Plików Atomowych (ang. \foreignlanguage{english}{\textit{Atomic Files}}) z rozszerzeniem \texttt{.inter}, stanowiącego standard wejściowy biblioteki RecBole \footcite[6, sekcja 2.1.2]{zhaoRecBoleUnifiedComprehensive2020}. Plik \texttt{.inter} przechowuje relacje w strukturze tabularycznej ze zdefiniowanymi typami pól \footcite[6, Tabela 3]{zhaoRecBoleUnifiedComprehensive2020}:
 \begin{itemize}
     \item \texttt{user\_id:token} -- unikalny identyfikator użytkownika (sekwencja dyskretna),
     \item \texttt{item\_id:token} -- unikalny identyfikator filmu (sekwencja dyskretna),
@@ -141,6 +141,95 @@ Tabela \ref{tab:movielens_stats} przedstawia zbiorcze zestawienie parametrów st
 \end{table}
 
 \subsection{Algorytmy filtrowania kolaboracyjnego}
+
+Filtrowanie kolaboracyjne stanowi jeden z najważniejszych i najbardziej ugruntowanych paradygmatów w dziedzinie systemów rekomendacyjnych \footcite{suSurveyCollaborativeFiltering2009, korenMatrixFactorizationTechniques2009, krawczukSystemyRekomendacyjne2024}. Jego podstawowym założeniem jest hipoteza, że użytkownicy o zbliżonych wzorcach zachowań w przeszłości będą przejawiać podobne preferencje w przyszłości. W przeciwieństwie do metod opartych na treści, filtrowanie kolaboracyjne nie wymaga analizy semantycznej obiektów ani dostępu do ich szczegółowych metadanych, opierając proces wnioskowania wyłącznie na macierzy interakcji użytkownik-obiekt $R \in \mathbb{R}^{M \times N}$, gdzie $M$ oznacza liczbę użytkowników, natomiast $N$ liczbę filmów w katalogu platformy.
+
+
+Techniki filtrowania kolaboracyjnego dzielą się na trzy główne nurty: metody oparte na pamięci (ang. \foreignlanguage{english}{\textit{memory-based CF}}), metody oparte na modelach (ang. \foreignlanguage{english}{\textit{model-based CF}}) oraz systemy hybrydowe. Pierwsza z wymienionych grup polega na bezpośrednim wykorzystaniu historycznych interakcji do poszukiwania podobieństw i działa w dwóch podstawowych wariantach. Z jednej strony wyróżnia się podejście zorientowane na użytkownika (ang. \foreignlanguage{english}{\textit{User-Based CF}}), które opiera się na poszukiwaniu profili o gustach historycznie zbliżonych do aktywnego odbiorcy. Z drugiej strony stosuje się podejście zorientowane na obiekty (ang. \foreignlanguage{english}{\textit{Item-Based CF}}), w którym oblicza się analityczne podobieństwo pomiędzy samymi pozycjami w katalogu na podstawie tego, czy wchodziła z nimi w interakcję ta sama grupa odbiorców. W przypadku serwisów VOD znacznie powszechniej wykorzystuje się podejście oparte na obiektach. Wynika to z faktu, że zbiór filmów tworzy strukturę znacznie bardziej stabilną w czasie -- charaktery ich grup docelowych rzadko ulegają zmianie, podczas gdy gusta użytkowników są zmienne, a ich całkowita liczba nieustannie fluktuuje.
+
+Ogromnym krokiem naprzód w ewolucji systemów rekomendacyjnych okazało się odejście od surowej pamięci na rzecz wprowadzania uczących się metod analitycznych (nurt oparty na modelach), a dokładniej modeli czynników ukrytych (ang. \foreignlanguage{english}{\textit{latent factor models}}), realizowanych za pomocą technik faktoryzacji macierzy. Idea faktoryzacji polega na odwzorowaniu zarówno użytkowników $u$, jak i obiektów $i$ we wspólnej, $k$-wymiarowej przestrzeni ukrytej $\mathbb{R}^k$, gdzie $k \ll \min(M, N)$ oznacza wyznaczoną liczbę wymiarów ukrytych. W architekturze tej preferencje pojedynczego użytkownika reprezentowane są przez wektor $\mathbf{p}_u \in \mathbb{R}^k$, natomiast właściwości samego filmu oddaje wektor $\mathbf{q}_i \in \mathbb{R}^k$. Stopień potencjalnego dopasowania danego tytułu do gustu widza obliczany jest na podstawie klasycznej operacji iloczynu skalarnego wyznaczonych wektorów.
+
+W niniejszej pracy jako wiodących reprezentantów tradycyjnego filtrowania kolaboracyjnego wybrano dwa algorytmy odniesienia (tzw. \foreignlanguage{english}{\textit{baseline}}), z których każdy reprezentuje całkowicie odmienne podejście analityczne: ItemKNN (stanowiący klasyczną metodę opartą na obiektowej pamięci) oraz BPR-MF, będący fundamentalnym przykładem wariantu opartego na uczeniu parametrów przy użyciu faktoryzacji macierzy z optymalizacją porządkową.
+
+\subsubsection{Algorytm ItemKNN}
+
+Jedną z najpopularniejszych i najbardziej uznanych metod bazujących na pamięci jest technika oparta na analizie podobieństwa obiektów (ang. \foreignlanguage{english}{\textit{Item-Based Collaborative Filtering}}), powszechnie implementowana jako algorytm ItemKNN. Geneza tej metody, wprowadzona i spopularyzowana na przełomie wieków w systemach e-commerce przez B. Sarwara i in. \footcite{sarwarItembasedCollaborativeFiltering2001}, opiera się na intuicyjnym założeniu, że z większym prawdopodobieństwem będziemy preferować te filmy, które są w dużym stopniu powiązane z produkcjami pozytywnie ocenionymi przez nas w przeszłości. Matematyczne podstawy algorytmu ItemKNN oraz koncepcja budowania sąsiedztwa, przedstawione w niniejszym podrozdziale, opierają się w głównej mierze na metodologii syntetyzowanej w pracy Bałchanowskiego \footcite[16-17]{balchanowskiEwolucyjnaAgregacjaRang2023}.
+
+W przeciwieństwie do metod zorientowanych na użytkownika (\foreignlanguage{english}{\textit{User-Based CF}}), ItemKNN wyszukuje podobieństwa na poziomie kolumn macierzy interakcji (filmów). Ogranicza to znacząco problemy wynikające ze zmienności gustów ludzkich oraz nieustannego rotowania bazy aktywnych kont. Z biznesowego punktu widzenia na platformach VOD liczba filmów rośnie wolniej niż liczba nowych subskrybentów, co stabilizuje proces obliczania sąsiedztwa i zwiększa jakość rekomendacji w ujęciu długoterminowym.
+
+Procedura generowania rekomendacji przy użyciu algorytmu ItemKNN przedstawia się następująco:
+
+\begin{enumerate}
+    \item W pierwszej kolejności, dla każdego z analizowanych elementów, system precyzyjnie ustala sąsiedztwo. Proces ten rozpoczyna się od wyliczenia funkcji podobieństwa $s(i, j)$ pomiędzy dowolnymi dwoma filmami $i$ oraz $j$ z katalogu $\mathcal{I}$. Ze względu na to, że badana w niniejszej pracy przestrzeń danych opiera się na interakcjach dorozumianych (\foreignlanguage{english}{\textit{implicit feedback}}), klasyczne miary uwzględniające średnie wariancje ocen (np. korelacja Pearsona) nie znajdują tu matematycznego zastosowania. Standardową techniką służącą do pomiaru bliskości w środowisku binarnym jest odległość kosinusowa (ang. \foreignlanguage{english}{\textit{Cosine Similarity}}), operująca w przestrzeni wektorowej. Stopień powiązania dwóch filmów wyznacza się za jej pomocą ze wzoru \footcite[16]{balchanowskiEwolucyjnaAgregacjaRang2023}:
+
+          \begin{equation}
+              s(i,j) = \frac{\mathbf{y}_i \cdot \mathbf{y}_j}{||\mathbf{y}_i||_2||\mathbf{y}_j||_2} = \frac{\sum_u y_{ui}y_{uj}}{\sqrt{\sum_u y_{ui}^2}\sqrt{\sum_u y_{uj}^2}}
+          \end{equation}
+
+          Gdzie:
+          \begin{itemize}
+              \item $\mathbf{y}_i, \mathbf{y}_j$ -- wektory binarne reprezentujące historię interakcji wszystkich użytkowników dla filmów $i$ oraz $j$
+              \item $y_{ui}, y_{uj}$ -- obserwacje obecności interakcji (0 lub 1) dla użytkownika $u$ z oboma filmami
+              \item $||\mathbf{y}_i||_2, ||\mathbf{y}_j||_2$ -- normy Euklidesowe (L2) badanych wektorów
+          \end{itemize}
+
+    \item Ponieważ obliczanie relacji dla każdej możliwej pary obiektów w skali milionów widzów wiąże się ze zjawiskiem ogromnego szumu informacyjnego, algorytm dokonuje redukcji macierzy podobieństw. Dla każdego filmu $i$ zawęża się grono powiązań wyłącznie do zamkniętego zbioru $K$ najbardziej zbliżonych filmów (tzw. zbiór najbliższych sąsiadów $\mathcal{N}_i$).
+
+    \item W etapie predykcji, po zalogowaniu się użytkownika $u$, algorytm odczytuje zbiór wszystkich filmów, które ten użytkownik zdążył już obejrzeć (tzw. wejściowy profil użytkownika $\mathcal{I}_u^+$).
+
+    \item Ostateczny krok działania algorytmu polega na wyliczeniu estymowanego stopnia dopasowania $\hat{x}_{ui}$, jakim użytkownik $u$ obdarzy dowolny, nieobejrzany jeszcze film $i$. Predykcję realizuje się poprzez obliczenie średniej ważonej z miar podobieństwa pomiędzy tym filmem $i$, a obejrzanymi już przez widza produkcjami $j$, które znalazły się w jego ograniczonym sąsiedztwie \footcite[16]{balchanowskiEwolucyjnaAgregacjaRang2023}:
+
+          \begin{equation}
+              \hat{x}_{ui} = \frac{\sum_{j} s(i,j) y_{uj}}{\sum_{j} |s(i,j)|}, \quad j \in \mathcal{N}_i \cap \mathcal{I}_u^+
+          \end{equation}
+
+          Gdzie:
+          \begin{itemize}
+              \item $\mathcal{N}_i$ -- wyznaczony w etapie 2 statyczny zbiór zawierający $K$ filmów najbliżej spokrewnionych z obiektem $i$
+              \item $\mathcal{I}_u^+$ -- zbiór wszystkich filmów, które użytkownik $u$ już obejrzał
+              \item $y_{uj}$ -- wystąpienie pozytywnej relacji pomiędzy użytkownikiem a sąsiadem badanego obiektu
+          \end{itemize}
+\end{enumerate}
+
+Model ItemKNN, ze względu na swoją wysoką skuteczność w systemach pozbawionych zaawansowanych mechanizmów uczących oraz wysoką wyjaśnialność (wyniki można wprost zinterpretować w interfejsie jako klauzulę "Z uwagi na to, że obejrzałeś X, polecamy Ci Y"), na stałe wszedł do kanonu filtrowania kolaboracyjnego. W nowoczesnych zestawieniach naukowych odgrywa on rolę punktu odniesienia (\foreignlanguage{english}{\textit{baseline}}), służącego do weryfikacji celowości wdrażania cięższych obliczeniowo metod rekomendacji.
+
+
+\subsubsection{Spersonalizowany ranking bayesowski}
+Spersonalizowany ranking bayesowski (ang. \foreignlanguage{english}{\textit{Bayesian Personalized Ranking, BPR}}) jest to technika generująca rekomendacje na podstawie macierzy interakcji. Charakterystycznym elementem tego algorytmu jest sposób, w jaki traktuje sytuacje, w których użytkownik nie wszedł w interakcję z danym przedmiotem. Tradycyjnie brak interakcji jest traktowany w macierzy jako wartość 0, co interpretowane jest jako negatywna informacja zwrotna. Taki stan rzeczy może nieprecyzyjnie oddawać rzeczywistość. Filmami nieobejrzanymi mogą być zarówno te, które są dla użytkownika nieinteresujące, jak i te, których po prostu nie zna, bądź nie zdążył jeszcze obejrzeć.
+
+Aby rozwiązać ten problem, algorytm BPR rezygnuje z klasycznego, punktowego podejścia do uczenia modelu (gdzie system estymuje konkretną wartość liczbową dla pary użytkownik-obiekt) na rzecz podejścia opartego na parach (ang. \foreignlanguage{english}{\textit{pairwise learning}}). Podstawowym założeniem metody jest to, że użytkownik zawsze preferuje obiekty, z którymi wszedł w interakcję, nad tymi, z którymi interakcji nie podjął. Jeżeli zdefiniujemy obiekty znane użytkownikowi $u$ jako pozytywne (oznaczane jako $i$), a pozostałe pozycje w katalogu jako negatywne ($j$), BPR zakłada relację wyższości $i >_u j$ na liście rankingowej \footcite[453-454]{rendleBPRBayesianPersonalized2009}.
+
+W trakcie treningu optymalizator nie rozpatruje indywidualnych obiektów, lecz przetwarza trójki uczące w postaci $(u, i, j)$. Celem algorytmu jest maksymalizacja prawdopodobieństwa, że estymowana ocena trafności filmu pozytywnego będzie zawsze przewyższać estymowaną ocenę filmu negatywnego. Podejście to prowadzi do sformułowania kryterium optymalizacyjnego BPR-OPT, które w oparciu o funkcję logistyczną minimalizuje stratę dla wszystkich trójek \footcite[455]{rendleBPRBayesianPersonalized2009}:
+
+\begin{equation}
+    \text{BPR-OPT} = \sum_{(u,i,j) \in D_S} \ln \sigma(\hat{x}_{ui} - \hat{x}_{uj}) - \lambda_\Theta ||\Theta||^2
+    \label{eq:bpr_opt}
+\end{equation}
+
+Gdzie:
+\begin{itemize}
+    \item $D_S$ -- zbiór wszystkich treningowych trójek (użytkownik, obiekt pozytywny, obiekt negatywny), formułowany na podstawie zbioru zaobserwowanych zdarzeń $\mathcal{E}$ i zdarzeń negatywnych z nim rozłącznych
+    \item $\hat{x}_{ui}$ -- estymowana preferencja użytkownika $u$ względem obiektu $i$ (pozytywnego)
+    \item $\hat{x}_{uj}$ -- estymowana preferencja użytkownika $u$ względem obiektu $j$ (negatywnego)
+    \item $\mathbf{\Theta}$ -- wektory wag modelu podlegające wyuczeniu
+    \item $\lambda_\Theta$ -- hiperparametr terminu regularyzacyjnego L2, zapobiegającego zjawisku przeuczenia modelu (ang. \foreignlanguage{english}{\textit{overfitting}})
+\end{itemize}
+
+Zastosowanie funkcji straty BPR samo w sobie nie określa architektury samej estymaty ($\hat{x}_{ui}$). W podejściu BPR-MF system integruje ową funkcję z modelem faktoryzacji macierzy. W tej konfiguracji przewidywana preferencja użytkownika względem danego obiektu jest obliczana jako standardowy iloczyn skalarny przypisanych do nich wektorów \footcite[456]{rendleBPRBayesianPersonalized2009}:
+
+\begin{equation}
+    \hat{x}_{ui} = \mathbf{p}_u \cdot \mathbf{q}_i = \sum_{f=1}^{k} p_{uf} q_{if}
+\end{equation}
+
+Gdzie:
+\begin{itemize}
+    \item $\mathbf{p}_u$ -- ukryty wektor cech reprezentujący użytkownika $u$
+    \item $\mathbf{q}_i$ -- ukryty wektor cech reprezentujący obiekt $i$
+    \item $k$ -- wymiarowość przestrzeni ukrytej (z góry określona liczba cech w wektorze)
+    \item $p_{uf}$, $q_{if}$ -- poszczególne ($f$-te) składowe wektorów ukrytych odpowiednio dla użytkownika i obiektu
+\end{itemize}
+
+W procesie optymalizacji -- wykorzystującym zazwyczaj algorytm stochastycznego spadku wzdłuż gradientu (SGD) -- system iteracyjnie przelicza parametry poszczególnych wektorów po jednej trójce, poszukując minimum funkcji błędu zdefiniowanej równaniem \eqref{eq:bpr_opt}. Choć model BPR-MF opiera się na matematycznie prostym iloczynie skalarnym, przez lata dowiódł on swojej potężnej skuteczności w zadaniach wykorzystujących wyłącznie dane dorozumiane. Wynika to wprost z dopasowania samej definicji straty parowej do natury rankingu -- algorytm uczy się bezpośrednio sortować obiekty, zamiast przewidywać ich wyizolowane oceny punktowe. Z tego powodu we współczesnej literaturze przedmiotu BPR stanowi fundamentalny model odniesienia, z którym obligatoryjnie zestawia się skuteczność nowszych, rozbudowanych architektur systemów rekomendacyjnych. Autorzy nowatorskich rozwiązań z rodziny głębokich sieci kolaboracyjnych \footcite[178]{heNeuralCollaborativeFilteringKwiecien032017} oraz sieci wykorzystujących propagację w strukturach grafowych \footcite[5]{heLightGCNSimplifyingPowering2020} regularnie opierają ewaluację empiryczną na bazowym zestawieniu swoich wyników właśnie z klasycznym wariantem BPR-MF.
 
 
 \subsection{Algorytmy uczenia głębokiego}

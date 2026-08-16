@@ -1,6 +1,5 @@
 {
     "python.defaultInterpreterPath": "${workspaceFolder}\\venv\\Scripts\\python.exe",
-    "python.pythonPath": "${workspaceFolder}\\venv\\Scripts\\python.exe",
     "python.analysis.extraPaths": [
         "./",
         "./venv/Lib/site-packages"
@@ -155,14 +154,7 @@
         "dictionary": "workspaceFolder"
     },
     "ltex.language": "pl-PL",
-    "ltex.enabled": [
-        "latex",
-        "markdown"
-    ],
-    "ltex.disabledFilePatterns": [
-        "**/*.ipynb",
-        "**/Notebooks/**"
-    ],
+
     "cSpell.ignorePaths": [
         "**/*.ipynb",
         "**/Notebooks/**",
@@ -177,50 +169,79 @@
         "**/*.synctex.gz",
         "**/*.bib"
     ],
-    "[ipynb]": {
-        "ltex.enabled": false,
-        "cSpell.enabled": false
-    },
-    "[jupyter]": {
-        "ltex.enabled": false,
-        "cSpell.enabled": false
-    },
+
     "diffEditor.ignoreTrimWhitespace": false,
-    "todo-tree.tree.showScanModeButton": false,
+
     "todo-tree.filtering.ignoreGitSubmodules": true,
     "todo-tree.general.tags": [
-        "BUG",
-        "HACK",
         "FIXME",
         "TODO",
-        "XXX",
-        "NOTE"
+        "IDEA",
+        "RESEARCH",
+        "CIT"
     ],
     "todo-tree.regex.regex": "((//|#|<!--|;|/\\*|^|%)\\s*($TAGS)|^\\s*- \\[\\])",
-    "ltex.commands.ignore": [
-        "\\inputminted{}{}",
-        "\\addcontentsline{}{}{}",
-        "\\setminted[]{}",
-        "\\setTitleang{}"
-    ],
+    "todo-tree.highlights.defaultHighlight": {
+        "icon": "check",
+        "type": "text",
+        "iconColour": "#00FFFF"
+    },
+    "todo-tree.highlights.customHighlight": {
+        "FIXME": {
+            "icon": "alert",
+            "iconColour": "#FF9800",
+            "foreground": "#FF9800",
+            "type": "text-and-comment"
+        },
+        "TODO": {
+            "icon": "checklist",
+            "iconColour": "#FFEB3B",
+            "foreground": "#FFEB3B",
+            "type": "text-and-comment"
+        },
+        "IDEA": {
+            "icon": "lightbulb",
+            "iconColour": "#E91E63",
+            "foreground": "#E91E63",
+            "type": "text-and-comment"
+        },
+        "RESEARCH": {
+            "icon": "book",
+            "iconColour": "#2196F3",
+            "foreground": "#2196F3",
+            "type": "text-and-comment"
+        },
+        "CIT": {
+            "icon": "quote",
+            "iconColour": "#9C27B0",
+            "foreground": "#9C27B0",
+            "type": "text-and-comment"
+        }
+    },
     "editor.fontFamily": "'JetBrains mono', Consolas, 'Courier New', monospace",
     "ltex.sentenceCacheSize": 4000,
     "ltex.java.maximumHeapSize": 2048,
-    "ltex.commands.dummy": [
-        "\\cite{}",
-        "\\ref{}",
-        "\\mintinline{}{}"
-    ],
-    "ltex.workspaceFolderDictionary": {
-        "pl-PL": []
+    "ltex.latex.commands": {
+        "\\inputminted{}{}": "ignore",
+        "\\addcontentsline{}{}{}": "ignore",
+        "\\setminted[]{}": "ignore",
+        "\\setTitleang{}": "ignore",
+        "\\cite{}": "dummy",
+        "\\ref{}": "dummy",
+        "\\mintinline{}{}": "dummy"
     },
     "ltex.dictionary": {
         "pl-PL": [
             ":${workspaceFolder}/.vscode/ltex.dictionary.pl-PL.txt",
-            "binarizacji"
+            "binarizacji",
+            "BPR",
+            "BPR-MF",
+            "estymaty",
+            "SGD"
         ],
         "en-US": [
-            ":${workspaceFolder}/.vscode/ltex.dictionary.en-US.txt"
+            ":${workspaceFolder}/.vscode/ltex.dictionary.en-US.txt",
+            "MovieLens"
         ]
     },
     "ltex.disabledRules": {
