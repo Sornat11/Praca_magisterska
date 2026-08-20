@@ -33,6 +33,30 @@
   file = {C:\Users\jakub\Zotero\storage\Z6VBWDV5\Anelli et al. - 2023 - Challenging the Myth of Graph Collaborative Filtering a Reasoned and Reproducibility-driven Analysi.pdf}
 }
 
+@book{anelliTopNRecommendationAlgorithms2022,
+  title = {Top-{{N Recommendation Algorithms}}: {{A Quest}} for the {{State-of-the-Art}}},
+  shorttitle = {Top-{{N Recommendation Algorithms}}},
+  author = {Anelli, Vito Walter and Bellog{\'i}n, Alejandro and Di Noia, Tommaso and Jannach, Dietmar and Pomo, Claudio},
+  year = 2022,
+  month = jul,
+  doi = {10.1145/3503252.3531292},
+  abstract = {Research on recommender systems algorithms, like other areas of applied machine learning, is largely dominated by efforts to improve the state-of-the-art, typically in terms of accuracy measures. Several recent research works however indicate that the reported improvements over the years sometimes "don't add up", and that methods that were published several years ago often outperform the latest models when evaluated independently. Different factors contribute to this phenomenon, including that some researchers probably often only fine-tune their own models but not the baselines. In this paper, we report the outcomes of an in-depth, systematic, and reproducible comparison of ten collaborative filtering algorithms - covering both traditional and neural models - on several common performance measures on three datasets which are frequently used for evaluation in the recent literature. Our results show that there is no consistent winner across datasets and metrics for the examined top-n recommendation task. Moreover, we find that for none of the accuracy measurements any of the considered neural models led to the best performance. Regarding the performance ranking of algorithms across the measurements, we found that linear models, nearest-neighbor methods, and traditional matrix factorization consistently perform well for the evaluated modest-sized, but commonly-used datasets. Our work shall therefore serve as a guideline for researchers regarding existing baselines to consider in future performance comparisons. Moreover, by providing a set of fine-tuned baseline models for different datasets, we hope that our work helps to establish a common understanding of the state-of-the-art for top-n recommendation tasks.},
+  file = {C:\Users\jakub\Zotero\storage\PEHANVE9\Anelli et al. - 2022 - Top-N Recommendation Algorithms A Quest for the State-of-the-Art.pdf}
+}
+
+@article{b.thoratSurveyCollaborativeFiltering2015,
+  title = {Survey on {{Collaborative Filtering}}, {{Content-based Filtering}} and {{Hybrid Recommendation System}}},
+  author = {B.Thorat, Poonam and Goudar, R. and Barve, Sunita},
+  year = 2015,
+  month = jan,
+  journal = {International Journal of Computer Applications},
+  volume = {110},
+  pages = {31--36},
+  doi = {10.5120/19308-0760},
+  abstract = {systems or recommendation systems are a subset of information filtering system that used to anticipate the 'evaluation' or 'preference' that user would feed to an item. In recent years E-commerce applications are widely using Recommender system. Generally the most popular E- commerce sites are probably music, news, books, research articles, and products. Recommender systems are also available for business experts, jokes, restaurants, financial services, life insurance and twitter followers. Recommender systems have formulated in parallel with the web. Initially Recommender systems were based on demographic, content-based filtering and collaborative filtering. Currently, these systems are incorporating social information for enhancing a quality of recommendation process. For betterment of recommendation process in the future, Recommender systems will use personal, implicit and local information from the Internet. This paper provides an overview of recommender systems that include collaborative filtering, content-based filtering and hybrid approach of recommender system.},
+  file = {C:\Users\jakub\Zotero\storage\F6XHDH7F\B.Thorat et al. - 2015 - Survey on Collaborative Filtering, Content-based Filtering and Hybrid Recommendation System.pdf}
+}
+
 @phdthesis{balchanowskiEwolucyjnaAgregacjaRang2023,
   title = {Ewolucyjna Agregacja Rang w Systemach Rekomendacyjnych},
   author = {Ba{\l}chanowski, Micha{\l}},
@@ -431,6 +455,23 @@
   file = {C:\Users\jakub\Zotero\storage\U65JGVEV\Steck - 2013 - Evaluation of recommendations Rating-prediction and ranking.pdf}
 }
 
+@inproceedings{sunAreWeEvaluatingWrzesien222020,
+  title = {Are {{We Evaluating Rigorously}}? {{Benchmarking Recommendation}} for {{Reproducible Evaluation}} and {{Fair Comparison}}},
+  shorttitle = {Are {{We Evaluating Rigorously}}?},
+  booktitle = {Proceedings of the 14th {{ACM Conference}} on {{Recommender Systems}}},
+  author = {Sun, Zhu and Yu, Di and Fang, Hui and Yang, Jie and Qu, Xinghua and Zhang, Jie and Geng, Cong},
+  year = {Wrzesie\'n 22, 2020},
+  series = {{{RecSys}} '20},
+  pages = {23--32},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  doi = {10.1145/3383313.3412489},
+  urldate = {2026-08-16},
+  abstract = {With tremendous amount of recommendation algorithms proposed every year, one critical issue has attracted a considerable amount of attention: there are no effective benchmarks for evaluation, which leads to two major concerns, i.e., unreproducible evaluation and unfair comparison. This paper aims to conduct rigorous (i.e., reproducible and fair) evaluation for implicit-feedback based top-N recommendation algorithms. We first systematically review 85 recommendation papers published at eight top-tier conferences (e.g., RecSys, SIGIR) to summarize important evaluation factors, e.g., data splitting and parameter tuning strategies, etc. Through a holistic empirical study, the impacts of different factors on recommendation performance are then analyzed in-depth. Following that, we create benchmarks with standardized procedures and provide the performance of seven well-tuned state-of-the-arts across six metrics on six widely-used datasets as a reference for later study. Additionally, we release a user-friendly Python toolkit, which differs from existing ones in addressing the broad scope of rigorous evaluation for recommendation. Overall, our work sheds light on the issues in recommendation evaluation and lays the foundation for further investigation. Our code and datasets are available at GitHub (https://github.com/AmazingDD/daisyRec).},
+  isbn = {978-1-4503-7583-2},
+  file = {C:\Users\jakub\Zotero\storage\EVNXD4Y5\Sun et al. - 2020 - Are We Evaluating Rigorously Benchmarking Recommendation for Reproducible Evaluation and Fair Compa.pdf}
+}
+
 @article{suSurveyCollaborativeFiltering2009,
   title = {A {{Survey}} of {{Collaborative Filtering Techniques}}},
   author = {Su, Xiaoyuan and Khoshgoftaar, Taghi},
@@ -452,6 +493,23 @@
   doi = {10.48550/arXiv.2206.12858},
   abstract = {Offline evaluation is a popular approach to determine the best algorithm in terms of the chosen quality metric. However, if the chosen metric calculates something unexpected, this miscommunication can lead to poor decisions and wrong conclusions. In this paper, we thoroughly investigate quality metrics used for recommender systems evaluation. We look at the practical aspect of implementations found in modern RecSys libraries and at the theoretical aspect of definitions in academic papers. We find that Precision is the only metric universally understood among papers and libraries, while other metrics may have different interpretations. Metrics implemented in different libraries sometimes have the same name but measure different things, which leads to different results given the same input. When defining metrics in an academic paper, authors sometimes omit explicit formulations or give references that do not contain explanations either. In 47\% of cases, we cannot easily know how the metric is defined because the definition is not clear or absent. These findings highlight yet another difficulty in recommender system evaluation and call for a more detailed description of evaluation protocols.},
   file = {C:\Users\jakub\Zotero\storage\97CDPA8K\Tamm et al. - 2022 - Quality Metrics in Recommender Systems Do We Calculate Metrics Consistently.pdf}
+}
+
+@misc{wangDistributionallyRobustGraphbased2024,
+  title = {Distributionally {{Robust Graph-based Recommendation System}}},
+  author = {Wang, Bohao and Chen, Jiawei and Li, Changdong and Zhou, Sheng and Shi, Qihao and Gao, Yang and Feng, Yan and Chen, Chun and Wang, Can},
+  year = 2024,
+  month = feb,
+  number = {arXiv:2402.12994},
+  eprint = {2402.12994},
+  primaryclass = {cs.IR},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2402.12994},
+  urldate = {2026-08-16},
+  abstract = {With the capacity to capture high-order collaborative signals, Graph Neural Networks (GNNs) have emerged as powerful methods in Recommender Systems (RS). However, their efficacy often hinges on the assumption that training and testing data share the same distribution (a.k.a. IID assumption), and exhibits significant declines under distribution shifts. Distribution shifts commonly arises in RS, often attributed to the dynamic nature of user preferences or ubiquitous biases during data collection in RS. Despite its significance, researches on GNN-based recommendation against distribution shift are still sparse. To bridge this gap, we propose Distributionally Robust GNN (DR-GNN) that incorporates Distributional Robust Optimization (DRO) into the GNN-based recommendation. DR-GNN addresses two core challenges: 1) To enable DRO to cater to graph data intertwined with GNN, we reinterpret GNN as a graph smoothing regularizer, thereby facilitating the nuanced application of DRO; 2) Given the typically sparse nature of recommendation data, which might impede robust optimization, we introduce slight perturbations in the training distribution to expand its support. Notably, while DR-GNN involves complex optimization, it can be implemented easily and efficiently. Our extensive experiments validate the effectiveness of DR-GNN against three typical distribution shifts. The code is available at https://github.com/WANGBohaO-jpg/DR-GNN.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Information Retrieval},
+  file = {C\:\\Users\\jakub\\Zotero\\storage\\KKIV5DFD\\Wang et al. - 2024 - Distributionally Robust Graph-based Recommendation System.pdf;C\:\\Users\\jakub\\Zotero\\storage\\A7BX5AMR\\2402.html}
 }
 
 @inproceedings{wangKnowledgeGraphConvolutional2019,

@@ -38,25 +38,29 @@ def import_ml_100k():
     print("\n[ML-100k] Sukces! Zapisano oceny, filmy i użytkowników.")
 
 def import_ml_1m():
-    url = "https://files.grouplens.org/datasets/movielens/ml-1m.zip"
-    zip_path = "0_Raw_Data/ml-1m.zip"
-    extract_path = "0_Raw_Data"
+    url = "https://files.grouplens.org/datasets/movielens/ml-100k.zip"
+    zip_path = "0_Raw_Data/ml-100k.zip"
     
-    download_and_extract(url, zip_path, extract_path)
+    print(f"Pobieranie pliku {url}...")
+    urllib.request.urlretrieve(url, zip_path)
     
-    # Przetwarzanie ocen
-    df_ratings = pd.read_csv('0_Raw_Data/ml-1m/ratings.dat', sep='::', names=['user_id', 'item_id', 'rating', 'timestamp'], engine='python')
-    df_ratings.to_csv('0_Raw_Data/movielens_1m_ratings.csv', index=False)
+    print("Rozpakowywanie...")
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall("0_Raw_Data/")
+        
+    df_ratings = pd.read_csv('0_Raw_Data/ml-100k/u.data', sep='\t', names=['user_id', 'item_id', 'rating', 'timestamp'], engine='python')
     
-    # Przetwarzanie filmów
-    df_items = pd.read_csv('0_Raw_Data/ml-1m/movies.dat', sep='::', names=['movie_id', 'title', 'genres'], engine='python', encoding='latin-1')
-    df_items.to_csv('0_Raw_Data/movielens_1m_items.csv', index=False)
+    # Filmy
+    # u.item ma | jako separator
+    df_items = pd.read_csv('0_Raw_Data/ml-100k/u.item', sep='|', names=['movie_id', 'title', 'release_date', 'video_release_date', 'IMDb_URL', 'unknown', 'Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'], engine='python', encoding='latin-1')
     
-    # Przetwarzanie użytkowników
-    df_users = pd.read_csv('0_Raw_Data/ml-1m/users.dat', sep='::', names=['user_id', 'gender', 'age', 'occupation', 'zip_code'], engine='python')
-    df_users.to_csv('0_Raw_Data/movielens_1m_users.csv', index=False)
+    # Użytkownicy
+    # u.user ma | jako separator
+    df_users = pd.read_csv('0_Raw_Data/ml-100k/u.user', sep='|', names=['user_id', 'age', 'gender', 'occupation', 'zip_code'], engine='python')
     
-    print("\n[ML-1m] Sukces! Zapisano oceny, filmy i użytkowników.")
+    df_ratings.to_csv('0_Raw_Data/movielens_100k_ratings.csv', index=False)
+    
+    print("\n[ML-100k] Sukces! Zapisano oceny, filmy i użytkowników.")
 
 if __name__ == "__main__":
     os.makedirs('0_Raw_Data', exist_ok=True)

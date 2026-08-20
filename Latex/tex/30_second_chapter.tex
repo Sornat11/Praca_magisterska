@@ -10,54 +10,60 @@ W celu standaryzacji protokołu ewaluacji wyników i przygotowania danych oraz d
 Sposób funkcjonowania ramki \foreignlanguage{english}{RecBole} opiera się na ściśle zdematerializowanej i zorientowanej na obliczenia GPU architekturze potokowej (ang. \foreignlanguage{english}{\textit{pipeline architecture}}). Przepływ danych i wykonanie eksperymentu wewnątrz biblioteki realizowane jest w następujących etapach:
 
 \begin{enumerate}
-    \item Moduł Konfiguracji (\foreignlanguage{english}{\textit{Configuration Module}}): Odpowiada za scalanie ustawień eksperymentalnych z hierarchicznie nakładanych źródeł: plików konfiguracyjnych \foreignlanguage{english}{YAML}, parametrów przekazywanych z wiersza poleceń oraz bezpośrednich słowników języka Python. Moduł ten kontroluje rozmiar batcha, stopę uczenia, użyty optymalizator (np. Adam, SGD) oraz szczegółowe parametry poszczególnych modeli.
-    \item Moduł Danych i Struktura Interaction (\foreignlanguage{english}{\textit{Data Module}}): Surowe zbiory danych przekształcane są w uniwersalny format tzw. plików atomowych (ang. \foreignlanguage{english}{\textit{Atomic Files}}) z rozszerzeniem \texttt{.inter} (zawierających relacje użytkownik-obiekt) oraz opcjonalnie \texttt{.user}, \texttt{.item} czy \texttt{.kg} (dla metadanych i grafów wiedzy). Wewnątrz środowiska dane są reprezentowane przez wyspecjalizowany obiekt Interaction, będący opakowaniem na słownik tensorów \foreignlanguage{english}{PyTorch} (\texttt{torch.Tensor}). Zapewnia to bezpośrednie i bezkosztowe przenoszenie całych pakietów danych do pamięci VRAM karty graficznej (\texttt{.to(device)}), eliminując wąskie gardła transferu pamięci RAM-VRAM.
-    \item Moduł Modelu (\foreignlanguage{english}{\textit{Model Module}}): Wszystkie zaimplementowane algorytmy dziedziczą po zunifikowanych klasach bazowych (np. GeneralRecommender dla modeli filtracji kolaboracyjnej oraz KnowledgeRecommender dla modeli z grafami wiedzy). Wymaga to od każdego algorytmu zdefiniowania dwóch zunifikowanych interfejsów:
-          \begin{itemize}
-              \item calculate\_loss(interaction) -- wyliczanie wartości funkcji straty (np. \foreignlanguage{english}{BPR Loss} lub \foreignlanguage{english}{Binary Cross-Entropy}) w fazie propagacji wprzód podczas uczenia,
-              \item predict(interaction) / full\_sort\_predict(interaction) -- wyznaczanie punktacji relewancji (\foreignlanguage{english}{\textit{scores}}) dla par użytkownik-obiekt w fazie predykcji.
-          \end{itemize}
-    \item Moduł Wykonania i Akceleracji Ewaluacji (\foreignlanguage{english}{\textit{Execution \& Evaluation Module}}): Pętla uczenia zarządzana jest przez obiekt Trainer, odpowiadający za automatyczny zapis punktów kontrolnych (\foreignlanguage{english}{\textit{checkpoints}}), wczesne zatrzymanie (\foreignlanguage{english}{\textit{early stopping}}) oraz optymalizację hiperparametrów.
+  \item Moduł Konfiguracji (\foreignlanguage{english}{\textit{Configuration Module}}): Odpowiada za scalanie ustawień eksperymentalnych z hierarchicznie nakładanych źródeł: plików konfiguracyjnych \foreignlanguage{english}{YAML}, parametrów przekazywanych z wiersza poleceń oraz bezpośrednich słowników języka Python. Moduł ten kontroluje rozmiar batcha, stopę uczenia, użyty optymalizator (np. Adam, SGD) oraz szczegółowe parametry poszczególnych modeli.
+  \item Moduł Danych i Struktura Interaction (\foreignlanguage{english}{\textit{Data Module}}): Surowe zbiory danych przekształcane są w uniwersalny format tzw. plików atomowych (ang. \foreignlanguage{english}{\textit{Atomic Files}}) z rozszerzeniem \texttt{.inter} (zawierających relacje użytkownik-obiekt) oraz opcjonalnie \texttt{.user}, \texttt{.item} czy \texttt{.kg} (dla metadanych i grafów wiedzy). Wewnątrz środowiska dane są reprezentowane przez wyspecjalizowany obiekt Interaction, będący opakowaniem na słownik tensorów \foreignlanguage{english}{PyTorch} (\texttt{torch.Tensor}). Zapewnia to bezpośrednie i bezkosztowe przenoszenie całych pakietów danych do pamięci VRAM karty graficznej (\texttt{.to(device)}), eliminując wąskie gardła transferu pamięci RAM-VRAM.
+  \item Moduł Modelu (\foreignlanguage{english}{\textit{Model Module}}): Wszystkie zaimplementowane algorytmy dziedziczą po zunifikowanych klasach bazowych (np. GeneralRecommender dla modeli filtracji kolaboracyjnej oraz KnowledgeRecommender dla modeli z grafami wiedzy). Wymaga to od każdego algorytmu zdefiniowania dwóch zunifikowanych interfejsów:
+        \begin{itemize}
+          \item calculate\_loss(interaction) -- wyliczanie wartości funkcji straty (np. \foreignlanguage{english}{BPR Loss} lub \foreignlanguage{english}{Binary Cross-Entropy}) w fazie propagacji wprzód podczas uczenia,
+          \item predict(interaction) / full\_sort\_predict(interaction) -- wyznaczanie punktacji relewancji (\foreignlanguage{english}{\textit{scores}}) dla par użytkownik-obiekt w fazie predykcji.
+        \end{itemize}
+  \item Moduł Wykonania i Akceleracji Ewaluacji (\foreignlanguage{english}{\textit{Execution \& Evaluation Module}}): Pętla uczenia zarządzana jest przez obiekt Trainer, odpowiadający za automatyczny zapis punktów kontrolnych (\foreignlanguage{english}{\textit{checkpoints}}), wczesne zatrzymanie (\foreignlanguage{english}{\textit{early stopping}}) oraz optymalizację hiperparametrów.
 \end{enumerate}
 
 Środowisko uruchomieniowe przygotowano na podstawie systemu operacyjnego Windows 11 oraz interpretera języka Python (wersja 3.12) działającego w odizolowanym środowisku wirtualnym. Wszystkie parametry modeli oraz ustawienia eksperymentalne zostały natomiast zdefiniowane w postaci deklaratywnych plików konfiguracji \foreignlanguage{english}{YAML}. Rozwiązanie to gwarantuje pełną separację logiki eksperymentalnej od kodu źródłowego, ułatwiając rekonfigurowalność hiperparametrów, kontrolę wersji eksperymentów oraz bezproblemową powtarzalność uzyskanych wyników. Zastosowanie jednolitej ramki \foreignlanguage{english}{RecBole} eliminuje ponadto tzw. błędy niespójności implementacyjnej (ang. \foreignlanguage{english}{\textit{reproducibility crisis}}), gwarantując, że obserwowane różnice w wynikach wynikają wyłącznie z właściwości samych algorytmów.
 
 \subsection{Opis i przygotowanie danych}
 
-W części empirycznej niniejszej pracy do ewaluacji modeli rekomendacyjnych wykorzystano zbiór danych \foreignlanguage{english}{MovieLens 1M}, udostępniany przez grupę badawczą \foreignlanguage{english}{GroupLens Research} z \foreignlanguage{english}{University of Minnesota}. Wybór tego zbioru jest podyktowany jego powszechnym uznaniem w literaturze naukowej jako kanonicznego benchmarku w dziedzinie systemów rekomendacyjnych \footcite{harperMovieLensDatasetsHistory2016, heNeuralCollaborativeFilteringKwiecien032017, zhaoRecBoleUnifiedComprehensive2020}.
+W części empirycznej niniejszej pracy do ewaluacji modeli rekomendacyjnych wykorzystano zbiór danych \foreignlanguage{english}{MovieLens 100K}, udostępniany przez grupę badawczą \foreignlanguage{english}{GroupLens Research} z Uniwersytetu Minnesoty w 1998 rok. Proces zbierania danych odbył się poprzez stronę internetową, działającą jako spersonalizowany system rekomendacyjny. Internauci na początku byli zobowiązani do założenia konta i uzupełnienia podstawowych informacji osobowych. Następnie mogli oceniać filmy w skali od 1 do 5. System rozwijał i ewoluował na przestrzeni lat poprzez dodawanie kolejnych funkcjonalności takich jak dodatkowe tagi czy słowa kluczowe opisujące wrażenia po obejrzeniu danego tytułu.
+
+Dane ze zbioru MovieLens 100k były kolekcjonowane między 19 września 1997 roku a 22 kwietnia 1998 roku \footcite[62]{balchanowskiEwolucyjnaAgregacjaRang2023}. Autorzy przed opublikowaniem danych oczyścili je jeszcze z rekordów niosących stosunkowo małą wartość informacyjną tj. użytkownicy, którzy ocenili mniej niż 20 filmów lub nie wprowadzili pełnych informacji demograficznych, zostali usunięci.
+
+
+Wybór tego zbioru podyktowany jest jego powszechnym uznaniem w literaturze przedmiotu jako kanonicznego benchmarku w dziedzinie systemów rekomendacyjnych \footcite{harperMovieLensDatasetsHistory2016, heNeuralCollaborativeFilteringKwiecien032017, zhaoRecBoleUnifiedComprehensive2020}. Należy zaznaczyć, że zastosowanie mniejszego wariantu (wobec alternatywnych zbiorów o rozmiarach rzędu 1M czy 25M, udostępnianych przez grupę GroupLens) nie obniża wartości naukowej prowadzonych eksperymentów, co znajduje potwierdzenie w dotychczasowych badaniach \footcite[23--32]{sunAreWeEvaluatingWrzesien222020}. Istotnym czynnikiem determinującym ten wybór jest również problem optymalizacji hiperparametrów oraz związane z nim zapotrzebowanie na moc obliczeniową. Jak podkreślają autorzy publikacji \footcite[4]{anelliTopNRecommendationAlgorithms2022}, współczesne algorytmy rekomendacyjne charakteryzują się znaczną złożonością, przez co proces poszukiwania optymalnych parametrów ulega drastycznemu wydłużeniu. Stanowi to silny argument za wykorzystaniem mniejszych zbiorów danych, w szczególności w obliczu ograniczonych zasobów sprzętowych i braku dostępu do zaawansowanej infrastruktury obliczeniowej.
+
 
 Przestrzeń badawczą definiuje trójka uporządkowana obejmująca:
 \begin{itemize}
-    \item zbiór wszystkich zarejestrowanych użytkowników, oznaczany symbolem $\mathcal{U}$ (gdzie $M = |\mathcal{U}|$ stanowi łączną liczbę użytkowników),
-    \item zbiór wszystkich dostępnych w katalogu obiektów (filmów), oznaczany symbolem $\mathcal{I}$ (gdzie $N = |\mathcal{I}|$ stanowi łączną liczbę obiektów),
-    \item zbiór zaobserwowanych historycznych interakcji, oznaczany symbolem $\mathcal{E}$ ($\mathcal{E} \subseteq \mathcal{U} \times \mathcal{I}$), reprezentujący zaobserwowane zdarzenia o liczebności $|\mathcal{E}|$.
+  \item zbiór wszystkich zarejestrowanych użytkowników, oznaczany symbolem $\mathcal{U}$ (gdzie $M = |\mathcal{U}|$ stanowi łączną liczbę użytkowników),
+  \item zbiór wszystkich dostępnych w katalogu obiektów (filmów), oznaczany symbolem $\mathcal{I}$ (gdzie $N = |\mathcal{I}|$ stanowi łączną liczbę obiektów),
+  \item zbiór zaobserwowanych historycznych interakcji, oznaczany symbolem $\mathcal{E}$ ($\mathcal{E} \subseteq \mathcal{U} \times \mathcal{I}$), reprezentujący zaobserwowane zdarzenia o liczebności $|\mathcal{E}|$.
 \end{itemize}
 
-W analizowanym zbiorze dane te przyjmują wartości: $M = 6\,040$, $N = 3\,706$ oraz $|\mathcal{E}| = 1\,000\,209$. Dokładne ustalenie wymiarów $M$ i $N$ jest kluczowe z punktu widzenia uczenia maszynowego, gdyż determinują one bezpośrednio rozmiary wejściowych słowników dla warstw osadzeń (\foreignlanguage{english}{\textit{embedding layers}}) w architekturach neuronowych i grafowych \footcite[sekcje 2.1, 3.2 oraz 3.4]{zhangDeepLearningBased2020}. W klasycznym ujęciu rzadkie wektory identyfikatorów użytkowników $\mathbf{v}_u \in \{0, 1\}^M$ (typu \foreignlanguage{english}{\textit{one-hot}}) oraz obiektów $\mathbf{v}_i \in \{0, 1\}^N$ są mapowane na gęste reprezentacje wektorowe $\mathbf{p}_u \in \mathbb{R}^k$ i $\mathbf{q}_i \in \mathbb{R}^k$ (gdzie $k \ll \min(M, N)$) poprzez mnożenie przez macierze wag osadzeń odpowiednio $\mathbf{P} \in \mathbb{R}^{M \times k}$ oraz $\mathbf{Q} \in \mathbb{R}^{N \times k}$.
+W analizowanym zbiorze dane te przyjmują wartości: $M = 943$, $N = 1\,682$ oraz $|\mathcal{E}| = 100\,000$. Dokładne ustalenie wymiarów $M$ i $N$ jest kluczowe z punktu widzenia uczenia maszynowego, gdyż determinują one bezpośrednio rozmiary wejściowych słowników dla warstw osadzeń (\foreignlanguage{english}{\textit{embedding layers}}) w architekturach neuronowych i grafowych \footcite[sekcje 2.1, 3.2 oraz 3.4]{zhangDeepLearningBased2020}. W klasycznym ujęciu rzadkie wektory identyfikatorów użytkowników $\mathbf{v}_u \in \{0, 1\}^M$ (typu \foreignlanguage{english}{\textit{one-hot}}) oraz obiektów $\mathbf{v}_i \in \{0, 1\}^N$ są mapowane na gęste reprezentacje wektorowe $\mathbf{p}_u \in \mathbb{R}^k$ i $\mathbf{q}_i \in \mathbb{R}^k$ (gdzie $k \ll \min(M, N)$) poprzez mnożenie przez macierze wag osadzeń odpowiednio $\mathbf{P} \in \mathbb{R}^{M \times k}$ oraz $\mathbf{Q} \in \mathbb{R}^{N \times k}$.
 
 Tradycyjny model danych rekomendacyjnych reprezentuje się jako dwuwymiarową macierz interakcji $\mathbf{R} \in \mathbb{R}^{M \times N}$, w której wiersze odpowiadają poszczególnym użytkownikom ($u \in \mathcal{U}$), a kolumny poszczególnym obiektom ($i \in \mathcal{I}$) \footcite[2]{suSurveyCollaborativeFiltering2009}. Stopień braku wypełnienia tej struktury opisuje wskaźnik rzadkości (\foreignlanguage{english}{\textit{sparsity rate}}), oznaczany symbolem $S \in [0, 1]$. Definiuje się go jako dopełnienie stosunku liczby faktycznie zaobserwowanych interakcji do teoretycznej maksymalnej liczby wszystkich możliwych powiązań w macierzy:
 \begin{equation}
-    S = 1 - \frac{|\mathcal{E}|}{M \times N}
+  S = 1 - \frac{|\mathcal{E}|}{M \times N}
 \end{equation}
 
-Dla wybranego zbioru danych stopień rzadkości wynosi $S = 95{,}53\%$, co oznacza, że jedynie $4{,}47\%$ komórek macierzy zawiera zaobserwowane wpisy. W środowisku VOD skrajna rzadkość jest zjawiskiem naturalnym --- pojedynczy widz jest w stanie zapoznać się jedynie z ułamkiem procenta całkowitej oferty platformy \footcite[19, 23]{checinskiSystemyRekomendacjiRemedium2023}. Skrajnie wysoki wskaźnik rzadkości stanowi podstawowe uzasadnienie metodologiczne dla odrzucenia prostych algorytmów pamięciowych ($k$-NN), które zmagają się z problemem braku wspólnych sąsiadów, na rzecz metod czynników ukrytych (SVD) \footcite[2, 3]{suSurveyCollaborativeFiltering2009, korenMatrixFactorizationTechniques2009} oraz propagacji osadzeń w sieciach grafowych \footcite[sekcja 3.4]{zhangDeepLearningBased2020}.
+Dla wybranego zbioru danych stopień rzadkości wynosi $S = 93{,}70\%$, co oznacza, że jedynie $6{,}30\%$ komórek macierzy zawiera zaobserwowane wpisy. W środowisku VOD skrajna rzadkość jest zjawiskiem naturalnym --- pojedynczy widz jest w stanie zapoznać się jedynie z ułamkiem procenta całkowitej oferty platformy \footcite[19, 23]{checinskiSystemyRekomendacjiRemedium2023}. Skrajnie wysoki wskaźnik rzadkości stanowi podstawowe uzasadnienie metodologiczne dla odrzucenia prostych algorytmów pamięciowych ($k$-NN), które zmagają się z problemem braku wspólnych sąsiadów, na rzecz metod czynników ukrytych (SVD) \footcite[2, 3]{suSurveyCollaborativeFiltering2009, korenMatrixFactorizationTechniques2009} oraz propagacji osadzeń w sieciach grafowych \footcite[sekcja 3.4]{zhangDeepLearningBased2020}.
 
 Interakcje na platformach streamingowych podlegają silnej asymetrii popytu opisanej rozkładem potęgowym (\foreignlanguage{english}{\textit{Power Law}}) \footcite[14--15, 105]{celmaMusicRecommendationDiscovery2010}. Charakterystyczną cechą tej asymetrii w systemach dystrybucji cyfrowej jest fakt, że skrajnie nieliczna, uprzywilejowana grupa najpopularniejszych pozycji skupia wokół siebie zdecydowaną większość całej aktywności w systemie, podczas gdy olbrzymia większość pozostałych obiektów odnotowuje znikome zainteresowanie ze strony odbiorców \footcite[93]{celmaMusicRecommendationDiscovery2010}. Badana przestrzeń danych jednoznacznie wykazuje zjawisko tzw. długiego ogona (\foreignlanguage{english}{\textit{Long-Tail Distribution}}), zaprezentowane na Rysunku \ref{fig:long_tail}.
 
 \begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.85\textwidth]{img/movielens_long_tail.pdf}
-    \caption{Rozkład popularności filmów w zbiorze MovieLens 1M przedstawiający zjawisko długiego ogona (\foreignlanguage{english}{\textit{Long-Tail Distribution}}).}
-    \label{fig:long_tail}
-    \vspace{1.5mm}
+  \centering
+  \includegraphics[width=0.85\textwidth]{img/movielens_long_tail.pdf}
+  \caption{Rozkład popularności filmów w zbiorze MovieLens 100K przedstawiający zjawisko długiego ogona (\foreignlanguage{english}{\textit{Long-Tail Distribution}}).}
+  \label{fig:long_tail}
+  \vspace{1.5mm}
 
-    {\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
+  {\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{figure}
 
 Katalog filmowy dzieli się na dwie wyraźne strefy \footcite[100]{celmaMusicRecommendationDiscovery2010}:
 \begin{itemize}
-    \item \textbf{Głowę popytu (\foreignlanguage{english}{\textit{Head}}):} wąską grupę najpopularniejszych produkcji kinowych (tzw. hitów), które skupiają przeważającą część całkowitej liczby ocen w systemie. Tradycyjnie to ta część oferty była faworyzowana w erze analogowej ze względu na ograniczenia fizycznej przestrzeni sklepowej i wysokie koszty dystrybucji, które wymuszały na dystrybutorach selekcję wyłącznie pozycji o masowej popularności \footcite[14--15, 100]{celmaMusicRecommendationDiscovery2010}.
-    \item \textbf{Długi ogon (\foreignlanguage{english}{\textit{Tail}}):} obszerną listę niszowych, mniej znanych lub starszych tytułów o niskiej częstotliwości odtworzeń. W dobie cyfrowej, po wyeliminowaniu fizycznych ograniczeń magazynowych i półkowych, cała ta niszowa oferta może pozostawać stale dostępna dla użytkowników, tworząc ogromną sumę małych rynków o bardzo wysokim potencjale zaspokajania specyficznych i zróżnicowanych gustów \footcite[100]{celmaMusicRecommendationDiscovery2010}.
+  \item \textbf{Głowę popytu (\foreignlanguage{english}{\textit{Head}}):} wąską grupę najpopularniejszych produkcji kinowych (tzw. hitów), które skupiają przeważającą część całkowitej liczby ocen w systemie. Tradycyjnie to ta część oferty była faworyzowana w erze analogowej ze względu na ograniczenia fizycznej przestrzeni sklepowej i wysokie koszty dystrybucji, które wymuszały na dystrybutorach selekcję wyłącznie pozycji o masowej popularności \footcite[14--15, 100]{celmaMusicRecommendationDiscovery2010}.
+  \item \textbf{Długi ogon (\foreignlanguage{english}{\textit{Tail}}):} obszerną listę niszowych, mniej znanych lub starszych tytułów o niskiej częstotliwości odtworzeń. W dobie cyfrowej, po wyeliminowaniu fizycznych ograniczeń magazynowych i półkowych, cała ta niszowa oferta może pozostawać stale dostępna dla użytkowników, tworząc ogromną sumę małych rynków o bardzo wysokim potencjale zaspokajania specyficznych i zróżnicowanych gustów \footcite[100]{celmaMusicRecommendationDiscovery2010}.
 \end{itemize}
 
 Z biznesowego i funkcjonalnego punktu widzenia spersonalizowany system rekomendacyjny na rynku VOD musi potrafić trafnie proponować pozycje z długiego ogona, zapobiegając zjawisku monopolizacji uwagi widza wyłącznie przez najpopularniejsze hity \footcite[23]{checinskiSystemyRekomendacjiRemedium2023}. W dobie tzw. cyfrowej klęski urodzaju, gdy platformy streamingowe oferują tysiące filmów i seriali, użytkownicy stają w obliczu przeładowania informacyjnego, w którym samodzielne dotarcie do interesujących pozycji staje się wysoce utrudnione, a zapoznanie się z pełną ofertą katalogową jest fizycznie niemożliwe \footcite[19]{checinskiSystemyRekomendacjiRemedium2023}. Brak skutecznego mechanizmu personalizacji sprawia, że uwaga użytkowników koncentruje się wyłącznie na tytułach najgłośniejszych i powszechnie promowanych, co prowadzi do marnowania potencjału niszowej części biblioteki serwisu \footcite[19]{checinskiSystemyRekomendacjiRemedium2023}. Wdrożenie algorytmów zdolnych do eksploracji długiego ogona i kierowania uwagi widzów z obszaru głowy popytu ku pozycjom niszowym pozwala na pełniejsze wykorzystanie zasobów, zwiększa satysfakcję i lojalność odbiorców oraz maksymalizuje zaangażowanie w korzystanie z platformy \footcite[14--15, 23]{celmaMusicRecommendationDiscovery2010, checinskiSystemyRekomendacjiRemedium2023}.
@@ -67,11 +73,11 @@ Oryginalny zbiór MovieLens zawiera oceny jawne (\foreignlanguage{english}{\text
 W konsekwencji głównym źródłem informacji dla algorytmów stają się ślady cyfrowe i interakcje dorozumiane (\foreignlanguage{english}{\textit{implicit feedback}}), takie jak odtworzenie filmu, czas jego oglądania, kliknięcie w miniaturę czy historia wyszukiwania \footcite[2]{suSurveyCollaborativeFiltering2009, checinskiSystemyRekomendacjiRemedium2023}. Dane te są gromadzone przez platformy całkowicie pasywnie, bez wysiłku ze strony widza, co pozwala na budowę znacznie większych i bardziej aktualnych zbiorów uczących, choć są one trudniejsze w interpretacji z uwagi na brak bezpośredniej deklaracji zadowolenia \footcite[452--453]{rendleBPRBayesianPersonalized2009}. Rozkład ocen jawnych w analizowanym zbiorze zaprezentowano na Rysunku \ref{fig:ratings_distribution}.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.82\linewidth]{img/movielens_ratings_distribution.pdf}
-    \caption{Rozkład ocen jawnych w zbiorze MovieLens 1M obrazujący efekt zjawiska \foreignlanguage{english}{\textit{positivity bias}}}
-    \label{fig:ratings_distribution}
-    {\raggedright \small \textbf{Źródło:} opracowanie własne na podstawie danych z zestawu MovieLens 1M.\par}
+  \centering
+  \includegraphics[width=0.82\linewidth]{img/movielens_ratings_distribution.pdf}
+  \caption{Rozkład ocen jawnych w zbiorze MovieLens 100K obrazujący efekt zjawiska \foreignlanguage{english}{\textit{positivity bias}}}
+  \label{fig:ratings_distribution}
+  {\raggedright \small \textbf{Źródło:} opracowanie własne na podstawie danych z zestawu MovieLens 100K.\par}
 \end{figure}
 
 Analiza histogramu wykazuje silne skrzywienie pozytywne (\foreignlanguage{english}{\textit{positivity bias}}) -- użytkownicy znacznie chętniej oceniają filmy, które im się podobały, podczas gdy produkcje ocenione negatywnie są w logach niemal nieobecne (oceny 3, 4 i 5 stanowią ponad $80\%$ wszystkich wpisów). Zjawisko to jest bezpośrednią konsekwencją błędu selekcji; widzowie intuicyjnie wybierają do obejrzenia te tytuły, wobec których żywią już uprzednie pozytywne oczekiwania (np. ze względu na ulubiony gatunek czy obsadę), co wtórnie drastycznie ogranicza szansę na wystawienie niskiej noty \footcite[28]{celmaMusicRecommendationDiscovery2010}. W rezultacie obserwowany zbiór ocen jawnych nie odzwierciedla reprezentatywnego profilu gustu użytkownika wobec całego katalogu, a jedynie wobec jego wyselekcjonowanego ułamka \footcite[28]{celmaMusicRecommendationDiscovery2010}.
@@ -80,35 +86,35 @@ Zgodnie z metodologią zaproponowaną przez He i in. \footcite[7]{heNeuralCollab
 
 Przed przedstawieniem reguły dyskryminacyjnej zdefiniujmy elementy składowe wzoru:
 \begin{itemize}
-    \item $y_{ui}$ --- wartość wskaźnikowa określająca obecność zaobserwowanej relacji pomiędzy użytkownikiem $u \in \mathcal{U}$ a obiektem $i \in \mathcal{I}$,
-    \item $y_{ui} = 1$ --- stan dodatni, oznaczający zarejestrowanie interakcji (np. wystawienie jakiejkolwiek oceny lub obejrzenie filmu),
-    \item $y_{ui} = 0$ --- stan nieobserwowany, oznaczający brak zarejestrowanej akcji w logach systemowych.
+  \item $y_{ui}$ --- wartość wskaźnikowa określająca obecność zaobserwowanej relacji pomiędzy użytkownikiem $u \in \mathcal{U}$ a obiektem $i \in \mathcal{I}$,
+  \item $y_{ui} = 1$ --- stan dodatni, oznaczający zarejestrowanie interakcji (np. wystawienie jakiejkolwiek oceny lub obejrzenie filmu),
+  \item $y_{ui} = 0$ --- stan nieobserwowany, oznaczający brak zarejestrowanej akcji w logach systemowych.
 \end{itemize}
 
 Sformułowanie matematyczne funkcji binarnej przyjmuje postać:
 \begin{equation}
-    y_{ui} = \begin{cases} 1, & \text{jeśli zaobserwowano interakcję (użytkownik } u \text{ ocenił/obejrzał film } i\text{)} \\ 0, & \text{w przeciwnym razie (brak obserwacji)} \end{cases}
+  y_{ui} = \begin{cases} 1, & \text{jeśli zaobserwowano interakcję (użytkownik } u \text{ ocenił/obejrzał film } i\text{)} \\ 0, & \text{w przeciwnym razie (brak obserwacji)} \end{cases}
 \end{equation}
 
 Warto podkreślić, że wartość $y_{ui} = 0$ ma charakter wysoce niejednoznaczny semantycznie. Nie oznacza ona bowiem jawnej niechęci użytkownika do danego tytułu, lecz jedynie brak wiedzy o wchodzeniu w interakcję \footcite[2]{heNeuralCollaborativeFilteringKwiecien032017}. Użytkownik mógł nie obejrzeć filmu z powodów zupełnie niezależnych od jego gustu: mógł go nie zauważyć w katalogu, nie zostać na niego wyeksponowany przez interfejs platformy, bądź po prostu jeszcze na niego nie trafić \footcite[2]{heNeuralCollaborativeFilteringKwiecien032017, rendleBPRBayesianPersonalized2009}. Struktura ta stanowi fundamentalne wyzwanie w uczeniu maszynowym, gdyż zbiór danych nieobserwowanych ($y_{ui} = 0$) de facto reprezentuje jednocześnie rzeczywiste negatywne preferencje (użytkownik zna film, ale nie chce go obejrzeć), jak i potencjalne przyszłe interakcje dodatnie (użytkownik chętnie obejrzałby film, gdyby tylko dowiedział się o jego istnieniu), które model powinien poprawnie zidentyfikować i wybić na górę listy rekomendacji \footcite[453]{rendleBPRBayesianPersonalized2009}.
 
 
-Rozkład aktywności użytkowników wykazuje duże zróżnicowanie -- od profilów okazjonalnych po użytkowników o skrajnie wysokiej liczbie obejrzanych pozycji. Rozkład liczby ocen przypadających na pojedynczego użytkownika w analizowanym zbiorze zaprezentowano na Rysunku \ref{fig:user_activity}. Aby wyeliminować zaburzenia wynikające ze skrajnie rzadkich profilów oraz pozycji znikających z katalogu bez historii ocen, zastosowano procedurę filtrowania typu $k$-\foreignlanguage{english}{\textit{core}} ($k = 5$) \footcite[7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}. Odrzucono wszystkich użytkowników oraz filmy posiadające mniej niż 5 zarejestrowanych interakcji. Operacja ta zapobiega występowaniu niemożliwych do wyuczenia trywialnych wektorów zerowych w warstwach embeddingów oraz stabilizuje proces wyznaczania normalizacji macierzy sąsiedztwa grafu dwudzielnego w modelach GNN \footcite[6, sekcja 2.1.1]{zhaoRecBoleUnifiedComprehensive2020}.
+Rozkład aktywności użytkowników wykazuje duże zróżnicowanie -- od profilów okazjonalnych po użytkowników o skrajnie wysokiej liczbie obejrzanych pozycji (rozkład liczby ocen przypadających na pojedynczego użytkownika zaprezentowano na Rysunku \ref{fig:user_activity}). Chociaż natywny zbiór MovieLens gwarantuje, że każdy użytkownik posiada co najmniej 20 zarejestrowanych interakcji, warunek ten nie dotyczy katalogu filmów. Wiele niszowych pozycji posiada zaledwie pojedyncze oceny, co w architekturach uczenia głębokiego uniemożliwia prawidłową aktualizację wag. Z tego względu zastosowano rygorystyczną procedurę filtrowania typu $k$-\foreignlanguage{english}{\textit{core}} ($k = 5$) \footcite[7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}. Usunięto z katalogu wszystkie filmy posiadające mniej niż 5 zarejestrowanych interakcji (co kaskadowo mogło odrzucić również ułamek profilów użytkowników). Operacja ta zapobiega występowaniu trywialnych wektorów zerowych w warstwach osadzeń (ang. \foreignlanguage{english}{\textit{embeddings}}) oraz stabilizuje proces wyznaczania znormalizowanej macierzy sąsiedztwa grafu dwudzielnego w modelach opartych na grafowych sieciach neuronowych (GNN) \footcite[6, sekcja 2.1.1]{zhaoRecBoleUnifiedComprehensive2020}.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.82\linewidth]{img/movielens_user_activity.pdf}
-    \caption{Rozkład liczby wystawionych ocen per użytkownik w zbiorze MovieLens 1M}
-    \label{fig:user_activity}
-    {\raggedright \small \textbf{Źródło:} opracowanie własne na podstawie danych z zestawu MovieLens 1M.\par}
+  \centering
+  \includegraphics[width=0.82\linewidth]{img/movielens_user_activity.pdf}
+  \caption{Rozkład liczby wystawionych ocen per użytkownik w zbiorze MovieLens 100K}
+  \label{fig:user_activity}
+  {\raggedright \small \textbf{Źródło:} opracowanie własne na podstawie danych z zestawu MovieLens 100K.\par}
 \end{figure}
 
 W celu zapewnienia ścisłej reprodukowalności eksperymentów i eliminacji błędów implementacyjnych oczyszczone zbiory danych przekonwertowano do formatu Plików Atomowych (ang. \foreignlanguage{english}{\textit{Atomic Files}}) z rozszerzeniem \texttt{.inter}, stanowiącego standard wejściowy biblioteki RecBole \footcite[6, sekcja 2.1.2]{zhaoRecBoleUnifiedComprehensive2020}. Plik \texttt{.inter} przechowuje relacje w strukturze tabularycznej ze zdefiniowanymi typami pól \footcite[6, Tabela 3]{zhaoRecBoleUnifiedComprehensive2020}:
 \begin{itemize}
-    \item \texttt{user\_id:token} -- unikalny identyfikator użytkownika (sekwencja dyskretna),
-    \item \texttt{item\_id:token} -- unikalny identyfikator filmu (sekwencja dyskretna),
-    \item \texttt{rating:float} -- oryginalna ocena użytkownika (wykorzystywana pomocniczo),
-    \item \texttt{timestamp:float} -- znacznik czasu interakcji.
+  \item \texttt{user\_id:token} -- unikalny identyfikator użytkownika (sekwencja dyskretna),
+  \item \texttt{item\_id:token} -- unikalny identyfikator filmu (sekwencja dyskretna),
+  \item \texttt{rating:float} -- oryginalna ocena użytkownika (wykorzystywana pomocniczo),
+  \item \texttt{timestamp:float} -- znacznik czasu interakcji.
 \end{itemize}
 
 
@@ -116,31 +122,33 @@ Ewaluację modeli przeprowadzono w oparciu o proporcjonalny losowy podział dany
 
 Do trenowania modeli punktowych i parowych (Log Loss w NCF oraz BPR Loss w SVD/LightGCN) zastosowano procedurę próbkowania negatywnego (\foreignlanguage{english}{\textit{negative sampling}}). Dla każdej dodatniej pary $(u, i) \in \mathcal{E}$ losowano jednostajnie ze zbioru pozycji nieobserwowanych zestaw próbek negatywnych $(u, j) \in \mathcal{E}^-$ (gdzie $y_{uj} = 0$), przy zachowaniu stosunku $1:4$ (4 próbki negatywne na 1 pozycję dodatnią), co stanowi optymalny kompromis między stabilnością gradientu a czasem obliczeń \footcite[7, sekcja 4.1.2]{heNeuralCollaborativeFilteringKwiecien032017}. Zastosowanie elastycznej liczby próbek negatywnych (w optymalnym przedziale od 3 do 6) pozwala modelom optymalizowanym punktową stratą logarytmicznej na znaczące przełamanie ograniczeń klasycznych strat parowych typu BPR, które z natury parują wyłącznie jedną próbkę negatywną z dodatnią \footcite[8, sekcja 4.3]{heNeuralCollaborativeFilteringKwiecien032017}.
 
-Tabela \ref{tab:movielens_stats} przedstawia zbiorcze zestawienie parametrów statystycznych przygotowanego zbioru danych MovieLens 1M po przeprowadzeniu potoku przetwarzania.
+Tabela \ref{tab:movielens_stats} przedstawia zbiorcze zestawienie parametrów statystycznych przygotowanego zbioru danych MovieLens 100K po przeprowadzeniu potoku przetwarzania.
+
+% TODO Sprawdzić czy wszystko się zgadza w tabeli
 
 \begin{table}[H]
-    \centering
-    \small
-    \setlength{\tabcolsep}{6pt}
-    \caption{Podsumowanie statystyczne zbioru danych MovieLens 1M wykorzystanego w eksperymentach}
-    \label{tab:movielens_stats}
-    \begin{tabular}{|l|c|}
-        \hline
-        \textbf{Parametr statystyczny}        & \textbf{Wartość dla zbioru MovieLens 1M (\texttt{ml-1m})} \\ \hline
-        Liczba użytkowników ($|\mathcal{U}|$) & 6\,040                                                    \\ \hline
-        Liczba filmów ($|\mathcal{I}|$)       & 3\,706                                                    \\ \hline
-        Liczba interakcji ($|\mathcal{E}|$)   & 1\,000\,209                                               \\ \hline
-        Średnia liczba ocen na użytkownika    & 165{,}60                                                  \\ \hline
-        Gęstość macierzy (\textit{Density})   & 4{,}47\%                                                  \\ \hline
-        Rzadkość macierzy (\textit{Sparsity}) & 95{,}53\%                                                 \\ \hline
-        Typ informacji zwrotnej               & Interakcje dorozumiane (\textit{Implicit Feedback})       \\ \hline
-    \end{tabular}
-    \vspace{1.5mm}
+  \centering
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \caption{Podsumowanie statystyczne zbioru danych MovieLens 100K wykorzystanego w eksperymentach}
+  \label{tab:movielens_stats}
+  \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Parametr statystyczny}        & \textbf{Wartość dla zbioru MovieLens 100K (\texttt{ml-100k})} \\ \hline
+    Liczba użytkowników ($|\mathcal{U}|$) & 943                                                           \\ \hline
+    Liczba filmów ($|\mathcal{I}|$)       & 1\,682                                                        \\ \hline
+    Liczba interakcji ($|\mathcal{E}|$)   & 100\,000                                                      \\ \hline
+    Średnia liczba ocen na użytkownika    & 106{,}04                                                      \\ \hline
+    Gęstość macierzy (\textit{Density})   & 6{,}30\%                                                      \\ \hline
+    Rzadkość macierzy (\textit{Sparsity}) & 93{,}70\%                                                     \\ \hline
+    Typ informacji zwrotnej               & Interakcje dorozumiane (\textit{Implicit Feedback})           \\ \hline
+  \end{tabular}
+  \vspace{1.5mm}
 
-    {\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
+  {\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{table}
 
-\subsection{Algorytmy filtrowania kolaboracyjnego}
+\subsection{Filtrowanie kolaboracyjne}
 
 Filtrowanie kolaboracyjne stanowi jeden z najważniejszych i najbardziej ugruntowanych paradygmatów w dziedzinie systemów rekomendacyjnych \footcite{suSurveyCollaborativeFiltering2009, korenMatrixFactorizationTechniques2009, krawczukSystemyRekomendacyjne2024}. Jego podstawowym założeniem jest hipoteza, że użytkownicy o zbliżonych wzorcach zachowań w przeszłości będą przejawiać podobne preferencje w przyszłości. W przeciwieństwie do metod opartych na treści, filtrowanie kolaboracyjne nie wymaga analizy semantycznej obiektów ani dostępu do ich szczegółowych metadanych, opierając proces wnioskowania wyłącznie na macierzy interakcji użytkownik-obiekt $R \in \mathbb{R}^{M \times N}$, gdzie $M$ oznacza liczbę użytkowników, natomiast $N$ liczbę filmów w katalogu platformy.
 
@@ -160,35 +168,35 @@ W przeciwieństwie do metod zorientowanych na użytkownika (\foreignlanguage{eng
 Procedura generowania rekomendacji przy użyciu algorytmu ItemKNN przedstawia się następująco:
 
 \begin{enumerate}
-    \item W pierwszej kolejności, dla każdego z analizowanych elementów, system precyzyjnie ustala sąsiedztwo. Proces ten rozpoczyna się od wyliczenia funkcji podobieństwa $s(i, j)$ pomiędzy dowolnymi dwoma filmami $i$ oraz $j$ z katalogu $\mathcal{I}$. Ze względu na to, że badana w niniejszej pracy przestrzeń danych opiera się na interakcjach dorozumianych (\foreignlanguage{english}{\textit{implicit feedback}}), klasyczne miary uwzględniające średnie wariancje ocen (np. korelacja Pearsona) nie znajdują tu matematycznego zastosowania. Standardową techniką służącą do pomiaru bliskości w środowisku binarnym jest odległość kosinusowa (ang. \foreignlanguage{english}{\textit{Cosine Similarity}}), operująca w przestrzeni wektorowej. Stopień powiązania dwóch filmów wyznacza się za jej pomocą ze wzoru \footcite[16]{balchanowskiEwolucyjnaAgregacjaRang2023}:
+  \item W pierwszej kolejności, dla każdego z analizowanych elementów, system precyzyjnie ustala sąsiedztwo. Proces ten rozpoczyna się od wyliczenia funkcji podobieństwa $s(i, j)$ pomiędzy dowolnymi dwoma filmami $i$ oraz $j$ z katalogu $\mathcal{I}$. Ze względu na to, że badana w niniejszej pracy przestrzeń danych opiera się na interakcjach dorozumianych (\foreignlanguage{english}{\textit{implicit feedback}}), klasyczne miary uwzględniające średnie wariancje ocen (np. korelacja Pearsona) nie znajdują tu matematycznego zastosowania. Standardową techniką służącą do pomiaru bliskości w środowisku binarnym jest odległość kosinusowa (ang. \foreignlanguage{english}{\textit{Cosine Similarity}}), operująca w przestrzeni wektorowej. Stopień powiązania dwóch filmów wyznacza się za jej pomocą ze wzoru \footcite[16]{balchanowskiEwolucyjnaAgregacjaRang2023}:
 
-          \begin{equation}
-              s(i,j) = \frac{\mathbf{y}_i \cdot \mathbf{y}_j}{||\mathbf{y}_i||_2||\mathbf{y}_j||_2} = \frac{\sum_u y_{ui}y_{uj}}{\sqrt{\sum_u y_{ui}^2}\sqrt{\sum_u y_{uj}^2}}
-          \end{equation}
+        \begin{equation}
+          s(i,j) = \frac{\mathbf{y}_i \cdot \mathbf{y}_j}{||\mathbf{y}_i||_2||\mathbf{y}_j||_2} = \frac{\sum_u y_{ui}y_{uj}}{\sqrt{\sum_u y_{ui}^2}\sqrt{\sum_u y_{uj}^2}}
+        \end{equation}
 
-          Gdzie:
-          \begin{itemize}
-              \item $\mathbf{y}_i, \mathbf{y}_j$ -- wektory binarne reprezentujące historię interakcji wszystkich użytkowników dla filmów $i$ oraz $j$
-              \item $y_{ui}, y_{uj}$ -- obserwacje obecności interakcji (0 lub 1) dla użytkownika $u$ z oboma filmami
-              \item $||\mathbf{y}_i||_2, ||\mathbf{y}_j||_2$ -- normy Euklidesowe (L2) badanych wektorów
-          \end{itemize}
+        Gdzie:
+        \begin{itemize}
+          \item $\mathbf{y}_i, \mathbf{y}_j$ -- wektory binarne reprezentujące historię interakcji wszystkich użytkowników dla filmów $i$ oraz $j$
+          \item $y_{ui}, y_{uj}$ -- obserwacje obecności interakcji (0 lub 1) dla użytkownika $u$ z oboma filmami
+          \item $||\mathbf{y}_i||_2, ||\mathbf{y}_j||_2$ -- normy Euklidesowe (L2) badanych wektorów
+        \end{itemize}
 
-    \item Ponieważ obliczanie relacji dla każdej możliwej pary obiektów w skali milionów widzów wiąże się ze zjawiskiem ogromnego szumu informacyjnego, algorytm dokonuje redukcji macierzy podobieństw. Dla każdego filmu $i$ zawęża się grono powiązań wyłącznie do zamkniętego zbioru $K$ najbardziej zbliżonych filmów (tzw. zbiór najbliższych sąsiadów $\mathcal{N}_i$).
+  \item Ponieważ obliczanie relacji dla każdej możliwej pary obiektów w skali milionów widzów wiąże się ze zjawiskiem ogromnego szumu informacyjnego, algorytm dokonuje redukcji macierzy podobieństw. Dla każdego filmu $i$ zawęża się grono powiązań wyłącznie do zamkniętego zbioru $K$ najbardziej zbliżonych filmów (tzw. zbiór najbliższych sąsiadów $\mathcal{N}_i$).
 
-    \item W etapie predykcji, po zalogowaniu się użytkownika $u$, algorytm odczytuje zbiór wszystkich filmów, które ten użytkownik zdążył już obejrzeć (tzw. wejściowy profil użytkownika $\mathcal{I}_u^+$).
+  \item W etapie predykcji, po zalogowaniu się użytkownika $u$, algorytm odczytuje zbiór wszystkich filmów, które ten użytkownik zdążył już obejrzeć (tzw. wejściowy profil użytkownika $\mathcal{I}_u^+$).
 
-    \item Ostateczny krok działania algorytmu polega na wyliczeniu estymowanego stopnia dopasowania $\hat{x}_{ui}$, jakim użytkownik $u$ obdarzy dowolny, nieobejrzany jeszcze film $i$. Predykcję realizuje się poprzez obliczenie średniej ważonej z miar podobieństwa pomiędzy tym filmem $i$, a obejrzanymi już przez widza produkcjami $j$, które znalazły się w jego ograniczonym sąsiedztwie \footcite[16]{balchanowskiEwolucyjnaAgregacjaRang2023}:
+  \item Ostateczny krok działania algorytmu polega na wyliczeniu estymowanego stopnia dopasowania $\hat{x}_{ui}$, jakim użytkownik $u$ obdarzy dowolny, nieobejrzany jeszcze film $i$. Predykcję realizuje się poprzez obliczenie średniej ważonej z miar podobieństwa pomiędzy tym filmem $i$, a obejrzanymi już przez widza produkcjami $j$, które znalazły się w jego ograniczonym sąsiedztwie \footcite[16]{balchanowskiEwolucyjnaAgregacjaRang2023}:
 
-          \begin{equation}
-              \hat{x}_{ui} = \frac{\sum_{j} s(i,j) y_{uj}}{\sum_{j} |s(i,j)|}, \quad j \in \mathcal{N}_i \cap \mathcal{I}_u^+
-          \end{equation}
+        \begin{equation}
+          \hat{x}_{ui} = \frac{\sum_{j} s(i,j) y_{uj}}{\sum_{j} |s(i,j)|}, \quad j \in \mathcal{N}_i \cap \mathcal{I}_u^+
+        \end{equation}
 
-          Gdzie:
-          \begin{itemize}
-              \item $\mathcal{N}_i$ -- wyznaczony w etapie 2 statyczny zbiór zawierający $K$ filmów najbliżej spokrewnionych z obiektem $i$
-              \item $\mathcal{I}_u^+$ -- zbiór wszystkich filmów, które użytkownik $u$ już obejrzał
-              \item $y_{uj}$ -- wystąpienie pozytywnej relacji pomiędzy użytkownikiem a sąsiadem badanego obiektu
-          \end{itemize}
+        Gdzie:
+        \begin{itemize}
+          \item $\mathcal{N}_i$ -- wyznaczony w etapie 2 statyczny zbiór zawierający $K$ filmów najbliżej spokrewnionych z obiektem $i$
+          \item $\mathcal{I}_u^+$ -- zbiór wszystkich filmów, które użytkownik $u$ już obejrzał
+          \item $y_{uj}$ -- wystąpienie pozytywnej relacji pomiędzy użytkownikiem a sąsiadem badanego obiektu
+        \end{itemize}
 \end{enumerate}
 
 Model ItemKNN, ze względu na swoją wysoką skuteczność w systemach pozbawionych zaawansowanych mechanizmów uczących oraz wysoką wyjaśnialność (wyniki można wprost zinterpretować w interfejsie jako klauzulę "Z uwagi na to, że obejrzałeś X, polecamy Ci Y"), na stałe wszedł do kanonu filtrowania kolaboracyjnego. W nowoczesnych zestawieniach naukowych odgrywa on rolę punktu odniesienia (\foreignlanguage{english}{\textit{baseline}}), służącego do weryfikacji celowości wdrażania cięższych obliczeniowo metod rekomendacji.
@@ -202,38 +210,93 @@ Aby rozwiązać ten problem, algorytm BPR rezygnuje z klasycznego, punktowego po
 W trakcie treningu optymalizator nie rozpatruje indywidualnych obiektów, lecz przetwarza trójki uczące w postaci $(u, i, j)$. Celem algorytmu jest maksymalizacja prawdopodobieństwa, że estymowana ocena trafności filmu pozytywnego będzie zawsze przewyższać estymowaną ocenę filmu negatywnego. Podejście to prowadzi do sformułowania kryterium optymalizacyjnego BPR-OPT, które w oparciu o funkcję logistyczną minimalizuje stratę dla wszystkich trójek \footcite[455]{rendleBPRBayesianPersonalized2009}:
 
 \begin{equation}
-    \text{BPR-OPT} = \sum_{(u,i,j) \in D_S} \ln \sigma(\hat{x}_{ui} - \hat{x}_{uj}) - \lambda_\Theta ||\Theta||^2
-    \label{eq:bpr_opt}
+  \text{BPR-OPT} = \sum_{(u,i,j) \in D_S} \ln \sigma(\hat{x}_{ui} - \hat{x}_{uj}) - \lambda_\Theta ||\Theta||^2
+  \label{eq:bpr_opt}
 \end{equation}
 
 Gdzie:
 \begin{itemize}
-    \item $D_S$ -- zbiór wszystkich treningowych trójek (użytkownik, obiekt pozytywny, obiekt negatywny), formułowany na podstawie zbioru zaobserwowanych zdarzeń $\mathcal{E}$ i zdarzeń negatywnych z nim rozłącznych
-    \item $\hat{x}_{ui}$ -- estymowana preferencja użytkownika $u$ względem obiektu $i$ (pozytywnego)
-    \item $\hat{x}_{uj}$ -- estymowana preferencja użytkownika $u$ względem obiektu $j$ (negatywnego)
-    \item $\mathbf{\Theta}$ -- wektory wag modelu podlegające wyuczeniu
-    \item $\lambda_\Theta$ -- hiperparametr terminu regularyzacyjnego L2, zapobiegającego zjawisku przeuczenia modelu (ang. \foreignlanguage{english}{\textit{overfitting}})
+  \item $D_S$ -- zbiór wszystkich treningowych trójek (użytkownik, obiekt pozytywny, obiekt negatywny), formułowany na podstawie zbioru zaobserwowanych zdarzeń $\mathcal{E}$ i zdarzeń negatywnych z nim rozłącznych
+  \item $\hat{x}_{ui}$ -- estymowana preferencja użytkownika $u$ względem obiektu $i$ (pozytywnego)
+  \item $\hat{x}_{uj}$ -- estymowana preferencja użytkownika $u$ względem obiektu $j$ (negatywnego)
+  \item $\mathbf{\Theta}$ -- wektory wag modelu podlegające wyuczeniu
+  \item $\lambda_\Theta$ -- hiperparametr terminu regularyzacyjnego L2, zapobiegającego zjawisku przeuczenia modelu (ang. \foreignlanguage{english}{\textit{overfitting}})
 \end{itemize}
 
 Zastosowanie funkcji straty BPR samo w sobie nie określa architektury samej estymaty ($\hat{x}_{ui}$). W podejściu BPR-MF system integruje ową funkcję z modelem faktoryzacji macierzy. W tej konfiguracji przewidywana preferencja użytkownika względem danego obiektu jest obliczana jako standardowy iloczyn skalarny przypisanych do nich wektorów \footcite[456]{rendleBPRBayesianPersonalized2009}:
 
 \begin{equation}
-    \hat{x}_{ui} = \mathbf{p}_u \cdot \mathbf{q}_i = \sum_{f=1}^{k} p_{uf} q_{if}
+  \hat{x}_{ui} = \mathbf{p}_u \cdot \mathbf{q}_i = \sum_{f=1}^{k} p_{uf} q_{if}
 \end{equation}
 
 Gdzie:
 \begin{itemize}
-    \item $\mathbf{p}_u$ -- ukryty wektor cech reprezentujący użytkownika $u$
-    \item $\mathbf{q}_i$ -- ukryty wektor cech reprezentujący obiekt $i$
-    \item $k$ -- wymiarowość przestrzeni ukrytej (z góry określona liczba cech w wektorze)
-    \item $p_{uf}$, $q_{if}$ -- poszczególne ($f$-te) składowe wektorów ukrytych odpowiednio dla użytkownika i obiektu
+  \item $\mathbf{p}_u$ -- ukryty wektor cech reprezentujący użytkownika $u$
+  \item $\mathbf{q}_i$ -- ukryty wektor cech reprezentujący obiekt $i$
+  \item $k$ -- wymiarowość przestrzeni ukrytej (z góry określona liczba cech w wektorze)
+  \item $p_{uf}$, $q_{if}$ -- poszczególne ($f$-te) składowe wektorów ukrytych odpowiednio dla użytkownika i obiektu
 \end{itemize}
 
 W procesie optymalizacji -- wykorzystującym zazwyczaj algorytm stochastycznego spadku wzdłuż gradientu (SGD) -- system iteracyjnie przelicza parametry poszczególnych wektorów po jednej trójce, poszukując minimum funkcji błędu zdefiniowanej równaniem \eqref{eq:bpr_opt}. Choć model BPR-MF opiera się na matematycznie prostym iloczynie skalarnym, przez lata dowiódł on swojej potężnej skuteczności w zadaniach wykorzystujących wyłącznie dane dorozumiane. Wynika to wprost z dopasowania samej definicji straty parowej do natury rankingu -- algorytm uczy się bezpośrednio sortować obiekty, zamiast przewidywać ich wyizolowane oceny punktowe. Z tego powodu we współczesnej literaturze przedmiotu BPR stanowi fundamentalny model odniesienia, z którym obligatoryjnie zestawia się skuteczność nowszych, rozbudowanych architektur systemów rekomendacyjnych. Autorzy nowatorskich rozwiązań z rodziny głębokich sieci kolaboracyjnych \footcite[178]{heNeuralCollaborativeFilteringKwiecien032017} oraz sieci wykorzystujących propagację w strukturach grafowych \footcite[5]{heLightGCNSimplifyingPowering2020} regularnie opierają ewaluację empiryczną na bazowym zestawieniu swoich wyników właśnie z klasycznym wariantem BPR-MF.
 
 
-\subsection{Algorytmy uczenia głębokiego}
-\subsection{Algorytmy grafowych sieci neuronowych}
+\subsection{Uczenie głębokie i Neural Collaborative Filtering}
+
+Uczenie głębokie w systemach rekomendacyjnych stanowi bezpośrednią odpowiedź na ograniczenia klasycznej faktoryzacji macierzy. W tradycyjnych modelach, takich jak opisany wcześniej BPR-MF, estymowana preferencja użytkownika względem obiektu obliczana jest za pomocą prostego iloczynu skalarnego przypisanych do nich wektorów ukrytych. Z matematycznego punktu widzenia jest to operacja ściśle liniowa. Taki stan rzeczy znacząco ogranicza elastyczność algorytmu i uniemożliwia uchwycenie złożonych, nieliniowych wzorców ukrytych w gigantycznych zbiorach interakcji użytkowników platform VOD.
+
+Aby rozwiązać ten problem, architektura \foreignlanguage{english}{Neural Collaborative Filtering} (NCF) całkowicie rezygnuje ze sztywnego iloczynu skalarnego na rzecz wielowarstwowych sieci neuronowych. Podstawowym założeniem tej metody jest to, że sieć neuronowa potrafi samodzielnie wyuczyć się optymalnej, nieliniowej funkcji interakcji bezpośrednio z danych historycznych \footcite[174]{heNeuralCollaborativeFilteringKwiecien032017}.
+
+Najskuteczniejszym wariantem z rodziny NCF jest hybrydowy model \foreignlanguage{english}{Neural Matrix Factorization} (NeuMF). Łączy on w sobie dwie niezależne ścieżki przetwarzania informacji: uogólnioną faktoryzację macierzy (GMF) oraz wielowarstwowy perceptron (MLP). Przetwarzanie danych i generowanie predykcji w tej architekturze realizowane są w następujących krokach:
+
+\begin{enumerate}
+  \item W pierwszej kolejności identyfikatory użytkownika $u$ oraz obiektu $i$ rzutowane są na gęstą przestrzeń wektorową w postaci macierzy osadzeń (ang. \foreignlanguage{english}{\textit{embeddings}}). Ponieważ obie ścieżki uczą się odmiennych cech, NeuMF inicjuje dla nich dwa niezależne zestawy wektorów -- jeden dla ścieżki liniowej ($\mathbf{p}_u^G$, $\mathbf{q}_i^G$) i drugi dla nieliniowej ($\mathbf{p}_u^M$, $\mathbf{q}_i^M$).
+
+  \item Równolegle system przetwarza wektory w dwóch odrębnych modułach:
+        \begin{itemize}
+          \item Ścieżka GMF (Generalized Matrix Factorization): wykonuje iloczyn Hadamarda (mnożenie po współrzędnych) pomiędzy wektorem użytkownika i obiektu, służąc do modelowania prostych, liniowych zależności.
+          \item Ścieżka MLP (Multi-Layer Perceptron): dokonuje konkatenacji (połączenia) wektorów użytkownika i obiektu, a następnie przepuszcza je przez kaskadę ukrytych warstw gęstych z nieliniowymi funkcjami aktywacji (zazwyczaj ReLU), realizując ekstrakcję głębokich relacji.
+        \end{itemize}
+
+  \item Na przedostatnim poziomie architektury (tzw. warstwie NeuMF) następuje fuzja. Ostateczna preferencja użytkownika obliczana jest poprzez połączenie wyników GMF i MLP w jeden wektor wyjściowy i przepuszczenie go przez sigmoidalną funkcję aktywacji \footcite[178]{heNeuralCollaborativeFilteringKwiecien032017}:
+
+        \begin{equation}
+          \hat{y}_{ui} = \sigma \left( \mathbf{h}^T \begin{bmatrix} \mathbf{p}_u^G \odot \mathbf{q}_i^G \\ \phi^{MLP}(\mathbf{p}_u^M, \mathbf{q}_i^M) \end{bmatrix} \right)
+          \label{eq:neumf_pred}
+        \end{equation}
+
+        Gdzie:
+        \begin{itemize}
+          \item $\hat{y}_{ui}$ -- estymowane prawdopodobieństwo interakcji użytkownika $u$ z obiektem $i$
+          \item $\sigma$ -- sigmoidalna funkcja aktywacji, transformująca wynik do przedziału $[0, 1]$
+          \item $\mathbf{h}$ -- wektor wag warstwy wyjściowej modelu, łączący wyniki obu ścieżek
+          \item $\odot$ -- iloczyn Hadamarda wektorów osadzeń ścieżki GMF
+          \item $\phi^{MLP}$ -- wynik przetwarzania połączonych wektorów przez perceptron (MLP)
+        \end{itemize}
+
+  \item Ze względu na operowanie na danych dorozumianych (1 -- obecność interakcji, 0 -- brak interakcji), proces optymalizacji (uczenia modelu) traktowany jest jako zadanie binarnej klasyfikacji. Algorytm spadku gradientu dąży iteracyjnie do minimalizacji funkcji binarnej entropii krzyżowej (ang. \foreignlanguage{english}{\textit{Binary Cross-Entropy}}, Log Loss) \footcite[177]{heNeuralCollaborativeFilteringKwiecien032017}:
+
+        \begin{equation}
+          \mathcal{L}_{NeuMF} = - \sum_{(u,i) \in \mathcal{Y}^+} \log(\hat{y}_{ui}) - \sum_{(u,j) \in \mathcal{Y}^-} \log(1 - \hat{y}_{uj})
+          \label{eq:neumf_loss}
+        \end{equation}
+
+        Gdzie:
+        \begin{itemize}
+          \item $\mathcal{Y}^+$ -- zbiór zaobserwowanych, pozytywnych interakcji w danych treningowych
+          \item $\mathcal{Y}^-$ -- zbiór interakcji negatywnych, wygenerowanych sztucznie poprzez losowe próbkowanie niezaobserwowanych par (ang. \foreignlanguage{english}{\textit{negative sampling}})
+        \end{itemize}
+\end{enumerate}
+
+Dzięki takiej konstrukcji architektura NeuMF stała się kanonicznym przykładem zastosowania głębokich sieci neuronowych w filtracji kolaboracyjnej. Stanowi ona obecnie potężny, uniwersalny punkt odniesienia (ang. \foreignlanguage{english}{\textit{benchmark}}), względem którego weryfikuje się skuteczność nowszych algorytmów -- w tym metod adresujących problem izolacji węzłów, takich jak grafowe sieci neuronowe \footcite[5]{heLightGCNSimplifyingPowering2020}.
+
+\begin{figure}[htbp]
+  \centering
+  \input{tex/tikz/neumf_architecture.tex}
+  \caption{Architektura hybrydowego modelu Neural Matrix Factorization (NeuMF). Opracowanie własne na podstawie \footcite{heNeuralCollaborativeFilteringKwiecien032017}.}
+  \label{fig:neumf_architecture}
+\end{figure}
+
+\subsection{Grafowe sieci neuronowe}
 \subsection{Metryki oceny}
 Ewaluacja modeli rekomendacyjnych w warunkach interakcji dorozumianych (\foreignlanguage{english}{\textit{implicit feedback}}) różni się fundamentalnie od tradycyjnej oceny systemów ukierunkowanych na przewidywanie ocen jawnych. W klasycznym ujęciu regresyjnym celem algorytmu jest minimalizacja błędu predykcji wartości ciągłej, wyrażanej najczęściej za pomocą średniego błędu kwadratowego (ang. \foreignlanguage{english}{\textit{Root Mean Squared Error, RMSE}}) lub średniego błędu bezwzględnego (ang. \foreignlanguage{english}{\textit{Mean Absolute Error, MAE}}) \footcite[15--16]{shaniEvaluatingRecommendationSystems2011}.
 
@@ -244,40 +307,40 @@ W badaniach eksperymentalnych zastosowano zestaw czterech komplementarnych metry
 Niech $\mathcal{U}$ oznacza zbiór użytkowników poddawanych ewaluacji, $\mathcal{R}_u(K)$ uporządkowany zbiór $K$ obiektów rekomendowanych użytkownikowi $u \in \mathcal{U}$ przez analizowany model, natomiast $\mathcal{T}_u$ zbiór obiektów faktycznie zaobserwowanych (relewantnych) w zbiorze testowym dla tego użytkownika. Każda z wymienionych metryk mierzy odmienny aspekt jakości dopasowania listy rekomendacyjnej:
 
 \begin{itemize}
-    \item \textbf{Czułość (ang. \foreignlanguage{english}{\textit{Recall at K, Recall@K}}):} określa, jaki ułamek wszystkich relewantnych dla użytkownika obiektów ze zbioru testowego znalazł się na wygenerowanej liście rekomendacji, ignorując kolejność ich ułożenia \footcite[264]{shaniEvaluatingRecommendationSystems2011}. Obliczany jako iloraz trafnych wskazań algorytmu (wyrażonych jako przecięcie zbioru rekomendacji ze zbiorem testowym) i łącznej liczby pożądanych przez użytkownika elementów:
-          \begin{equation}
-              \text{Recall@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \frac{|\mathcal{R}_u(K) \cap \mathcal{T}_u|}{|\mathcal{T}_u|}
-          \end{equation}
+  \item \textbf{Czułość (ang. \foreignlanguage{english}{\textit{Recall at K, Recall@K}}):} określa, jaki ułamek wszystkich relewantnych dla użytkownika obiektów ze zbioru testowego znalazł się na wygenerowanej liście rekomendacji, ignorując kolejność ich ułożenia \footcite[264]{shaniEvaluatingRecommendationSystems2011}. Obliczany jako iloraz trafnych wskazań algorytmu (wyrażonych jako przecięcie zbioru rekomendacji ze zbiorem testowym) i łącznej liczby pożądanych przez użytkownika elementów:
+        \begin{equation}
+          \text{Recall@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \frac{|\mathcal{R}_u(K) \cap \mathcal{T}_u|}{|\mathcal{T}_u|}
+        \end{equation}
 
-    \item \textbf{Wskaźnik Trafień (ang. \foreignlanguage{english}{\textit{Hit Rate at K, Hit Rate@K}}):} reprezentuje prawdopodobieństwo, że na rekomendowanej liście o długości $K$ znajdzie się co najmniej jeden obiekt poszukiwany przez użytkownika w zbiorze testowym \footcite[7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}:
-          \begin{equation}
-              \text{HR@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \mathbb{I}\left( \mathcal{R}_u(K) \cap \mathcal{T}_u \neq \emptyset \right)
-          \end{equation}
-          gdzie $\mathbb{I}(\cdot)$ oznacza funkcję wskaźnikową, przyjmującą wartość $1$, gdy warunek logiczny jest spełniony, oraz $0$ w przeciwnym razie.
+  \item \textbf{Wskaźnik Trafień (ang. \foreignlanguage{english}{\textit{Hit Rate at K, Hit Rate@K}}):} reprezentuje prawdopodobieństwo, że na rekomendowanej liście o długości $K$ znajdzie się co najmniej jeden obiekt poszukiwany przez użytkownika w zbiorze testowym \footcite[7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}:
+        \begin{equation}
+          \text{HR@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \mathbb{I}\left( \mathcal{R}_u(K) \cap \mathcal{T}_u \neq \emptyset \right)
+        \end{equation}
+        gdzie $\mathbb{I}(\cdot)$ oznacza funkcję wskaźnikową, przyjmującą wartość $1$, gdy warunek logiczny jest spełniony, oraz $0$ w przeciwnym razie.
 
-    \item \textbf{Znormalizowany Zdyskontowany Zysk Skumulowany (ang. \foreignlanguage{english}{\textit{Normalized Discounted Cumulative Gain, NDCG@K}}):} w przeciwieństwie do czułości i wskaźnika trafień, metryka NDCG@K uwzględnia dokładną pozycję (rangę) trafionych obiektów. Odzwierciedla to rzeczywiste zachowanie użytkowników platform streamingowych, których uwaga drastycznie maleje wraz z oddalaniem się od początku zestawienia. Dyskonto pozycjonalne nakłada najwyższą wagę na trafienia na najwyższych miejscach (np. pozycje 1--3), stosując logarytmiczne osłabienie wag dla pozycji dalszych, co pozwala na precyzyjną ocenę zdolności modelu do pozycjonowania najlepszych propozycji na samym szczycie listy \footcite[35]{krawczukSystemyRekomendacyjne2024}.
+  \item \textbf{Znormalizowany Zdyskontowany Zysk Skumulowany (ang. \foreignlanguage{english}{\textit{Normalized Discounted Cumulative Gain, NDCG@K}}):} w przeciwieństwie do czułości i wskaźnika trafień, metryka NDCG@K uwzględnia dokładną pozycję (rangę) trafionych obiektów. Odzwierciedla to rzeczywiste zachowanie użytkowników platform streamingowych, których uwaga drastycznie maleje wraz z oddalaniem się od początku zestawienia. Dyskonto pozycjonalne nakłada najwyższą wagę na trafienia na najwyższych miejscach (np. pozycje 1--3), stosując logarytmiczne osłabienie wag dla pozycji dalszych, co pozwala na precyzyjną ocenę zdolności modelu do pozycjonowania najlepszych propozycji na samym szczycie listy \footcite[35]{krawczukSystemyRekomendacyjne2024}.
 
-          Zysk zdyskontowany (DCG@K) dla użytkownika $u$ wyraża się wzorem \footcite[270]{shaniEvaluatingRecommendationSystems2011}:
-          \begin{equation}
-              \text{DCG@K}(u) = \sum_{i=1}^K \frac{rel_u(i)}{\log_2(i + 1)}
-          \end{equation}
-          gdzie $rel_u(i) \in \{0, 1\}$ oznacza wskaźnik trafienia obiektu znajdującego się na $i$-tej pozycji rekomendowanej listy $\mathcal{R}_u(K)$ (przyjmując wartość 1, jeśli obiekt należy do zbioru testowego $\mathcal{T}_u$, oraz 0 w przeciwnym razie). Idealny zysk zdyskontowany (IDCG@K) odpowiada hipotetycznemu, bezbłędnemu uszeregowaniu, w którym wszystkie rzeczywiste obiekty ze zbioru testowego umieszczono na najwyższych możliwych pozycjach listy rekomendacyjnej \footcite[35]{krawczukSystemyRekomendacyjne2024}:
-          \begin{equation}
-              \text{IDCG@K}(u) = \sum_{i=1}^{\min(|\mathcal{T}_u|, K)} \frac{1}{\log_2(i + 1)}
-          \end{equation}
-          Znormalizowana wartość NDCG@K stanowi stosunek zysku rzeczywistego do idealnego, a jej uśrednienie po całym zbiorze użytkowników pozwala na uzyskanie syntetycznej oceny jakości rankingu generowanego przez model \footcite[270--271]{shaniEvaluatingRecommendationSystems2011, krawczukSystemyRekomendacyjne2024}:
-          \begin{equation}
-              \text{NDCG@K}(u) = \frac{\text{DCG@K}(u)}{\text{IDCG@K}(u)} \quad \implies \quad \text{NDCG@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \text{NDCG@K}(u)
-          \end{equation}
+        Zysk zdyskontowany (DCG@K) dla użytkownika $u$ wyraża się wzorem \footcite[270]{shaniEvaluatingRecommendationSystems2011}:
+        \begin{equation}
+          \text{DCG@K}(u) = \sum_{i=1}^K \frac{rel_u(i)}{\log_2(i + 1)}
+        \end{equation}
+        gdzie $rel_u(i) \in \{0, 1\}$ oznacza wskaźnik trafienia obiektu znajdującego się na $i$-tej pozycji rekomendowanej listy $\mathcal{R}_u(K)$ (przyjmując wartość 1, jeśli obiekt należy do zbioru testowego $\mathcal{T}_u$, oraz 0 w przeciwnym razie). Idealny zysk zdyskontowany (IDCG@K) odpowiada hipotetycznemu, bezbłędnemu uszeregowaniu, w którym wszystkie rzeczywiste obiekty ze zbioru testowego umieszczono na najwyższych możliwych pozycjach listy rekomendacyjnej \footcite[35]{krawczukSystemyRekomendacyjne2024}:
+        \begin{equation}
+          \text{IDCG@K}(u) = \sum_{i=1}^{\min(|\mathcal{T}_u|, K)} \frac{1}{\log_2(i + 1)}
+        \end{equation}
+        Znormalizowana wartość NDCG@K stanowi stosunek zysku rzeczywistego do idealnego, a jej uśrednienie po całym zbiorze użytkowników pozwala na uzyskanie syntetycznej oceny jakości rankingu generowanego przez model \footcite[270--271]{shaniEvaluatingRecommendationSystems2011, krawczukSystemyRekomendacyjne2024}:
+        \begin{equation}
+          \text{NDCG@K}(u) = \frac{\text{DCG@K}(u)}{\text{IDCG@K}(u)} \quad \implies \quad \text{NDCG@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \text{NDCG@K}(u)
+        \end{equation}
 
-    \item \textbf{Średnia Odwrotność Rangi (ang. \foreignlanguage{english}{\textit{Mean Reciprocal Rank, MRR@K}}):} mierzy zdolność systemu do jak najszybszego dostarczenia pierwszej trafnej rekomendacji. Z punktu widzenia platform VOD wskaźnik ten ma fundamentalne znaczenie użytkowe, gdyż symuluje scenariusz, w którym widz poszukuje pojedynczego, satysfakcjonującego filmu na dany wieczór, a jego proces interakcji z interfejsem kończy się w momencie odnalezienia pierwszej interesującej pozycji. Jakość systemu ocenia się tu przez pryzmat odwrotności pozycji, na której pojawił się pierwszy obiekt ze zbioru testowego \footcite[34]{krawczukSystemyRekomendacyjne2024}:
-          \begin{equation}
-              \text{MRR@K}(u) = \frac{1}{\text{rank}_u^*}
-          \end{equation}
-          gdzie $\text{rank}_u^*$ oznacza rangę pierwszej trafnej rekomendacji na liście $\mathcal{R}_u(K)$ (przyjmując $\text{MRR@K}(u) = 0$, jeśli w obrębie $K$ pozycji nie wystąpiło żadne trafienie). Ostateczna wartość MRR@K stanowi średnią arytmetyczną odwrotności rang obliczoną dla wszystkich analizowanych użytkowników \footcite[34]{krawczukSystemyRekomendacyjne2024}:
-          \begin{equation}
-              \text{MRR@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \text{MRR@K}(u)
-          \end{equation}
+  \item \textbf{Średnia Odwrotność Rangi (ang. \foreignlanguage{english}{\textit{Mean Reciprocal Rank, MRR@K}}):} mierzy zdolność systemu do jak najszybszego dostarczenia pierwszej trafnej rekomendacji. Z punktu widzenia platform VOD wskaźnik ten ma fundamentalne znaczenie użytkowe, gdyż symuluje scenariusz, w którym widz poszukuje pojedynczego, satysfakcjonującego filmu na dany wieczór, a jego proces interakcji z interfejsem kończy się w momencie odnalezienia pierwszej interesującej pozycji. Jakość systemu ocenia się tu przez pryzmat odwrotności pozycji, na której pojawił się pierwszy obiekt ze zbioru testowego \footcite[34]{krawczukSystemyRekomendacyjne2024}:
+        \begin{equation}
+          \text{MRR@K}(u) = \frac{1}{\text{rank}_u^*}
+        \end{equation}
+        gdzie $\text{rank}_u^*$ oznacza rangę pierwszej trafnej rekomendacji na liście $\mathcal{R}_u(K)$ (przyjmując $\text{MRR@K}(u) = 0$, jeśli w obrębie $K$ pozycji nie wystąpiło żadne trafienie). Ostateczna wartość MRR@K stanowi średnią arytmetyczną odwrotności rang obliczoną dla wszystkich analizowanych użytkowników \footcite[34]{krawczukSystemyRekomendacyjne2024}:
+        \begin{equation}
+          \text{MRR@K} = \frac{1}{|\mathcal{U}|} \sum_{u \in \mathcal{U}} \text{MRR@K}(u)
+        \end{equation}
 \end{itemize}
 
 Wartość $\text{NDCG@10}$ przyjęto w badaniach jako główną metrykę walidacyjną (\foreignlanguage{english}{\textit{target metric}}), decydującą o zatrzymaniu procesu trenowania (procedura \foreignlanguage{english}{\textit{early stopping}}) oraz wyznaczaniu optymalnych zestawów hiperparametrów analizowanych modeli. Takie podejście jest w pełni spójne z powszechną praktyką eksperymentalną w dziedzinie głębokich systemów rekomendacyjnych, gdzie to właśnie jakość uporządkowania czołówki listy rekomendacji decyduje o finalnej użyteczności modelu dla widza \footcite[zob. s. 7, sekcja 4.1.1]{heNeuralCollaborativeFilteringKwiecien032017}.

@@ -9,7 +9,7 @@ if __name__ == '__main__':
     
     result = run_recbole(
         model='LightGCN', 
-        dataset='ml-1m', 
+        dataset='ml-100k', 
         config_file_list=config_file_list,
         config_dict={
             'checkpoint_dir': '3_Evaluation/Saved/'

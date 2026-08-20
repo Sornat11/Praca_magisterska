@@ -1,15 +1,11 @@
-# Zoptymalizowana konfiguracja NeuMF (NCF)
-model: NeuMF
+# Konfiguracja modelu bazowego ItemKNN
+model: ItemKNN
 dataset: ml-100k
 data_path: Datasets/
 checkpoint_dir: '3_Evaluation/Saved/'
 
 # Architektura
-# layers[0] = mlp_embedding_size * 2 = 128 * 2 = 256
-layers: [256, 128, 64, 32] 
-mf_embedding_size: 128    # Zwiększono z 64 na 128
-mlp_embedding_size: 128   # Zwiększono z 64 na 128
-dropout_prob: 0.2         # Zwiększony dropout dla większej sieci
+k: 100               # Liczba najbliższych sąsiadów
 
 # Data settings
 USER_ID_FIELD: user_id
@@ -20,14 +16,8 @@ load_col:
     inter: [user_id, item_id, rating, timestamp]
 user_inter_num_interval: "[5,inf)"
 item_inter_num_interval: "[5,inf)"
-train_neg_sample_args: {'distribution': 'uniform', 'sample_num': 4}
 
-# Training settings
-epochs: 100
-train_batch_size: 4096
-learning_rate: 0.0005     # Zmniejszono LR dla lepszej stabilności głębokiej sieci
-learner: adam
-
+# Model nie jest trenowany w oparciu o stochastyczny spadek gradientu (nie wymaga epok i LR w tym samym wymiarze co deep learning)
 # Evaluation settings
 eval_args:
     split: {'RS': [0.8, 0.1, 0.1]}
