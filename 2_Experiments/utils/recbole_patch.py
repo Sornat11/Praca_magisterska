@@ -31,6 +31,10 @@ def apply_patches() -> None:
     if not hasattr(np, 'object'): np.object = object
     if not hasattr(np, 'complex_'): np.complex_ = np.complex128
     if not hasattr(np, 'complex'): np.complex = complex
+    if not hasattr(np, 'unicode_'): np.unicode_ = np.str_
+    if not hasattr(np, 'unicode'): np.unicode = str
+    if not hasattr(np, 'str_'): np.str_ = np.str_ if hasattr(np, 'str_') else str
+    if not hasattr(np, 'str'): np.str = str
 
     if not hasattr(pkgutil, 'ImpImporter'):
         class ImpImporter:
