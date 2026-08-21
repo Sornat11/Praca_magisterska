@@ -29,6 +29,8 @@ def apply_patches() -> None:
     if not hasattr(np, 'bool_'): np.bool_ = bool
     if not hasattr(np, 'bool'): np.bool = bool
     if not hasattr(np, 'object'): np.object = object
+    if not hasattr(np, 'complex_'): np.complex_ = np.complex128
+    if not hasattr(np, 'complex'): np.complex = complex
 
     if not hasattr(pkgutil, 'ImpImporter'):
         class ImpImporter:
