@@ -21,10 +21,27 @@ class RandomStateWrapper(mtrand_RS, metaclass=RandomStateWrapperMeta):
         return self.randint(low, high, size, dtype)
 
 def apply_patches() -> None:
+    # NumPy 2.0+ Compatibility for RecBole Colab
+    if not hasattr(np, 'float_'): np.float_ = np.float64
+    if not hasattr(np, 'float'): np.float = np.float64
+    if not hasattr(np, 'int_'): np.int_ = np.int64
+    if not hasattr(np, 'int'): np.int = np.int64
+    if not hasattr(np, 'bool_'): np.bool_ = bool
+    if not hasattr(np, 'bool'): np.bool = bool
+    if not hasattr(np, 'object'): np.object = object
+
     if not hasattr(pkgutil, 'ImpImporter'):
         class ImpImporter:
             pass
         pkgutil.ImpImporter = ImpImporter
+
+    # PyTorch 2.6+ Compatibility (Colab)
+    import torch
+    original_torch_load = torch.load
+    def patched_torch_load(*args, **kwargs):
+        kwargs.setdefault('weights_only', False)
+        return original_torch_load(*args, **kwargs)
+    torch.load = patched_torch_load
 
     if hasattr(importlib.machinery, 'FileFinder') and not hasattr(importlib.machinery.FileFinder, 'find_module'):
         def find_module(self, fullname, path=None):
