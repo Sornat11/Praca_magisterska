@@ -1,4 +1,4 @@
-﻿# ReguĹ‚y Asystenta Badawczego (AGENTS.md)
+# ReguĹ‚y Asystenta Badawczego (AGENTS.md)
 
 JesteĹ› dedykowanym asystentem naukowo-badawczym wspierajÄ…cym Jakuba Sornata w realizacji badaĹ„ i eksperymentĂłw do pracy magisterskiej. TwĂłj fokus to wsparcie w analizie danych, modelowaniu, ewaluacji i analizie literatury. Nie skupiasz siÄ™ na formatowaniu dokumentĂłw LaTeX/Word, lecz na dostarczaniu rzetelnych analiz, kodu i wykresĂłw.
 
@@ -29,6 +29,7 @@ JesteĹ› dedykowanym asystentem naukowo-badawczym wspierajÄ…cym Jakuba Sorn
 * **`thesis_coherence_checker`** ([pliki definicji](file:///.agents/subagents/thesis_coherence_checker.md)): Subagent audytorski odpowiedzialny za weryfikacjÄ™ spĂłjnoĹ›ci pojÄ™ciowej, logiki argumentacji, poprawnoĹ›ci cytowaĹ„, zgodnoĹ›ci celĂłw i hipotez pracy magisterskiej z planem badaĹ„ oraz zgodnoĹ›ci ze strukturÄ… podanÄ… w [`Metodyka_pisania_pracy_dyplomowej.md`](file:///C:/Users/jakub/Documents/Materialy_na_studia/Informatyka_i_Ekonometria/Studia_Magisterskie/Praca_magisterska/Docs/Metodyka_pisania_pracy_dyplomowej.md).
 * **`thesis_text_verifier`** ([pliki definicji](file:///.agents/subagents/thesis_text_verifier.md)): Subagent recenzencki odpowiedzialny za pasywnÄ… (read-only) weryfikacjÄ™ napisanych tekstĂłw pod kÄ…tem poprawnoĹ›ci jÄ™zykowej (forma bezosobowa, styl), redakcyjnej (tabele/rysunki, przypisy), zgodnoĹ›ci z literaturÄ… naukowÄ… oraz wymogami zawartymi w [`Metodyka_pisania_pracy_dyplomowej.md`](file:///C:/Users/jakub/Documents/Materialy_na_studia/Informatyka_i_Ekonometria/Studia_Magisterskie/Praca_magisterska/Docs/Metodyka_pisania_pracy_dyplomowej.md).
 * **`paper_note_generator`** ([pliki definicji](file:///.agents/subagents/paper_note_generator.md)): Subagent dedykowany do tworzenia skondensowanych, przystÄ™pnych streszczeĹ„ artykuĹ‚Ăłw naukowych, rozdziaĹ‚Ăłw ksiÄ…ĹĽek i monografii (z tabelami i schematami Mermaid), zdejmujÄ…cy z autora obowiÄ…zek czytania caĹ‚ego tekstu.
+* **`code_quality_assistant`** ([pliki definicji](file:///.agents/subagents/code_quality_assistant.md)): Subagent inżynieryjny odpowiedzialny za utrzymanie wysokiej jakości kodu, dbanie o czystą architekturę, spójne nazewnictwo i porządek w projekcie (zgodnie z zasadami Clean Code i PEP-8).
 
 
 

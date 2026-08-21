@@ -50,37 +50,45 @@ python 1_Preprocessing/convert_to_recbole.py
 ```
 
 ### 2. Running Experiments
-Execute specific models using the provided scripts:
+Execute specific models using the provided universal script:
 - **Matrix Factorization (Baseline):**
   ```bash
-  python 2_Experiments/run_bpr.py
+  python 2_Experiments/run_experiment.py --model BPR --dataset ml-100k --config 2_Experiments/Configs/bpr.yaml
   ```
 - **Neural Collaborative Filtering (Deep Learning):**
   ```bash
-  python 2_Experiments/run_ncf.py
+  python 2_Experiments/run_experiment.py --model NeuMF --dataset ml-100k --config 2_Experiments/Configs/ncf.yaml
   ```
 - **LightGCN (Graph Neural Networks):**
   ```bash
-  python 2_Experiments/run_gnn.py
+  python 2_Experiments/run_experiment.py --model LightGCN --dataset ml-100k --config 2_Experiments/Configs/gnn.yaml
+  ```
+- **ItemKNN (Memory-based Baseline):**
+  ```bash
+  python 2_Experiments/run_experiment.py --model ItemKNN --dataset ml-100k --config 2_Experiments/Configs/itemknn.yaml
   ```
 
 ### 3. Hyperparameter Optimization (HPO)
 To find the best hyperparameters for each model using RecBole's `HyperTuning`.
 
 > [!IMPORTANT]
-> **Pro Tip:** Always run tuning scripts with the `-u` flag (`python -u ...`) to prevent stdout buffering and see progress bars in real-time. Remember that ONLY scripts prefixed with `run_hyper_` generate tuning output. Bulk testing scripts (like `run_all_100k.py`) perform static evaluation and will NOT produce tuning results.
+> **Pro Tip:** Always run tuning scripts with the `-u` flag (`python -u ...`) to prevent stdout buffering and see progress bars in real-time.
 
 - **BPR Optimization:**
   ```bash
-  python -u 2_Experiments/run_hyper_bpr.py
+  python -u 2_Experiments/run_hyper.py --model BPR --config 2_Experiments/Configs/bpr.yaml --hyper 2_Experiments/Hyperparams/bpr.hyper --algo bayes
   ```
 - **NCF Optimization:**
   ```bash
-  python -u 2_Experiments/run_hyper_ncf.py
+  python -u 2_Experiments/run_hyper.py --model NeuMF --config 2_Experiments/Configs/ncf.yaml --hyper 2_Experiments/Hyperparams/ncf.hyper --algo bayes
   ```
 - **LightGCN Optimization:**
   ```bash
-  python -u 2_Experiments/run_hyper_gnn.py
+  python -u 2_Experiments/run_hyper.py --model LightGCN --config 2_Experiments/Configs/gnn.yaml --hyper 2_Experiments/Hyperparams/gnn.hyper --algo bayes
+  ```
+- **ItemKNN Optimization:**
+  ```bash
+  python -u 2_Experiments/run_hyper.py --model ItemKNN --config 2_Experiments/Configs/itemknn.yaml --hyper 2_Experiments/Hyperparams/itemknn.hyper --algo bayes
   ```
 
 - **Run all tuning scripts sequentially (PowerShell):**
@@ -98,11 +106,16 @@ Parsed results and a comprehensive summary of the best configurations can be fou
 
 *Note on GNN (LightGCN) tuning:* Due to the high computational cost of running GNNs (~22.4 hours per single training run on CPU), a full grid search was bypassed. Instead, we use an optimized expert configuration defined in `2_Experiments/Configs/gnn.yaml`.
 
-## Compatibility Note (Patch)
-Due to changes in `SciPy 1.11+`, the LightGCN model in RecBole requires a manual patch in the source code. If you recreate the `venv`, apply the patch using:
-```bash
-python -c "path='venv/Lib/site-packages/recbole/model/general_recommender/lightgcn.py'; content=open(path).read().replace('A._update(data_dict)', 'for k, v in data_dict.items(): A[k] = v'); open(path, 'w').write(content)"
-```
+## Compatibility Notes & Patches
+
+This project handles several compatibility issues between `RecBole 1.2.0`, `NumPy 1.26+`, and `SciPy 1.11+`:
+
+1. **Automatic Monkey-Patches:** Issues regarding `numpy.random.RandomState`, `pkgutil`, and progress bar arguments in `Trainer.fit` are resolved automatically at runtime. The module `2_Experiments/utils/recbole_patch.py` injects these patches dynamically when you run any of the execution scripts.
+   
+2. **Manual LightGCN Patch:** Due to changes in `SciPy 1.11+` sparse matrices, the `LightGCN` model in RecBole requires a manual code modification in the library source code itself. If you ever recreate the `venv` from scratch, you must apply this patch before running GNN models:
+   ```bash
+   python -c "path='venv/Lib/site-packages/recbole/model/general_recommender/lightgcn.py'; content=open(path).read().replace('A._update(data_dict)', 'for k, v in data_dict.items(): A[k] = v'); open(path, 'w').write(content)"
+   ```
 
 ## Author
 Jakub Sornat  

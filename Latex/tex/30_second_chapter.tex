@@ -296,7 +296,53 @@ Dzięki takiej konstrukcji architektura NeuMF stała się kanonicznym przykłade
   \label{fig:neumf_architecture}
 \end{figure}
 
-\subsection{Grafowe sieci neuronowe}
+\subsection{Grafowe sieci neuronowe i architektura LightGCN}
+
+Uczenie głębokie, reprezentowane przez architekturę NeuMF, znacząco zwiększyło zdolność systemów rekomendacyjnych do modelowania nieliniowych interakcji. Modele te posiadają jednak fundamentalne ograniczenie -- traktują każdą parę użytkownik-obiekt jako wyizolowany rekord danych. W rzeczywistości interakcje na platformach VOD tworzą rozbudowany graf dwudzielny, w którym użytkownicy są połączeni z oglądanymi filmami. Ignorowanie topologii tego grafu uniemożliwia uchwycenie tzw. relacji wyższych rzędów (ang. \foreignlanguage{english}{\textit{high-order connectivity}}), czyli wiedzy płynącej z faktu, że użytkownicy o podobnym guście tworzą ukryte klastry powiązań \footcite[1]{heLightGCNSimplifyingPowering2020}.
+
+Odpowiedzią na ten problem są grafowe sieci neuronowe (GNN). Początkowo adaptowano w tym celu klasyczne konwolucje grafowe (GCN), jednak ze względu na ich ciężar obliczeniowy (transformacje cech i nieliniowe funkcje aktywacji), okazały się one nieoptymalne dla zadania filtrowania kolaboracyjnego. Przełomem w tej dziedzinie stał się algorytm \foreignlanguage{english}{\textit{LightGCN}}, zaproponowany w 2020 roku. Badacze udowodnili, że w systemach rekomendacyjnych opartych wyłącznie na identyfikatorach (ID) operacje nieliniowe są szkodliwe, a kluczem do sukcesu jest samo wygładzanie wektorów po strukturze grafu (ang. \foreignlanguage{english}{\textit{neighborhood aggregation}}) \footcite[2--3]{heLightGCNSimplifyingPowering2020}.
+
+Architektura LightGCN składa się z następujących etapów przetwarzania:
+
+\begin{enumerate}
+  \item \textbf{Inicjalizacja (Warstwa Osadzeń):} Podobnie jak w standardowej faktoryzacji macierzy, każdemu węzłowi w grafie (użytkownikowi $u$ oraz obiektowi $i$) przypisywany jest unikalny wektor cech. Stanowią one początkowe reprezentacje informacyjne na tak zwanej warstwie zerowej: $\mathbf{e}_u^{(0)}$ oraz $\mathbf{e}_i^{(0)}$.
+
+  \item \textbf{Lekka Konwolucja Grafowa (Propagacja):} Wektory reprezentacji aktualizowane są iteracyjnie poprzez agregację informacji od bezpośrednich sąsiadów w grafie dwudzielnym. Zgodnie z głównym postulatem LightGCN, z procesu tego całkowicie usunięto parametryzowane macierze wag i aktywacje nieliniowe. Wartość wektora użytkownika w kolejnej warstwie $k+1$ wyliczana jest ze wzoru \footcite[3]{heLightGCNSimplifyingPowering2020}:
+
+        \begin{equation}
+          \mathbf{e}_u^{(k+1)} = \sum_{i \in \mathcal{N}_u} \frac{1}{\sqrt{|\mathcal{N}_u|} \sqrt{|\mathcal{N}_i|}} \mathbf{e}_i^{(k)}
+          \label{eq:lightgcn_prop}
+        \end{equation}
+
+        Gdzie:
+        \begin{itemize}
+          \item $\mathbf{e}_u^{(k+1)}$ -- zaktualizowany wektor cech użytkownika $u$ po $k+1$ krokach propagacji grafowej
+          \item $\mathbf{e}_i^{(k)}$ -- wektor cech obiektu $i$ (sąsiada) pochodzący z poprzedniej warstwy $k$
+          \item $\mathcal{N}_u$, $\mathcal{N}_i$ -- zbiór bezpośrednich sąsiadów w grafie (dla użytkownika są to obejrzane przez niego filmy, a dla filmu -- użytkownicy, którzy weszli z nim w interakcję)
+          \item $\frac{1}{\sqrt{|\mathcal{N}_u|} \sqrt{|\mathcal{N}_i|}}$ -- symetryczny czynnik normalizujący dyskontujący wpływ bardzo popularnych filmów lub wybitnie aktywnych użytkowników
+        \end{itemize}
+        Analogiczny proces propagacji zachodzi w drugą stronę -- wektory filmów aktualizowane są na podstawie połączonych z nimi wektorów użytkowników.
+
+  \item \textbf{Fuzja Warstw (Kombinacja Wektorów):} Ponieważ każda warstwa $k$ koduje informacje o topologii z innej odległości (np. $k=1$ to bezpośrednie interakcje, $k=2$ to znajomi o podobnym guście), LightGCN nie odrzuca warstw pośrednich. Ostateczna reprezentacja węzła jest wyliczana jako średnia ważona jego stanów z poszczególnych warstw \footcite[4]{heLightGCNSimplifyingPowering2020}:
+
+        \begin{equation}
+          \mathbf{e}_u = \sum_{k=0}^K \alpha_k \mathbf{e}_u^{(k)}
+        \end{equation}
+
+        Gdzie $K$ to łączna liczba wykorzystanych warstw konwolucyjnych (zazwyczaj od 2 do 4), a $\alpha_k$ to waga przypisana danej warstwie (domyślnie przyjmuje się stałą wartość $\alpha_k = \frac{1}{K+1}$, traktując wszystkie kroki propagacji równorzędnie).
+
+  \item \textbf{Predykcja i Optymalizacja:} Ostateczna predykcja prawdopodobieństwa interakcji wyliczana jest poprzez standardowy iloczyn skalarny finalnych, wzbogaconych strukturalnie wektorów: $\hat{y}_{ui} = \mathbf{e}_u^T \mathbf{e}_i$. Tak zaprojektowany model trenowany jest z wykorzystaniem znanej z klasycznych podejść parowej funkcji straty BPR (zdefiniowanej wcześniej równaniem \eqref{eq:bpr_opt}). Pozwala to na bezpośrednią optymalizację algorytmu pod kątem poprawnego sortowania spersonalizowanej listy rekomendacji.
+\end{enumerate}
+
+Usunięcie zbędnych operacji matematycznych uczyniło z LightGCN model nie tylko skuteczniejszy od wcześniejszych architektur GNN, ale także znacznie szybszy obliczeniowo i łatwiejszy w procesie strojenia. Algorytm ten redefiniuje podejście do filtrowania kolaboracyjnego, udowadniając wprost, że ukryta struktura powiązań pomiędzy użytkownikami a multimediami jest równie kluczowa, co głęboka ekstrakcja nieliniowych wzorców preferencji.
+
+\begin{figure}[htbp]
+    \centering
+    \input{tex/tikz/lightgcn_architecture.tex}
+    \caption{Architektura algorytmu LightGCN z uwzględnieniem propagacji warstwowej. Opracowanie własne na podstawie \footcite{heLightGCNSimplifyingPowering2020}.}
+    \label{fig:lightgcn_architecture}
+\end{figure}
+
 \subsection{Metryki oceny}
 Ewaluacja modeli rekomendacyjnych w warunkach interakcji dorozumianych (\foreignlanguage{english}{\textit{implicit feedback}}) różni się fundamentalnie od tradycyjnej oceny systemów ukierunkowanych na przewidywanie ocen jawnych. W klasycznym ujęciu regresyjnym celem algorytmu jest minimalizacja błędu predykcji wartości ciągłej, wyrażanej najczęściej za pomocą średniego błędu kwadratowego (ang. \foreignlanguage{english}{\textit{Root Mean Squared Error, RMSE}}) lub średniego błędu bezwzględnego (ang. \foreignlanguage{english}{\textit{Mean Absolute Error, MAE}}) \footcite[15--16]{shaniEvaluatingRecommendationSystems2011}.
 

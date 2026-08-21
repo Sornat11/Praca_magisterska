@@ -1,4 +1,2 @@
-learning_rate choice [0.001]
-n_layers choice [2, 3]
-reg_weight choice [1e-04, 1e-03]
-embedding_size choice [64, 256]
+reg_weight loguniform -13.815, -4.6
+n_layers choice [1, 2, 3, 4]

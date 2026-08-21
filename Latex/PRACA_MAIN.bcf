@@ -2457,20 +2457,25 @@
     <bcf:citekey order="72" intorder="1">heNeuralCollaborativeFilteringKwiecien032017</bcf:citekey>
     <bcf:citekey order="73" intorder="1">heLightGCNSimplifyingPowering2020</bcf:citekey>
     <bcf:citekey order="74" intorder="1">heNeuralCollaborativeFilteringKwiecien032017</bcf:citekey>
-    <bcf:citekey order="75" intorder="1">shaniEvaluatingRecommendationSystems2011</bcf:citekey>
-    <bcf:citekey order="76" intorder="1">steckEvaluationRecommendationsRatingprediction2013</bcf:citekey>
-    <bcf:citekey order="77" intorder="1">shaniEvaluatingRecommendationSystems2011</bcf:citekey>
-    <bcf:citekey order="78" intorder="1">zhaoRecBoleUnifiedComprehensive2020</bcf:citekey>
-    <bcf:citekey order="79" intorder="1">shaniEvaluatingRecommendationSystems2011</bcf:citekey>
-    <bcf:citekey order="80" intorder="1">heNeuralCollaborativeFilteringKwiecien032017</bcf:citekey>
-    <bcf:citekey order="81" intorder="1">krawczukSystemyRekomendacyjne2024</bcf:citekey>
+    <bcf:citekey order="75" intorder="1">heLightGCNSimplifyingPowering2020</bcf:citekey>
+    <bcf:citekey order="76" intorder="1">heLightGCNSimplifyingPowering2020</bcf:citekey>
+    <bcf:citekey order="77" intorder="1">heLightGCNSimplifyingPowering2020</bcf:citekey>
+    <bcf:citekey order="78" intorder="1">heLightGCNSimplifyingPowering2020</bcf:citekey>
+    <bcf:citekey order="79" intorder="1">heLightGCNSimplifyingPowering2020</bcf:citekey>
+    <bcf:citekey order="80" intorder="1">shaniEvaluatingRecommendationSystems2011</bcf:citekey>
+    <bcf:citekey order="81" intorder="1">steckEvaluationRecommendationsRatingprediction2013</bcf:citekey>
     <bcf:citekey order="82" intorder="1">shaniEvaluatingRecommendationSystems2011</bcf:citekey>
-    <bcf:citekey order="83" intorder="1">krawczukSystemyRekomendacyjne2024</bcf:citekey>
+    <bcf:citekey order="83" intorder="1">zhaoRecBoleUnifiedComprehensive2020</bcf:citekey>
     <bcf:citekey order="84" intorder="1">shaniEvaluatingRecommendationSystems2011</bcf:citekey>
-    <bcf:citekey order="84" intorder="2">krawczukSystemyRekomendacyjne2024</bcf:citekey>
-    <bcf:citekey order="85" intorder="1">krawczukSystemyRekomendacyjne2024</bcf:citekey>
+    <bcf:citekey order="85" intorder="1">heNeuralCollaborativeFilteringKwiecien032017</bcf:citekey>
     <bcf:citekey order="86" intorder="1">krawczukSystemyRekomendacyjne2024</bcf:citekey>
-    <bcf:citekey order="87" intorder="1">heNeuralCollaborativeFilteringKwiecien032017</bcf:citekey>
+    <bcf:citekey order="87" intorder="1">shaniEvaluatingRecommendationSystems2011</bcf:citekey>
+    <bcf:citekey order="88" intorder="1">krawczukSystemyRekomendacyjne2024</bcf:citekey>
+    <bcf:citekey order="89" intorder="1">shaniEvaluatingRecommendationSystems2011</bcf:citekey>
+    <bcf:citekey order="89" intorder="2">krawczukSystemyRekomendacyjne2024</bcf:citekey>
+    <bcf:citekey order="90" intorder="1">krawczukSystemyRekomendacyjne2024</bcf:citekey>
+    <bcf:citekey order="91" intorder="1">krawczukSystemyRekomendacyjne2024</bcf:citekey>
+    <bcf:citekey order="92" intorder="1">heNeuralCollaborativeFilteringKwiecien032017</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nyt">

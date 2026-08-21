@@ -6,16 +6,20 @@ $PythonPath = ".\venv\Scripts\python.exe"
 Write-Host "=== Rozpoczynam serie optymalizacji hiperparametrow ===" -ForegroundColor Cyan
 
 # 1. BPR-MF
-Write-Host "[1/3] Uruchamiam optymalizacje BPR-MF..." -ForegroundColor Yellow
-& $PythonPath 2_Experiments/run_hyper_bpr.py
+Write-Host "[1/4] Uruchamiam optymalizacje BPR-MF..." -ForegroundColor Yellow
+& $PythonPath 2_Experiments/run_hyper.py --model BPR --config 2_Experiments/Configs/bpr.yaml --hyper 2_Experiments/Hyperparams/bpr.hyper --algo bayes
 
 # 2. NeuMF (NCF)
-Write-Host "[2/3] Uruchamiam optymalizacje NeuMF (NCF)..." -ForegroundColor Yellow
-& $PythonPath 2_Experiments/run_hyper_ncf.py
+Write-Host "[2/4] Uruchamiam optymalizacje NeuMF (NCF)..." -ForegroundColor Yellow
+& $PythonPath 2_Experiments/run_hyper.py --model NeuMF --config 2_Experiments/Configs/ncf.yaml --hyper 2_Experiments/Hyperparams/ncf.hyper --algo bayes
 
 # 3. LightGCN (GNN)
-Write-Host "[3/3] Uruchamiam optymalizacje LightGCN (GNN)..." -ForegroundColor Yellow
-& $PythonPath 2_Experiments/run_hyper_gnn.py
+Write-Host "[3/4] Uruchamiam optymalizacje LightGCN (GNN)..." -ForegroundColor Yellow
+& $PythonPath 2_Experiments/run_hyper.py --model LightGCN --config 2_Experiments/Configs/gnn.yaml --hyper 2_Experiments/Hyperparams/gnn.hyper --algo bayes
+
+# 4. ItemKNN
+Write-Host "[4/4] Uruchamiam optymalizacje ItemKNN..." -ForegroundColor Yellow
+& $PythonPath 2_Experiments/run_hyper.py --model ItemKNN --config 2_Experiments/Configs/itemknn.yaml --hyper 2_Experiments/Hyperparams/itemknn.hyper --algo bayes
 
 Write-Host "=== Wszystkie optymalizacje zakonczone! ===" -ForegroundColor Green
 Write-Host "Wyniki znajdziesz w folderze '3_Evaluation/Reports/'."

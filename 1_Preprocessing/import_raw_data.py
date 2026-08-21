@@ -3,7 +3,7 @@ import zipfile
 import urllib.request
 import pandas as pd
 
-def download_and_extract(url, zip_path, extract_path):
+def download_and_extract(url: str, zip_path: str, extract_path: str) -> None:
     if not os.path.exists(zip_path):
         print(f"Pobieranie {url}...")
         urllib.request.urlretrieve(url, zip_path)
@@ -12,7 +12,7 @@ def download_and_extract(url, zip_path, extract_path):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_path)
 
-def import_ml_100k():
+def import_ml_100k() -> None:
     url = "https://files.grouplens.org/datasets/movielens/ml-100k.zip"
     zip_path = "0_Raw_Data/ml-100k.zip"
     extract_path = "0_Raw_Data/"
@@ -25,8 +25,13 @@ def import_ml_100k():
     df_ratings.to_csv('0_Raw_Data/movielens_100k_ratings.csv', index=False)
     
     # Przetwarzanie filmów (metadane)
-    cols = "movie_id | movie_title | release_date | video_release_date | IMDb_URL | unknown | Action | Adventure | Animation | Children's | Comedy | Crime | Documentary | Drama | Fantasy | Film-Noir | Horror | Musical | Mystery | Romance | Sci-Fi | Thriller | War | Western"
-    movie_cols = [c.strip() for c in cols.split('|')]
+    movie_cols = [
+        "movie_id", "movie_title", "release_date", "video_release_date", 
+        "IMDb_URL", "unknown", "Action", "Adventure", "Animation", 
+        "Children's", "Comedy", "Crime", "Documentary", "Drama", "Fantasy", 
+        "Film-Noir", "Horror", "Musical", "Mystery", "Romance", "Sci-Fi", 
+        "Thriller", "War", "Western"
+    ]
     df_items = pd.read_csv('0_Raw_Data/ml-100k/u.item', sep='|', names=movie_cols, encoding='latin-1')
     df_items.to_csv('0_Raw_Data/movielens_100k_items.csv', index=False)
     
@@ -37,30 +42,27 @@ def import_ml_100k():
     
     print("\n[ML-100k] Sukces! Zapisano oceny, filmy i użytkowników.")
 
-def import_ml_1m():
-    url = "https://files.grouplens.org/datasets/movielens/ml-100k.zip"
-    zip_path = "0_Raw_Data/ml-100k.zip"
+def import_ml_1m() -> None:
+    url = "https://files.grouplens.org/datasets/movielens/ml-1m.zip"
+    zip_path = "0_Raw_Data/ml-1m.zip"
+    extract_path = "0_Raw_Data/"
     
-    print(f"Pobieranie pliku {url}...")
-    urllib.request.urlretrieve(url, zip_path)
-    
-    print("Rozpakowywanie...")
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall("0_Raw_Data/")
+    download_and_extract(url, zip_path, extract_path)
         
-    df_ratings = pd.read_csv('0_Raw_Data/ml-100k/u.data', sep='\t', names=['user_id', 'item_id', 'rating', 'timestamp'], engine='python')
+    # ML-1M używa :: jako separatora
+    # Oceny
+    df_ratings = pd.read_csv('0_Raw_Data/ml-1m/ratings.dat', sep='::', names=['user_id', 'item_id', 'rating', 'timestamp'], engine='python')
+    df_ratings.to_csv('0_Raw_Data/movielens_1m_ratings.csv', index=False)
     
     # Filmy
-    # u.item ma | jako separator
-    df_items = pd.read_csv('0_Raw_Data/ml-100k/u.item', sep='|', names=['movie_id', 'title', 'release_date', 'video_release_date', 'IMDb_URL', 'unknown', 'Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western'], engine='python', encoding='latin-1')
+    df_items = pd.read_csv('0_Raw_Data/ml-1m/movies.dat', sep='::', names=['movie_id', 'title', 'genres'], engine='python', encoding='latin-1')
+    df_items.to_csv('0_Raw_Data/movielens_1m_items.csv', index=False)
     
     # Użytkownicy
-    # u.user ma | jako separator
-    df_users = pd.read_csv('0_Raw_Data/ml-100k/u.user', sep='|', names=['user_id', 'age', 'gender', 'occupation', 'zip_code'], engine='python')
+    df_users = pd.read_csv('0_Raw_Data/ml-1m/users.dat', sep='::', names=['user_id', 'gender', 'age', 'occupation', 'zip_code'], engine='python')
+    df_users.to_csv('0_Raw_Data/movielens_1m_users.csv', index=False)
     
-    df_ratings.to_csv('0_Raw_Data/movielens_100k_ratings.csv', index=False)
-    
-    print("\n[ML-100k] Sukces! Zapisano oceny, filmy i użytkowników.")
+    print("\n[ML-1M] Sukces! Zapisano oceny, filmy i użytkowników.")
 
 if __name__ == "__main__":
     os.makedirs('0_Raw_Data', exist_ok=True)
