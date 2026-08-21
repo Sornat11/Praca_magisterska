@@ -7,6 +7,10 @@ Używać ostrożnie i pamiętać przy ewentualnej aktualizacji środowiska.
 import pkgutil
 import importlib.machinery
 import numpy as np
+import warnings
+
+# Wyciszenie wszystkich ostrzeżeń w konsoli (FutureWarning z Pandas/Numpy itp.)
+warnings.filterwarnings('ignore')
 
 # We subclass the original C implementation of RandomState (numpy.random.mtrand.RandomState)
 # and use a custom metaclass to ensure that isinstance(x, np.random.RandomState) returns True
