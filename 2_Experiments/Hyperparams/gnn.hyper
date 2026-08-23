@@ -1,2 +1,2 @@
-reg_weight loguniform -13.815, -4.6
-n_layers choice [1, 2, 3, 4]
+reg_weight choice [0.01, 0.05, 0.1]
+n_layers choice [2, 4]

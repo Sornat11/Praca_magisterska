@@ -80,7 +80,7 @@ To find the best hyperparameters for each model using RecBole's `HyperTuning`.
   ```
 - **NCF Optimization:**
   ```bash
-  python -u 2_Experiments/run_hyper.py --model NeuMF --config 2_Experiments/Configs/ncf.yaml --hyper 2_Experiments/Hyperparams/ncf.hyper --algo bayes
+  python -u 2_Experiments/run_hyper.py --model NeuMF --config 2_Experiments/Configs/ncf.yaml --hyper 2_Experiments/Hyperparams/ncf.hyper --algo exhaustive
   ```
 - **LightGCN Optimization:**
   ```bash

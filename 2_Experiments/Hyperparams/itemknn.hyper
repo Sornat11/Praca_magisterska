@@ -1,2 +1,2 @@
-k choice [10, 50, 100, 150, 200]
-shrink uniform 0.0, 10.0
+k choice [100, 150, 200]
+shrink choice [0.0, 2.5, 5.0, 7.5, 10.0]

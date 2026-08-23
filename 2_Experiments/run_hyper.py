@@ -23,7 +23,10 @@ def parse_args() -> argparse.Namespace:
 def objective_function(config_dict: Optional[Dict[str, Any]] = None, config_file_list: Optional[List[str]] = None, saved: bool = True) -> Any:
     fixed_config = {
         'checkpoint_dir': '3_Evaluation/Saved/',
-        'state': 'INFO'
+        'state': 'INFO',
+        'use_gpu': True,
+        'gpu_id': '0',
+        'device': 'cuda'
     }
     if config_dict is None:
         config_dict = {}
@@ -47,7 +50,9 @@ if __name__ == '__main__':
         if isinstance(config_data, dict):
             dataset_name = config_data.get('dataset', 'unknown')
 
-    output_file = f'3_Evaluation/Reports/hyper_results_{args.model.lower()}_{dataset_name}_{args.algo}.result'
+    import datetime
+    timestamp = datetime.datetime.now().strftime("%b-%d-%Y_%H-%M-%S")
+    output_file = f'3_Evaluation/Reports/hyper_results_{args.model.lower()}_{dataset_name}_{args.algo}_{timestamp}.result'
 
     hp = HyperTuning(
         objective_function,
@@ -63,13 +68,34 @@ if __name__ == '__main__':
     end_time = time.time()
     total_time = end_time - start_time
     
+    import os
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
     hp.export_result(output_file)
     
-    # Dopisywanie czasu do pliku wyników
+    # Wyciąganie bloku z najlepszym wynikiem
+    best_result_text = ""
+    try:
+        if hasattr(hp, 'best_params'):
+            params_str = hp.params2str(hp.best_params)
+            with open(output_file, "r", encoding="utf-8") as f:
+                content = f.read()
+            blocks = content.split("\n\n")
+            for block in blocks:
+                if params_str in block:
+                    best_result_text = block.strip()
+                    break
+    except Exception as e:
+        pass
+    
+    # Dopisywanie czasu i podsumowania do pliku wyników
     with open(output_file, "a", encoding="utf-8") as f:
         f.write(f"\n'Optimization_Time_Seconds': {total_time}\n")
+        if best_result_text:
+            f.write(f"\n=== NAJLEPSZY WYNIK ===\n{best_result_text}\n")
     
     print(f"\nOptymalizacja zakończona!")
     if hasattr(hp, 'best_params'):
         print(f"Najlepsze parametry: {hp.best_params}")
-    print(f"Wyniki zapisano w: {output_file}")
+    if best_result_text:
+        print(f"\n=== NAJLEPSZY WYNIK ===\n{best_result_text}")
+    print(f"\nWyniki zapisano w: {output_file}")
