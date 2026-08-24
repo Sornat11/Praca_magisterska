@@ -6,6 +6,7 @@ checkpoint_dir: '3_Evaluation/Saved/'
 
 # Architektura
 k: 100               # Liczba najbliższych sąsiadów
+shrink: 7.5
 
 # Data settings
 USER_ID_FIELD: user_id

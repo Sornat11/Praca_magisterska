@@ -9,7 +9,8 @@ checkpoint_dir: '3_Evaluation/Saved/'
 layers: [256, 128, 64, 32] 
 mf_embedding_size: 128    # Zwiększono z 64 na 128
 mlp_embedding_size: 128   # Zwiększono z 64 na 128
-dropout_prob: 0.2         # Zwiększony dropout dla większej sieci
+dropout_prob: 0.5         # Zwiększony dropout dla większej sieci
+
 
 # Data settings
 USER_ID_FIELD: user_id

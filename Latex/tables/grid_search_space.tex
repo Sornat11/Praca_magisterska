@@ -1,0 +1,12 @@
+\begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Model}            & \textbf{Parametr}        & \textbf{Przestrzeń poszukiwań (Grid)} \\ \hline
+    \multirow{2}{*}{ItemKNN}  & $k$                      & \{100, 150, 200\}                     \\ \cline{2-3}
+                              & \textit{shrink}          & \{0.0, 2.5, 5.0, 7.5, 10.0\}          \\ \hline
+    \multirow{2}{*}{BPR}      & \textit{learning\_rate}  & \{0.001, 0.0005, 0.0001\}             \\ \cline{2-3}
+                              & \textit{embedding\_size} & \{64, 128\}                           \\ \hline
+    \multirow{2}{*}{NeuMF}    & \textit{learning\_rate}  & \{0.0005, 0.0001, 0.00005\}           \\ \cline{2-3}
+                              & \textit{dropout\_prob}   & \{0.4, 0.5, 0.6\}                     \\ \hline
+    \multirow{2}{*}{LightGCN} & \textit{reg\_weight}     & \{0.01, 0.05, 0.1\}                   \\ \cline{2-3}
+                              & \textit{n\_layers}       & \{2, 4\}                              \\ \hline
+\end{tabular}

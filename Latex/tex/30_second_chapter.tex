@@ -15,7 +15,7 @@ Sposób funkcjonowania ramki \foreignlanguage{english}{RecBole} opiera się na �
   \item Moduł Modelu (\foreignlanguage{english}{\textit{Model Module}}): Wszystkie zaimplementowane algorytmy dziedziczą po zunifikowanych klasach bazowych (np. GeneralRecommender dla modeli filtracji kolaboracyjnej oraz KnowledgeRecommender dla modeli z grafami wiedzy). Wymaga to od każdego algorytmu zdefiniowania dwóch zunifikowanych interfejsów:
         \begin{itemize}
           \item calculate\_loss(interaction) -- wyliczanie wartości funkcji straty (np. \foreignlanguage{english}{BPR Loss} lub \foreignlanguage{english}{Binary Cross-Entropy}) w fazie propagacji wprzód podczas uczenia,
-          \item predict(interaction) / full\_sort\_predict(interaction) -- wyznaczanie punktacji relewancji (\foreignlanguage{english}{\textit{scores}}) dla par użytkownik-obiekt w fazie predykcji.
+          \item predict(interaction) / full\_sort\_predict(interaction) -- wyznaczanie punktacji relewancji (\foreignlanguage{english}{\textit{scores}}) dla par użytkownik-\allowbreak obiekt w fazie predykcji.
         \end{itemize}
   \item Moduł Wykonania i Akceleracji Ewaluacji (\foreignlanguage{english}{\textit{Execution \& Evaluation Module}}): Pętla uczenia zarządzana jest przez obiekt Trainer, odpowiadający za automatyczny zapis punktów kontrolnych (\foreignlanguage{english}{\textit{checkpoints}}), wczesne zatrzymanie (\foreignlanguage{english}{\textit{early stopping}}) oraz optymalizację hiperparametrów.
 \end{enumerate}
@@ -34,7 +34,7 @@ Wybór tego zbioru podyktowany jest jego powszechnym uznaniem w literaturze prze
 
 Przestrzeń badawczą definiuje trójka uporządkowana obejmująca:
 \begin{itemize}
-  \item zbiór wszystkich zarejestrowanych użytkowników, oznaczany symbolem $\mathcal{U}$ (gdzie $M = |\mathcal{U}|$ stanowi łączną liczbę użytkowników),
+  \item zbiór wszystkich zarejestrowanych użytkowników, oznaczany symbolem $\mathcal{U}$ \allowbreak (gdzie $M = |\mathcal{U}|$ stanowi łączną liczbę użytkowników),
   \item zbiór wszystkich dostępnych w katalogu obiektów (filmów), oznaczany symbolem $\mathcal{I}$ (gdzie $N = |\mathcal{I}|$ stanowi łączną liczbę obiektów),
   \item zbiór zaobserwowanych historycznych interakcji, oznaczany symbolem $\mathcal{E}$ ($\mathcal{E} \subseteq \mathcal{U} \times \mathcal{I}$), reprezentujący zaobserwowane zdarzenia o liczebności $|\mathcal{E}|$.
 \end{itemize}
@@ -134,7 +134,7 @@ Tabela \ref{tab:movielens_stats} przedstawia zbiorcze zestawienie parametrów st
   \label{tab:movielens_stats}
   \begin{tabular}{|l|c|}
     \hline
-    \textbf{Parametr statystyczny}        & \textbf{Wartość dla zbioru MovieLens 100K (\texttt{ml-100k})} \\ \hline
+    \textbf{Parametr statystyczny}        & \textbf{Wartość dla zbioru MovieLens 100K (\texttt{ml-\allowbreak 100k})} \\ \hline
     Liczba użytkowników ($|\mathcal{U}|$) & 943                                                           \\ \hline
     Liczba filmów ($|\mathcal{I}|$)       & 1\,682                                                        \\ \hline
     Liczba interakcji ($|\mathcal{E}|$)   & 100\,000                                                      \\ \hline
@@ -176,7 +176,7 @@ Procedura generowania rekomendacji przy użyciu algorytmu ItemKNN przedstawia si
 
         Gdzie:
         \begin{itemize}
-          \item $\mathbf{y}_i, \mathbf{y}_j$ -- wektory binarne reprezentujące historię interakcji wszystkich użytkowników dla filmów $i$ oraz $j$
+          \item $\mathbf{y}_i, \mathbf{y}_j$ -- wektory binarne reprezentujące historię interakcji wszystkich użytkowników dla filmów \allowbreak $i$ oraz $j$
           \item $y_{ui}, y_{uj}$ -- obserwacje obecności interakcji (0 lub 1) dla użytkownika $u$ z oboma filmami
           \item $||\mathbf{y}_i||_2, ||\mathbf{y}_j||_2$ -- normy Euklidesowe (L2) badanych wektorów
         \end{itemize}
@@ -203,7 +203,7 @@ Model ItemKNN, ze względu na swoją wysoką skuteczność w systemach pozbawion
 
 
 \subsubsection{Spersonalizowany ranking bayesowski}
-Spersonalizowany ranking bayesowski (ang. \foreignlanguage{english}{\textit{Bayesian Personalized Ranking, BPR}}) jest to technika generująca rekomendacje na podstawie macierzy interakcji. Charakterystycznym elementem tego algorytmu jest sposób, w jaki traktuje sytuacje, w których użytkownik nie wszedł w interakcję z danym przedmiotem. Tradycyjnie brak interakcji jest traktowany w macierzy jako wartość 0, co interpretowane jest jako negatywna informacja zwrotna. Taki stan rzeczy może nieprecyzyjnie oddawać rzeczywistość. Filmami nieobejrzanymi mogą być zarówno te, które są dla użytkownika nieinteresujące, jak i te, których po prostu nie zna, bądź nie zdążył jeszcze obejrzeć.
+Spersonalizowany ranking bayesowski (ang. \foreignlanguage{english}{\textit{Bayesian Personalized Ranking, \allowbreak BPR}}) jest to technika generująca rekomendacje na podstawie macierzy interakcji. Charakterystycznym elementem tego algorytmu jest sposób, w jaki traktuje sytuacje, w których użytkownik nie wszedł w interakcję z danym przedmiotem. Tradycyjnie brak interakcji jest traktowany w macierzy jako wartość 0, co interpretowane jest jako negatywna informacja zwrotna. Taki stan rzeczy może nieprecyzyjnie oddawać rzeczywistość. Filmami nieobejrzanymi mogą być zarówno te, które są dla użytkownika nieinteresujące, jak i te, których po prostu nie zna, bądź nie zdążył jeszcze obejrzeć.
 
 Aby rozwiązać ten problem, algorytm BPR rezygnuje z klasycznego, punktowego podejścia do uczenia modelu (gdzie system estymuje konkretną wartość liczbową dla pary użytkownik-obiekt) na rzecz podejścia opartego na parach (ang. \foreignlanguage{english}{\textit{pairwise learning}}). Podstawowym założeniem metody jest to, że użytkownik zawsze preferuje obiekty, z którymi wszedł w interakcję, nad tymi, z którymi interakcji nie podjął. Jeżeli zdefiniujemy obiekty znane użytkownikowi $u$ jako pozytywne (oznaczane jako $i$), a pozostałe pozycje w katalogu jako negatywne ($j$), BPR zakłada relację wyższości $i >_u j$ na liście rankingowej \footcite[453-454]{rendleBPRBayesianPersonalized2009}.
 
@@ -292,7 +292,7 @@ Dzięki takiej konstrukcji architektura NeuMF stała się kanonicznym przykłade
 \begin{figure}[htbp]
   \centering
   \input{tex/tikz/neumf_architecture.tex}
-  \caption{Architektura hybrydowego modelu Neural Matrix Factorization (NeuMF). Opracowanie własne na podstawie \footcite{heNeuralCollaborativeFilteringKwiecien032017}.}
+  \caption[Architektura hybrydowego modelu Neural Matrix Factorization (NeuMF)]{Architektura hybrydowego modelu Neural Matrix Factorization (NeuMF). Opracowanie własne na podstawie \footcite{heNeuralCollaborativeFilteringKwiecien032017}.}
   \label{fig:neumf_architecture}
 \end{figure}
 
@@ -339,7 +339,7 @@ Usunięcie zbędnych operacji matematycznych uczyniło z LightGCN model nie tylk
 \begin{figure}[htbp]
     \centering
     \input{tex/tikz/lightgcn_architecture.tex}
-    \caption{Architektura algorytmu LightGCN z uwzględnieniem propagacji warstwowej. Opracowanie własne na podstawie \footcite{heLightGCNSimplifyingPowering2020}.}
+    \caption[Architektura algorytmu LightGCN z uwzględnieniem propagacji warstwowej]{Architektura algorytmu LightGCN z uwzględnieniem propagacji warstwowej. Opracowanie własne na podstawie \footcite{heLightGCNSimplifyingPowering2020}.}
     \label{fig:lightgcn_architecture}
 \end{figure}
 

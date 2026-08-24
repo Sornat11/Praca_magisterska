@@ -6,8 +6,8 @@ checkpoint_dir: '3_Evaluation/Saved/'
 
 # Architektura
 embedding_size: 128    # Zwiększono z 64 na 128
-n_layers: 3            # Zwiększono z 2 na 3 (głębsza propagacja w grafie)
-reg_weight: 1e-04      # Zwiększona regularyzacja dla większych embeddingów
+n_layers: 2            # Zwiększono z 2 na 3 (głębsza propagacja w grafie)
+reg_weight: 0.1      # Zwiększona regularyzacja dla większych embeddingów
 
 # Data settings
 USER_ID_FIELD: user_id

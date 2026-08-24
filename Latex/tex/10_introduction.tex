@@ -1,36 +1,18 @@
 % !TEX root = ../PRACA_MAIN.tex
-\section*{Wstęp} \addcontentsline{toc}{section}{Wstęp}
+\section{Wstęp}
 
-Wyznaczanie spersonalizowanych rekomendacji w cyfrowych usługach rozrywkowych stanowi jedno z kluczowych wyzwań współczesnej informatyki stosowanej i ekonometrii. Dynamiczny rozwój metod uczenia maszynowego doprowadził do powstania odmiennych paradygmatów obliczeniowych – od klasycznej algebry macierzowej, przez głębokie sieci neuronowe, po algorytmy wykorzystujące osadzenia na strukturach grafowych. W literaturze naukowej brakuje jednak bezpośrednich, ujednoliconych badań porównawczych weryfikujących zarówno jakość porządkowania rankingowego, jak i czystą wydajność obliczeniową tych podejść w specyficznych warunkach konsumpcji mediów.
+W dobie dynamicznego rozwoju platform cyfrowych, a w szczególności serwisów oferujących wideo na żądanie (VOD), użytkownicy coraz częściej stykają się z bezprecedensowym zjawiskiem przeciążenia informacyjnego. Dostępny asortyment treści dalece przekracza ludzkie możliwości poznawcze i analityczne, czyniąc proces samodzielnego wyboru skrajnie nieefektywnym. W takich warunkach systemy rekomendacyjne stają się nie tylko wygodnym udogodnieniem, ale wręcz kluczowym narzędziem nawigacyjnym oraz podstawowym mechanizmem budowania zaangażowania i retencji klienta. Dynamiczny rozwój metod sztucznej inteligencji doprowadził do powstania wielu zaawansowanych algorytmów rekomendacyjnych. Rodzi to naturalną potrzebę ich obiektywnego ewaluowania i porównywania pod kątem skuteczności predykcyjnej oraz koniecznych nakładów obliczeniowych, co stanowiło główną motywację do podjęcia niniejszej tematyki badawczej.
 
-Powyższe uwarunkowania definiują \textbf{problem badawczy} niniejszej pracy magisterskiej, którym jest empiryczna ewaluacja relatywnej skuteczności personalizacji oraz narzutu serwerowego algorytmów reprezentujących trzy generacje technologiczne systemów rekomendacyjnych (faktoryzacji macierzy SVD/BPR, głębokiej architektury NCF oraz grafowych modeli LightGCN/KGCN) na zbiorze danych interakcji z dorozumianą informacją zwrotną (\foreignlanguage{english}{\textit{implicit feedback}}).
+Przedmiotem rozważań i badań w niniejszej pracy są algorytmy rekomendacyjne wywodzące się z różnych paradygmatów nauczania maszynowego. Szczególną uwagę zwrócono na klasyczne techniki filtrowania kolaboracyjnego, zaawansowane architektury uczenia głębokiego (ang. \textit{Deep Learning}) oraz nowoczesne podejścia oparte na grafowych sieciach neuronowych (ang. \textit{Graph Neural Networks}). Zakres pracy obejmuje teoretyczny opis, praktyczną implementację oraz rygorystyczną ewaluację wybranych, reprezentatywnych algorytmów (m.in. ItemKNN, BPR, NCF, LightGCN).
 
-\textbf{Jako cel główny pracy} przyjęto zbudowanie ujednoliconego środowiska badawczego przy użyciu pakietu RecBole, przeprowadzenie kompleksowej optymalizacji hiperparametrów oraz ilościową ocenę porównawczą dokładności rankingowej i wydajności trzech reprezentatywnych klas modeli na zbiorze danych z obszaru VOD.
+Celem pracy jest kompleksowe porównanie skuteczności działania wymienionych wyżej algorytmów rekomendacyjnych w specyficznym kontekście portali streamingowych. Założono weryfikację potencjalnej przewagi złożonych podejść opartych na głębokich sieciach neuronowych i strukturach grafowych nad klasycznymi metodami filtrowania kolaboracyjnego. Ważnym aspektem badawczym jest również analiza kompromisu pomiędzy uzyskiwanym zyskiem predykcyjnym a poniesionym narzutem obliczeniowym.
 
+W realizacji pracy oparto się na zróżnicowanych źródłach informacji. W warstwie teoretycznej czerpano przede wszystkim z aktualnej literatury anglojęzycznej, uwzględniając recenzowane artykuły naukowe oraz publikacje z wiodących konferencji zajmujących się sztuczną inteligencją. Źródłem materiału badawczego był powszechnie uznany i wykorzystywany w nauce zbiór danych MovieLens, który dobrze oddaje charakterystykę preferencji użytkowników platform filmowych. Dokumentacja techniczna dedykowanych bibliotek (w tym frameworku RecBole) stanowiła bazę informacyjną do implementacji badanych architektur.
 
-Dla realizacji celu głównego wyznaczono następujące \textbf{cele szczegółowe}:
-\begin{enumerate}
-    \item Przygotowanie oraz analiza eksploracyjna (EDA) zbioru danych interakcji typu \foreignlanguage{english}{\textit{implicit feedback}}.
-    \item Skonfigurowanie powtarzalnego środowiska eksperymentalnego w języku Python z wykorzystaniem frameworka RecBole.
-    \item Przeprowadzenie procesu strojenia hiperparametrów (\foreignlanguage{english}{\textit{hyperparameter tuning}}) dla każdego z badanych modeli w celu wyznaczenia ich optymalnych konfiguracji.
-    \item Ilościowa ewaluacja wyników za pomocą metryk jakości rankingu (NDCG@k, Recall@k), miary błędu RMSE oraz pomiaru czasu uczenia i wnioskowania online.
-\end{enumerate}
+W przeprowadzonych badaniach posłużono się metodami o charakterze empirycznym i analitycznym. Zastosowano zaawansowane strojenie hiperparametrów algorytmów z użyciem techniki przeszukiwania siatki (ang. \textit{Grid Search}) oraz eksperymenty analizujące zbieżność funkcji straty w procesie uczenia. Do rzetelnej oceny jakości generowanych rekomendacji zastosowano ugruntowane w dziedzinie metryki ewaluacyjne, takie jak trafność rankingu (m.in. NDCG) czy współczynnik uderzeń (HR). Modele zaimplementowano i przetrenowano w środowisku języka Python. Realizacja założonych celów podyktowała podział pracy na trzy zasadnicze rozdziały.
 
-W pracy sformułowano \textbf{hipotezę badawczą główną ($H_1$)}:
-\begin{quote}
-    Zastosowanie modeli Grafowych Sieci Neuronowych (LightGCN oraz KGCN) pozwala na osiągnięcie statystycznie istotnie wyższej trafności rekomendacji rankingowych Top-N (mierzonej wskaźnikami NDCG@k oraz Recall@k) na zbiorze danych VOD w porównaniu do klasycznej faktoryzacji macierzy SVD oraz głębokiej sieci NCF.
-\end{quote}
+W rozdziale pierwszym wprowadzono w ogólną problematykę systemów rekomendacyjnych. Omówiono specyfikę serwisów VOD, zdefiniowano niezbędne pojęcia i formalizm matematyczny, a także zarysowano ewolucję paradygmatów personalizacji treści. Przedstawiono również kluczowy dla tematyki przegląd dotychczasowej literatury oraz zdefiniowano główne wyzwania badawcze.
 
-Sformułowano również \textbf{hipotezę pomocniczą ($H_2$)}:
-\begin{quote}
-    Wzrost dokładności rekomendacji uzyskiwany przez modele grafowe wiąże się z większym narzutem obliczeniowym w fazie treningu, jednak czas generowania predykcji w fazie wnioskowania online (\foreignlanguage{english}{\textit{inference}}) dla modeli LightGCN oraz KGCN mieści się w granicach akceptowalnych dla systemów czasu rzeczywistego VOD (poniżej 1 sekundy).
-\end{quote}
+Rozdział drugi stanowi podbudowę metodyczną przeprowadzonych eksperymentów. Scharakteryzowano w nim wykorzystane środowisko wykonawcze i sposób przygotowania danych. Następnie szczegółowo opisano budowę matematyczną poddanych ewaluacji algorytmów: od klasycznego filtrowania kolaboracyjnego, przez uczenie głębokie, aż po grafowe sieci neuronowe. Rozdział ten zamyka formalna definicja zastosowanych metryk oceny.
 
-
-Podstawową \textbf{metodą badawczą} wykorzystaną w pracy jest eksperyment obliczeniowy przeprowadzony w środowisku Python 3.12 przy użyciu frameworka RecBole oraz bibliotek PyTorch i SciPy.
-
-Układ pracy jest następujący:
-W \textbf{Rozdziale 1} omówiono uwarunkowania rynkowe VOD, formalizm matematyczny rekomendacji, ewolucję er algorytmicznych oraz kompromisy wdrożeniowe.
-W \textbf{Rozdziale 2} przedstawiono przyjętą metodykę badań, ścisłe sformułowania algorytmów (SVD, NCF, LightGCN/KGCN), zbiór danych oraz wskaźniki oceny.
-W \textbf{Rozdziale 3} zamieszczono przebieg eksperymentów obliczeniowych, zestawienie wyników ilościowych oraz dyskusję w kontekście wymagań produkcyjnych.
-Pracę zamyka \textbf{Podsumowanie}, zawierające syntezę wniosków oraz weryfikację postawionych hipotez badawczych.
+W rozdziale trzecim zaprezentowano właściwe rezultaty przeprowadzonych eksperymentów numerycznych i ich szczegółową analizę. Udokumentowano proces strojenia hiperparametrów, zestawiono algorytmy pod kątem jakości predykcji, zbadano koszty obliczeniowe i stabilność treningu. Całość wieńczy dyskusja nad osiągniętymi wynikami i sformułowanie wniosków końcowych.
