@@ -1,0 +1,35 @@
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+            node distance=2.5cm,
+            box/.style={rectangle, draw=black!60, rounded corners=4pt, fill=blue!5, text width=12cm, align=left, minimum height=1.5cm, inner sep=10pt},
+            arrow/.style={->, thick, draw=black!60, >=stealth}
+        ]
+        % Node 1
+        \node[box] (trad) {
+            \textbf{1. Era Tradycyjna (Fundamenty)} \\
+            \textit{Filtrowanie Kolaboracyjne (CF), Filtrowanie Treściowe (CBF), Modele Hybrydowe.} \\
+            Algorytmy oparte na pamięci ($k$-NN) oraz rozkład Faktoryzacji Macierzy (SVD).
+        };
+
+        % Node 2
+        \node[box, below of=trad] (dl) {
+            \textbf{2. Era Uczenia Głębokiego (Deep Learning)} \\
+            \textit{Ekstrakcja złożonych, nieliniowych cech z danych i głębokie architektury neuronowe.} \\
+            Neural Collaborative Filtering (NCF), Autoenkodery (VAE), Transformery (SASRec).
+        };
+
+        % Node 3
+        \node[box, below of=dl] (graph) {
+            \textbf{3. Era Struktur Grafowych i Modelowania Dynamicznego (Współczesność)} \\
+            \textit{Modelowanie zależności wieloskokowych oraz ciągła optymalizacja długoterminowa.} \\
+            Grafowe Sieci Neuronowe (GCN, LightGCN), Grafy Wiedzy (KGCN), Uczenie ze Wzmocnieniem (RL).
+        };
+
+        % Arrows
+        \draw[arrow] (trad) -- (dl);
+        \draw[arrow] (dl) -- (graph);
+    \end{tikzpicture}
+    \caption{Trzy główne etapy ewolucji technologicznej i rozwoju algorytmów w systemach rekomendacyjnych}
+    \label{fig:ewolucja_algorytmow}
+\end{figure}

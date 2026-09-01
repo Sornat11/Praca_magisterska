@@ -179,7 +179,8 @@
         "TODO",
         "IDEA",
         "RESEARCH",
-        "CIT"
+        "CIT",
+        "REVIEWED"
     ],
     "todo-tree.regex.regex": "((//|#|<!--|;|/\\*|^|%)\\s*($TAGS)|^\\s*- \\[\\])",
     "todo-tree.highlights.defaultHighlight": {
@@ -201,7 +202,7 @@
             "type": "text-and-comment"
         },
         "IDEA": {
-            "icon": "lightbulb",
+            "icon": "zap",
             "iconColour": "#E91E63",
             "foreground": "#E91E63",
             "type": "text-and-comment"
@@ -216,6 +217,12 @@
             "icon": "quote",
             "iconColour": "#9C27B0",
             "foreground": "#9C27B0",
+            "type": "text-and-comment"
+        },
+        "REVIEWED": {
+            "icon": "verified",
+            "iconColour": "#4CAF50",
+            "foreground": "#4CAF50",
             "type": "text-and-comment"
         }
     },

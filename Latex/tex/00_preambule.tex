@@ -4,7 +4,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english,polish]{babel} 
 \usepackage[T1]{polski}
+\usepackage{lmodern} % Wymagane przez microtype do działania ze skalowalnymi fontami w kodowaniu T1
 \usepackage{mathptmx}
+\usepackage{microtype} % Poprawia skład tekstu i eliminuje Overfull \hbox
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{geometry}
@@ -58,6 +60,37 @@
   loccit = {Ibidem}
 }
 
+% --- ZARZĄDZANIE ŹRÓDŁAMI INTERNETOWYMI ---
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+      \pertype{misc}
+      \step[fieldsource=howpublished, match=\regexp{^https?://}, final]
+      \step[fieldset=keywords, fieldvalue=internet, append]
+      \step[typesource=misc, typetarget=online]
+    }
+    \map{
+      \pertype{misc}
+      \step[fieldsource=url, match=\regexp{^https?://}, final]
+      \step[fieldset=keywords, fieldvalue=internet, append]
+      \step[typesource=misc, typetarget=online]
+    }
+  }
+}
+
+\DeclareFieldFormat[online]{urldate}{\mkbibparens{\bibstring{urlseen}\space#1}}
+
+\DeclareBibliographyDriver{online}{%
+  \iffieldundef{howpublished}
+    {\printfield{url}}
+    {\printfield{howpublished}}%
+  \setunit{\space}%
+  \iffieldundef{urlyear}
+    {}
+    {\printurldate}%
+  \finentry
+}
+
 
 
 \geometry{left=3.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
@@ -83,5 +116,9 @@
 %\pretocmd{\section}{\cleardoublepage}{}{}
 
 \usepackage{multirow}
-\input{tex/01_titlePage}
- 
+
+% --- DODANIE KROPKI PO NUMERZE SEKCJI ---
+\usepackage{titlesec}
+\titlelabel{\thetitle.\quad}
+
+\input{tex/01_titlePage} 

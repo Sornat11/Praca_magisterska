@@ -1,0 +1,37 @@
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[
+                level distance=2.8cm,
+                level 1/.style={sibling distance=7.5cm},
+                level 2/.style={sibling distance=3.5cm},
+                level 3/.style={sibling distance=3.2cm},
+                box/.style={draw=black!70, rectangle, rounded corners=3pt, align=center, inner sep=6pt},
+                root/.style={box, fill=blue!15, font=\bfseries\Large},
+                main/.style={box, fill=blue!5, font=\bfseries},
+                leaf/.style={box, fill=white, font=\small, text width=3.0cm},
+                edge from parent/.style={draw=black!70, thick, ->, >=stealth},
+                edge from parent path={(\tikzparentnode.south) -- +(0,-0.6) -| (\tikzchildnode.north)}
+            ]
+
+            \node[root] {Systemy Rekomendacyjne}
+            child {node[main] {Podejścia Tradycyjne}
+                    child {node[leaf] {Filtrowanie Treściowe\\(Content-Based)}}
+                    child {node[leaf] {Filtrowanie\\Kolaboracyjne (CF)}
+                            child {node[leaf, fill=gray!5, font=\footnotesize, text width=2.6cm] {Oparte na pamięci\\($k$-NN)}}
+                            child {node[leaf, fill=gray!5, font=\footnotesize, text width=2.6cm] {Oparte na modelu\\(SVD, BPR)}}
+                        }
+                }
+            child {node[main] {Uczenie Głębokie\\(Deep Learning)}
+                    child {node[leaf] {Modele Perceptronowe\\(np. NCF, NeuMF)}}
+                    child {node[leaf] {Modele Sekwencyjne\\(np. SASRec)}}
+                }
+            child {node[main] {Podejścia Grafowe\\(GNN)}
+                    child {node[leaf] {Grafy Interakcji\\(np. LightGCN)}}
+                    child {node[leaf] {Grafy Wiedzy\\(np. KGCN)}}
+                };
+        \end{tikzpicture}
+    }
+    \caption{Podział algorytmów rekomendacyjnych}
+    \label{fig:taksonomia_rekomendacji}
+\end{figure}
