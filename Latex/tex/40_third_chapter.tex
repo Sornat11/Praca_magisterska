@@ -11,63 +11,76 @@ W celu uzyskania stosunkowo najlepszych możliwych wyników badanie poprzedzono 
 
 Dobór parametrów poddanych analizie wrażliwości wynikał z ich kluczowego wpływu na zdolności predykcyjne oraz charakterystyki architektonicznej każdego z badanych algorytmów:
 \begin{itemize}
-    \item W modelu \textbf{ItemKNN} wybrano rozmiar sąsiedztwa ($k$) oraz współczynnik wygładzania (\foreignlanguage{english}{shrinkage}). Parametr $k$ determinuje, na ilu najbardziej podobnych elementach bazuje predykcja, co jest kluczowe w filtrowaniu opartym na sąsiedztwie. Współczynnik wygładzania pozwala z kolei na redukcję szumu statystycznego przy obliczaniu podobieństwa dla rzadko ocenianych przedmiotów.
-    \item Dla modelu \textbf{BPR} skupiono się na współczynniku uczenia (\foreignlanguage{english}{learning rate}) oraz rozmiarze wektora cech ukrytych (\foreignlanguage{english}{embedding size}). Współczynnik uczenia determinuje zbieżność optymalizacji. Z kolei złożoność faktoryzacji macierzy rośnie wraz z wymiarem przestrzeni latentnej, dlatego optymalizacja tego parametru jest kluczowa dla balansu pomiędzy niedouczeniem a przeuczeniem.
-    \item W głębokim modelu \textbf{NeuMF} analizie poddano współczynnik uczenia oraz prawdopodobieństwo odrzucenia neuronów (\foreignlanguage{english}{dropout probability}). Głębokie sieci neuronowe są wysoce podatne na zapamiętywanie danych treningowych (\foreignlanguage{english}{overfitting}), dlatego właściwy dobór parametru dropout jest niezbędny do uzyskania dobrej zdolności do generalizacji.
-    \item W przypadku grafowego modelu \textbf{LightGCN} wytypowano wagę regularyzacji (\foreignlanguage{english}{regularization weight}) oraz liczbę warstw propagacji (\foreignlanguage{english}{number of layers}). Regularyzacja L2 kontroluje wielkość wag wektorów zapobiegając nadmiernemu dopasowaniu, podczas gdy liczba warstw odpowiada za eksplorację sygnałów wyższego rzędu w grafie (np. odległości 2-skokowe).
+    \item W modelu \textbf{ItemKNN} wybrano rozmiar sąsiedztwa ($k$) oraz współczynnik wygładzania (ang. \foreignlanguage{english}{\textit{shrinkage}}). Parametr $k$ determinuje, na ilu najbardziej podobnych elementach bazuje predykcja, co jest kluczowe w filtrowaniu opartym na sąsiedztwie. Współczynnik wygładzania pozwala z kolei na redukcję szumu statystycznego przy obliczaniu podobieństwa dla rzadko ocenianych przedmiotów.
+    \item Dla modelu \textbf{BPR} skupiono się na współczynniku uczenia (ang. \foreignlanguage{english}{\textit{learning rate}}) oraz rozmiarze wektora cech ukrytych (ang. \foreignlanguage{english}{\textit{embedding size}}). Współczynnik uczenia determinuje zbieżność optymalizacji. Z kolei złożoność faktoryzacji macierzy rośnie wraz z wymiarem przestrzeni latentnej, dlatego optymalizacja tego parametru jest kluczowa dla balansu pomiędzy niedouczeniem a przeuczeniem.
+    \item W głębokim modelu \textbf{NeuMF} analizie poddano współczynnik uczenia oraz prawdopodobieństwo odrzucenia neuronów (ang. \foreignlanguage{english}{\textit{dropout probability}}). Głębokie sieci neuronowe są wysoce podatne na zapamiętywanie danych treningowych (ang. \foreignlanguage{english}{\textit{overfitting}}), dlatego właściwy dobór parametru dropout jest niezbędny do uzyskania dobrej zdolności do generalizacji.
+    \item W przypadku grafowego modelu \textbf{LightGCN} wytypowano wagę regularyzacji (ang. \foreignlanguage{english}{\textit{regularization weight}}) oraz liczbę warstw propagacji (ang. \foreignlanguage{english}{\textit{number of layers}}). Regularyzacja L2 kontroluje wielkość wag wektorów zapobiegając nadmiernemu dopasowaniu, podczas gdy liczba warstw odpowiada za eksplorację sygnałów wyższego rzędu w grafie (np. odległości 2-skokowe).
 \end{itemize}
 
 \subsubsection{Analiza wrażliwości}
 
 Poniżej przedstawiono graficzne zestawienie wpływu badanych hiperparametrów na metrykę NDCG@10 dla każdego z algorytmów.
-\begin{figure}[htbp]
+W przypadku modelu ItemKNN (Rysunek \ref{fig:sweep_itemknn}) można zaobserwować, że zwiększanie liczby uwzględnianych sąsiadów ($k$) konsekwentnie poprawia wyniki metryki NDCG@10 aż do wartości $k=200$, po czym przyrost ten naturalnie zwalnia. Regularyzacja \textit{shrinkage} z kolei nie przynosi w tym przypadku znaczących korzyści na zbiorze MovieLens 100K -- najwyższy wynik odnotowano dla braku wygładzania (wartość 0.0), a dalsze zwiększanie tego parametru skutkuje delikatnym i marginalnym spadkiem trafności.
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../3_Evaluation/Reports/sweep_itemknn_summary.png}
+    \includegraphics[width=\textwidth]{img/sweep_itemknn_summary.png}
     \caption{Wpływ hiperparametrów $k$ oraz \textit{shrinkage} na trafność modelu ItemKNN}
     \label{fig:sweep_itemknn}
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{figure}
-W przypadku modelu ItemKNN (Rysunek \ref{fig:sweep_itemknn}) można zaobserwować, że zwiększanie liczby uwzględnianych sąsiadów ($k$) konsekwentnie poprawia wyniki metryki NDCG@10 aż do wartości $k=200$, po czym przyrost ten naturalnie zwalnia. Regularyzacja \textit{shrinkage} z kolei nie przynosi w tym przypadku znaczących korzyści na zbiorze MovieLens 100K -- najwyższy wynik odnotowano dla braku wygładzania (wartość 0.0), a dalsze zwiększanie tego parametru skutkuje delikatnym i marginalnym spadkiem trafności.
-\begin{figure}[htbp]
+
+Dla modelu faktoryzacji BPR (Rysunek \ref{fig:sweep_bpr}) analiza ujawnia klasyczną zależność optymalizacyjną. Współczynnik uczenia osiąga jednoznaczne optimum na poziomie 0.0005, zapewniając najwyższą trafność na poziomie NDCG@10 $\approx$ 0.2867. Większe wartości prowadzą do spadku trafności w wyniku niestabilności numerycznej. Z kolei rozmiar wektora cech wskazuje, że wartość 128 oferuje optymalną celność (niewielka przewaga nad 64), podczas gdy dalsze zwiększanie do wymiaru 256 skutkuje spadkiem skuteczności spowodowanym powolnym przeuczaniem się algorytmu na treningowej części zbioru.
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../3_Evaluation/Reports/sweep_bpr_summary.png}
+    \includegraphics[width=\textwidth]{img/sweep_bpr_summary.png}
     \caption{Wpływ współczynnika uczenia oraz rozmiaru wektora zanurzeń na trafność modelu BPR}
     \label{fig:sweep_bpr}
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{figure}
-Dla modelu faktoryzacji BPR (Rysunek \ref{fig:sweep_bpr}) analiza ujawnia klasyczną zależność optymalizacyjną. Współczynnik uczenia osiąga jednoznaczne optimum na poziomie 0.0005, zapewniając najwyższą trafność na poziomie NDCG@10 $\approx$ 0.2867. Większe wartości prowadzą do spadku trafności w wyniku niestabilności numerycznej. Z kolei rozmiar wektora cech (\textit{embedding size}) wskazuje, że wartość 128 oferuje optymalną celność (niewielka przewaga nad 64), podczas gdy dalsze zwiększanie do wymiaru 256 skutkuje spadkiem skuteczności spowodowanym powolnym przeuczaniem się algorytmu na treningowej części zbioru.
-\begin{figure}[htbp]
+
+Ocena parametrów hybrydowego modelu NeuMF (Rysunek \ref{fig:sweep_neumf}) potwierdza specyfikę głębokich sieci neuronowych. Widać jednoznacznie, że model zbiega do globalnego optimum przy \textit{learning rate} na poziomie 0.0001 (NDCG $\approx$ 0.2810). Parametr \textit{dropout} wykazuje z kolei wysoce czytelny punkt optymalny dla wartości 0.5. Pozwala to na odpowiednią, restrykcyjną regularyzację gęstych warstw, skutecznie hamując overfitting i zwiększając zdolność uogólniania wniosków.
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../3_Evaluation/Reports/sweep_neumf_summary.png}
+    \includegraphics[width=\textwidth]{img/sweep_neumf_summary.png}
     \caption{Wpływ współczynnika uczenia oraz parametru dropout na trafność modelu NeuMF}
     \label{fig:sweep_neumf}
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{figure}
-Ocena parametrów hybrydowego modelu NeuMF (Rysunek \ref{fig:sweep_neumf}) potwierdza specyfikę głębokich sieci neuronowych. Widać jednoznacznie, że model zbiega do globalnego optimum przy \textit{learning rate} na poziomie 0.0001 (NDCG $\approx$ 0.2810). Parametr \textit{dropout} wykazuje z kolei wysoce czytelny punkt optymalny dla wartości 0.5. Pozwala to na odpowiednią, restrykcyjną regularyzację gęstych warstw, skutecznie hamując overfitting i zwiększając zdolność uogólniania wniosków.
-\begin{figure}[htbp]
+
+Ostatnim etapem analizy była ocena grafowego modelu LightGCN (Rysunek \ref{fig:sweep_lightgcn}). Architektura ta bazuje na propagacji informacji wzdłuż krawędzi, co ma swoje odzwierciedlenie na wykresie: zastosowanie dwóch warstw propagacji (\textit{n\_layers = 2}) okazało się optymalne. Zwiększanie liczby warstw do 3 lub 4 nieznacznie pogarsza wyniki, co jest klasycznym objawem problemu nadmiernego wygładzenia sygnałów (ang. \foreignlanguage{english}{\textit{over-smoothing}}). Zastosowanie odpowiedniej siły kary za wielkość wag również posiada ostry szczyt użyteczności: \textit{reg\_weight = 0.10} maksymalizuje końcową precyzję predykcji tego algorytmu.
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../3_Evaluation/Reports/sweep_lightgcn_summary.png}
+    \includegraphics[width=\textwidth]{img/sweep_lightgcn_summary.png}
     \caption{Wpływ wagi regularyzacji oraz liczby warstw propagacji na trafność modelu LightGCN}
     \label{fig:sweep_lightgcn}
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{figure}
-Ostatnim etapem analizy była ocena grafowego modelu LightGCN (Rysunek \ref{fig:sweep_lightgcn}). Architektura ta bazuje na propagacji informacji wzdłuż krawędzi, co ma swoje odzwierciedlenie na wykresie: zastosowanie dwóch warstw propagacji (\textit{n\_layers = 2}) okazało się optymalne. Zwiększanie liczby warstw do 3 lub 4 nieznacznie pogarsza wyniki, co jest klasycznym objawem problemu nadmiernego wygładzenia sygnałów (\foreignlanguage{english}{over-smoothing}). Zastosowanie odpowiedniej siły kary za wielkość wag również posiada ostry szczyt użyteczności: \textit{reg\_weight = 0.10} maksymalizuje końcową precyzję predykcji tego algorytmu.
 
 
 \subsubsection{Przeszukiwanie siatki parametrów --- Grid Search}
 
-Proces strojenia hiperparametrów zwieńczono zastosowaniem metody wyczerpującego przeszukiwania siatki (ang. \textit{Grid Search}). Jest to deterministyczne podejście do optymalizacji modelu, polegające na zdefiniowaniu dyskretnego zbioru dopuszczalnych wartości dla każdego z badanych parametrów, a następnie przetestowaniu wszystkich możliwych ich kombinacji, stanowiących iloczyn kartezjański zdefiniowanych zbiorów. Choć w ogólnym przypadku metoda ta jest wysoce kosztowna obliczeniowo i jej złożoność rośnie wykładniczo wraz z dodawaniem kolejnych wymiarów (zjawisko znane jako klątwa wymiarowości), jej zastosowanie w niniejszym badaniu było w pełni zoptymalizowane i uzasadnione.
+Do ostatecznej optymalizacji hiperparametrów wykorzystano metodę przeszukiwania siatki (\textit{Grid Search}). Jest to podejście deterministyczne, w którym dla każdego badanego parametru definiuje się dyskretny zbiór wartości, a następnie sprawdza każdą możliwą ich kombinację. Złożoność obliczeniowa tego procesu rośnie wykładniczo wraz z liczbą analizowanych wymiarów, co w naturalny sposób narzuca konieczność wcześniejszej redukcji przestrzeni wariantów.
 
-Dzięki przeprowadzonej wcześniej, szczegółowej analizie wrażliwości (Sekcja 3.1.1) udało się odrzucić nieperspektywiczne przedziały wartości i drastycznie zawęzić ostateczną przestrzeń poszukiwań. Pozwoliło to na bezpieczne wykorzystanie metody \textit{Grid Search}, która w przeciwieństwie do podejść stochastycznych (takich jak \textit{Random Search}) gwarantuje bezwzględne odnalezienie globalnego optimum w obrębie zadanej siatki. Opierając się na wytycznych z analizy, dla każdego algorytmu zdefiniowano okrojoną przestrzeń hiperparametrów, którą zestawiono w Tabeli \ref{tab:grid_search_space}. Zgodnie z metodologią badawczą, dla każdej możliwej konfiguracji zdefiniowanej w siatce inicjowano całkowicie niezależny proces uczenia od podstaw. Ewaluacja poszczególnych wariantów odbywała się na wyodrębnionym zbiorze walidacyjnym (ang. \textit{validation set}), co zapobiegało zjawisku ,,wycieku danych'' (ang. \textit{data leakage}) i gwarantowało obiektywną ocenę zdolności do generalizacji. Za ostateczne kryterium wyboru najlepszego zestawu hiperparametrów przyjęto maksymalizację metryki NDCG@10.
+Dzięki przeprowadzonej wcześniej, szczegółowej analizie wrażliwości (Sekcja 3.1.1) udało się odrzucić nieperspektywiczne przedziały wartości i drastycznie zawęzić ostateczną przestrzeń poszukiwań. Pozwoliło to na bezpieczne wykorzystanie metody \textit{Grid Search}, która w przeciwieństwie do podejść stochastycznych (takich jak \foreignlanguage{english}{\textit{Random Search}}) gwarantuje bezwzględne odnalezienie globalnego optimum w obrębie zadanej siatki. Opierając się na wytycznych z analizy, dla każdego algorytmu zdefiniowano okrojoną przestrzeń hiperparametrów, którą zestawiono w Tabeli \ref{tab:grid_search_space}. Zgodnie z metodologią badawczą, dla każdej możliwej konfiguracji zdefiniowanej w siatce inicjowano całkowicie niezależny proces uczenia od podstaw. Ewaluacja poszczególnych wariantów odbywała się wyłącznie na wyodrębnionym zbiorze walidacyjnym, co pozwalało na obiektywny wybór modelu i chroniło finalny zbiór testowy przed zjawiskiem przedwczesnego dopasowania. Za ostateczne kryterium wyboru najlepszego zestawu hiperparametrów przyjęto maksymalizację metryki NDCG@10.
 
 Warto w tym miejscu zaznaczyć, że współczesne algorytmy rekomendacyjne -- w szczególności te oparte na sieciach neuronowych -- charakteryzują się rozbudowaną przestrzenią konfiguracyjną. Jednoczesna optymalizacja wszystkich dostępnych hiperparametrów przy użyciu metody \textit{Grid Search} była niemożliwa ze względu na wykładniczy wzrost czasu trwania obliczeń. Z tego powodu proces strojenia świadomie ograniczono wyłącznie do kluczowych parametrów, zidentyfikowanych w analizie wrażliwości jako najbardziej wpływowe dla poszczególnych architektur.
 
-Wszelkie pozostałe ustawienia procesu uczenia, niewyszczególnione w Tabeli \ref{tab:grid_search_space}, zostały ustandaryzowane i zachowane na stałym, odgórnie narzuconym poziomie dla wszystkich algorytmów. Do aktualizacji wag wykorzystano optymalizator Adam, będący domyślnym i powszechnie uznanym standardem w środowisku RecBole. Rozmiar partii danych (ang. \textit{batch size}) ustalono na 4096, co zapewniło odpowiednią stabilność numeryczną gradientu. Maksymalną liczbę iteracji ograniczono do 100 epok, jednak w celu zapobiegania przeuczeniu (\textit{overfitting}) zastosowano mechanizm wczesnego zatrzymywania (ang. \textit{early stopping}). Trening modelu był automatycznie przerywany w przypadku, gdy metryka NDCG@10 na zbiorze walidacyjnym nie uległa poprawie przez 10 kolejnych epok. Proces uczenia przeprowadzono również ze stałą strategią negatywnego próbkowania (ang. \textit{negative sampling}), gdzie dla każdej pozytywnej interakcji losowano jednostajnie 4 interakcje negatywne. Zachowanie tych parametrów na jednakowym poziomie dla każdego algorytmu gwarantuje, że końcowa ewaluacja jest miarodajna i sprawiedliwa.
+Zdecydowana większość pozostałych ustawień procesu uczenia, niewyszczególnionych w Tabeli \ref{tab:grid_search_space}, została ustandaryzowana i zachowana na stałym poziomie dla badanych algorytmów. Do aktualizacji wag wykorzystano optymalizator Adam, będący powszechnie uznanym standardem w środowisku RecBole. Rozmiar partii danych ustalono na 4096, co zapewniło odpowiednią stabilność numeryczną gradientu. Maksymalną liczbę iteracji ograniczono do 100 epok, z włączonym mechanizmem wczesnego zatrzymywania -- trening przerywano, gdy metryka NDCG@10 na zbiorze walidacyjnym nie uległa poprawie przez 10 kolejnych epok. Strategię negatywnego próbkowania uzależniono z kolei od specyfiki optymalizacji. Algorytmy bazujące na parowej funkcji straty BPR (klasyczny BPR oraz LightGCN) trenowano w schemacie 1:1, parując każdą interakcję pozytywną z jedną losową interakcją negatywną. Z kolei model NeuMF, zoptymalizowany pod kątem straty punktowej, trenowano stosując proporcję 1:4 (cztery próbki negatywne na jedną obserwowaną). Odpowiednie dostosowanie tego aspektu do natywnych mechanizmów poszczególnych architektur gwarantuje, że końcowa ewaluacja w pełni oddaje ich faktyczny potencjał.
 
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
     \caption{Zestawienie przestrzeni hiperparametrów (siatki) dla poszczególnych algorytmów}
     \label{tab:grid_search_space}
     \input{tables/grid_search_space.tex}
+
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{table}
 
-Wyniki procesu optymalizacji pozwoliły na wyłonienie ostatecznych architektur, które posłużą do finalnego porównania skuteczności algorytmów w kolejnym podrozdziale. Zestawienie zwycięskich parametrów prezentuje się następująco:
+Wyniki procesu optymalizacji pozwoliły na wyłonienie ostatecznych architektur, które posłużą do finalnego porównania skuteczności algorytmów w kolejnym podrozdziale. Zestawienie wyselekcjonowanych parametrów przedstawiono w Tabeli \ref{tab:finalne_parametry}:
 \begin{itemize}
     \item \textbf{ItemKNN}: Najlepszą celność uzyskano dla sąsiedztwa $k=100$ oraz wygładzania \textit{shrinkage} $= 7.5$ (NDCG@10 $= 0.2734$).
     \item \textbf{BPR}: Wariant z optymalizacją bayesowską najlepiej operował w przestrzeni latentnej o rozmiarze $128$ przy kroku uczenia równym $0.001$ (NDCG@10 $= 0.2837$).
@@ -75,64 +88,70 @@ Wyniki procesu optymalizacji pozwoliły na wyłonienie ostatecznych architektur,
     \item \textbf{LightGCN}: Model grafowy zdominował zestawienie testowe, uzyskując najwyższą bezwzględną trafność (NDCG@10 $= 0.3021$) dla $2$ warstw propagacji wzdłuż krawędzi oraz wagi regularyzacji L2 na poziomie $0.1$.
 \end{itemize}
 
-Powyższe zestawy parametrów gwarantują, że każdy z modeli podczas ostatecznej ewaluacji będzie operował na granicy swoich maksymalnych, teoretycznych możliwości, co zapewni miarodajność końcowego porównania.
+Powyższe zestawy parametrów gwarantują, że podczas ostatecznej ewaluacji każdy z modeli będzie operował na możliwie najlepiej dobranych wartościach i osiągał optymalne wyniki.
 
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
     \caption{Wyselekcjonowane, optymalne wartości hiperparametrów dla badanych modeli}
     \label{tab:finalne_parametry}
     \input{tables/finalne_parametry.tex}
+
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{table}
 
 \subsection{Wyniki badań}
 
-W niniejszym podrozdziale zaprezentowano ostateczne zestawienie skuteczności badanych algorytmów. Ocenę przeprowadzono na odseparowanym zbiorze testowym, gwarantując tym samym obiektywną miarę zdolności modeli do generalizacji. Zgodnie z wcześniej przyjętą metodologią, predykcje poszczególnych architektur oceniono z wykorzystaniem metryk NDCG@10, Recall@10, Hit@10 oraz MRR@10. Pełne zestawienie wyników zaprezentowano w Tabeli \ref{tab:wyniki_eksperymentow}.
+W niniejszym podrozdziale zaprezentowano ostateczne zestawienie skuteczności badanych algorytmów. Ocenę przeprowadzono na odseparowanym zbiorze testowym, gwarantując tym samym obiektywną miarę zdolności modeli do generalizacji. Zgodnie z wcześniej przyjętą metodologią, predykcje poszczególnych architektur oceniono z wykorzystaniem metryk NDCG@10, Recall@10, HR@10 oraz MRR@10. Pełne zestawienie wyników zaprezentowano w Tabeli \ref{tab:wyniki_eksperymentow}.
 
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
     \caption{Porównanie wyników metryk oceny dla testowanych algorytmów rekomendacyjnych na zbiorze MovieLens 100K.}
     \label{tab:wyniki_eksperymentow}
     \input{tables/wyniki_eksperymentow.tex}
+
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{table}
 
-Analiza powyższej tabeli pozwala na wyciągnięcie kilku kluczowych wniosków, które wpisują się w historyczną ewolucję systemów rekomendacyjnych. Punktem odniesienia (ang. \textit{baseline}) w eksperymencie był najprostszy algorytm oparty na sąsiedztwie -- ItemKNN, który uzyskał najniższe, bazowe wyniki. Wprowadzenie klasycznej faktoryzacji macierzy (BPR) znacząco poprawiło jakość rekomendacji (wzrost NDCG z 0.2734 na 0.2837), co dowodzi wyższości uczenia się cech ukrytych nad prostymi heurystykami podobieństwa.
+Analiza powyższej tabeli pozwala na wyciągnięcie kilku kluczowych wniosków, które wpisują się w historyczną ewolucję systemów rekomendacyjnych. Punktem odniesienia w eksperymencie był najprostszy algorytm oparty na sąsiedztwie -- ItemKNN, który uzyskał najniższe, bazowe wyniki. Wprowadzenie klasycznej faktoryzacji macierzy (BPR) znacząco poprawiło jakość rekomendacji (wzrost NDCG z 0.2734 na 0.2837), co dowodzi wyższości uczenia się cech ukrytych nad prostymi heurystykami podobieństwa.
 
-Wykorzystanie głębokich sieci neuronowych w modelu NeuMF przyniosło dalszą poprawę w większości metryk, jednak na szczególną uwagę zasługuje relacja między wskaźnikami Hit@10 a NDCG@10. Choć NeuMF wygrał w kategorii Hit@10 (0.7720), co oznacza, że skuteczniej umieszczał przynajmniej jeden trafny element w pierwszej dziesiątce, to ustąpił w rankingu NDCG. Dowodzi to, że bezapelacyjny zwycięzca zestawienia -- grafowy model LightGCN -- znacznie lepiej radzi sobie z precyzyjnym pozycjonowaniem trafnych rekomendacji na samym szczycie listy. Architektura grafowa, dzięki jawnej propagacji sygnałów między użytkownikami a przedmiotami, uzyskała najwyższe wartości NDCG@10 (0.3021) oraz MRR@10 (0.4835).
+Wykorzystanie głębokich sieci neuronowych w modelu NeuMF przyniosło dalszą poprawę w większości metryk, jednak na szczególną uwagę zasługuje relacja między wskaźnikami HR@10 a NDCG@10. Choć NeuMF wygrał w kategorii HR@10 (0.7720), co oznacza, że skuteczniej umieszczał przynajmniej jeden trafny element w pierwszej dziesiątce, to ustąpił w rankingu NDCG. Dowodzi to, że osiągający najwyższe wyniki w zestawieniu grafowy model LightGCN znacznie lepiej radzi sobie z precyzyjnym pozycjonowaniem trafnych rekomendacji na samym szczycie listy. Architektura grafowa, dzięki jawnej propagacji sygnałów między użytkownikami a przedmiotami, uzyskała najwyższe wartości NDCG@10 (0.3021) oraz MRR@10 (0.4835).
 
 \subsubsection{Krzywe zbieżności i stabilność procesu uczenia}
 
-Zestawienie końcowych wyników uzupełniono o analizę dynamiki procesu uczenia poszczególnych architektur. Na Rysunku \ref{fig:learning_curves} zaprezentowano krzywe zbieżności (ang. \textit{learning curves}) rejestrujące zmianę metryki NDCG@10 na zbiorze walidacyjnym w trakcie trwania optymalizacji, aż do momentu aktywacji mechanizmu wczesnego zatrzymywania (ang. \textit{early stopping}).
+Zestawienie końcowych wyników uzupełniono o analizę dynamiki procesu uczenia poszczególnych architektur. Na Rysunku \ref{fig:learning_curves} zaprezentowano krzywe zbieżności (ang. \foreignlanguage{english}{\textit{learning curves}}) rejestrujące zmianę metryki NDCG@10 na zbiorze walidacyjnym w trakcie trwania optymalizacji, aż do momentu aktywacji mechanizmu wczesnego zatrzymywania.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{img/learning_curves.png}
     \caption{Krzywe zbieżności metryki NDCG@10 na zbiorze walidacyjnym dla algorytmów BPR, NeuMF oraz LightGCN.}
     \label{fig:learning_curves}
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{figure}
 
-Analiza krzywych ujawnia interesujące różnice w sposobie optymalizacji. Klasyczny model faktoryzacji macierzy (BPR) wykazuje najszybsze tempo zbieżności -- jego trafność drastycznie rośnie już w pierwszych iteracjach, osiągając lokalne optimum w okolicach 20. epoki. Następnie można zaobserwować delikatny spadek jakości, co świadczy o podatności na przeuczenie (ang. \textit{overfitting}) na zbiorze treningowym. Z kolei model grafowy (LightGCN) startuje z niższego poziomu i uczy się znacznie wolniej, jednak jego krzywa jest wysoce stabilna. Ostatecznie, proces powolnego propagowania sygnałów w grafie pozwala na przekroczenie pułapu wyznaczonego przez BPR i NeuMF, a optymalna zbieżność osiągana jest znacznie później.
+Analiza krzywych ujawnia interesujące różnice w sposobie optymalizacji. Klasyczny model faktoryzacji macierzy (BPR) wykazuje najszybsze tempo zbieżności -- jego trafność gwałtownie rośnie już w pierwszych iteracjach, osiągając lokalne optimum w okolicach 20. epoki. Następnie można zaobserwować delikatny spadek jakości, co świadczy o podatności na przeuczenie na zbiorze treningowym. Z kolei model grafowy (LightGCN) startuje z niższego poziomu i uczy się znacznie wolniej, jednak jego krzywa jest wysoce stabilna. Ostatecznie, proces powolnego propagowania sygnałów w grafie pozwala na przekroczenie pułapu wyznaczonego przez BPR i NeuMF, a optymalna zbieżność osiągana jest znacznie później.
 
 \subsubsection{Koszty obliczeniowe a skuteczność algorytmów}
 
 Ostatnim elementem ewaluacji jest analiza relacji nakładów obliczeniowych (czasu optymalizacji modelu) do uzyskiwanej trafności predykcji. Jest to kluczowy wskaźnik inżynieryjny w środowiskach produkcyjnych, w których systemy rekomendacyjne muszą być regularnie i szybko dotrenowywane nowymi danymi. Zależność tę zilustrowano na Rysunku \ref{fig:time_vs_ndcg}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{img/time_vs_ndcg.png}
     \caption[Zestawienie czasu uczenia względem ostatecznej skuteczności dla badanych modeli.]{Zestawienie czasu uczenia względem ostatecznej skuteczności (NDCG@10) dla badanych modeli.}
     \label{fig:time_vs_ndcg}
+    \vspace{0.2cm}\noindent{\raggedright \small \textbf{Źródło:} opracowanie własne.\par}
 \end{figure}
 
-Wykres punktowy obnaża bardzo wyraźny kompromis (ang. \textit{trade-off}) pomiędzy kosztem a jakością. Model bazowy ItemKNN, nie wymagający iteracyjnej optymalizacji stochastycznej, zapewnia niemal błyskawiczny czas odpowiedzi przy relatywnie najniższej skuteczności. Klasyczny wariant BPR jawi się jako algorytm niezwykle efektywny kosztowo -- czas jego uczenia zamyka się w kilkudziesięciu sekundach, dostarczając bardzo zadowalające rezultaty.
+Wykres punktowy ukazuje bardzo wyraźny kompromis pomiędzy kosztem a jakością. Model bazowy ItemKNN, nie wymagający iteracyjnej optymalizacji stochastycznej, zapewnia bardzo krótki czas odpowiedzi przy relatywnie najniższej skuteczności. Klasyczny wariant BPR jawi się jako algorytm niezwykle efektywny kosztowo. Czas jego uczenia zamyka się w kilkudziesięciu sekundach, dostarczając bardzo zadowalające rezultaty.
 
-Najważniejszym wnioskiem jest jednak ewaluacja grafowych sieci neuronowych. Choć LightGCN deklasuje rywali pod kątem metryki NDCG, to odbywa się to potężnym kosztem sprzętowym. Czas jego pełnego treningu okazał się niemal 10-krotnie wyższy niż w przypadku głębokiej sieci neuronowej (NeuMF) oraz rzędy wielkości wyższy w porównaniu do klasycznej faktoryzacji macierzy. Wynik ten zmusza do refleksji nad opłacalnością wdrożenia tego typu algorytmu w czasie rzeczywistym.
+Najważniejszym wnioskiem jest jednak ewaluacja grafowych sieci neuronowych. Choć LightGCN przewyższa pozostałe modele pod kątem metryki NDCG, to odbywa się to znacznym kosztem sprzętowym. Czas jego pełnego treningu okazał się niemal 10-krotnie wyższy niż w przypadku głębokiej sieci neuronowej (NeuMF) oraz rzędy wielkości wyższy w porównaniu do klasycznej faktoryzacji macierzy. Wynik ten wskazuje na potencjalne ograniczenia wdrożeniowe algorytmu w czasie rzeczywistym.
 
 \subsection{Dyskusja wyników i wnioski}
 
 Przeprowadzone badania eksperymentalne na zbiorze MovieLens 100K dostarczyły dowodów na to, że ewolucja systemów rekomendacyjnych w kierunku architektur uwzględniających szerszy kontekst powiązań pomiędzy obiektami jest kierunkiem gwarantującym stosunkowo najlepsze wyniki. Metryki rangowe potwierdziły teoretyczną hierarchię modeli, układając się w czytelny ciąg rosnącej skuteczności: od najprostszych metod opartych na pamięci (ItemKNN), poprzez klasyczną faktoryzację macierzy (BPR), głębokie sieci neuronowe (NeuMF), aż po grafowe sieci neuronowe (LightGCN).
 
-Zwycięstwo algorytmu LightGCN we wskaźnikach uwzględniających pozycje w rankingu (NDCG@10 na poziomie 0.3021 oraz MRR@10 wynoszące 0.4835) bezpośrednio udowadnia, że jawne włączenie struktury grafu dwudzielnego do procesu uczenia pozwala na najtrafniejsze ułożenie samej czołówki listy rekomendacji. Jest to zjawisko wysoce pożądane w systemach VOD, gdzie uwaga widza skupia się na pierwszych kilku propozycjach wyświetlanych na ekranie telewizora. Interesującą obserwacją okazał się jednak wynik wskaźnika Hit Rate@10, w którym to głęboka architektura NeuMF (0.7720) zdołała nieznacznie wyprzedzić wariant grafowy (0.7678). Sugeruje to, że nieliniowe sieci wielowarstwowe wykazują zdolność do odnajdywania jakiegokolwiek trafnego obiektu i wyprowadzania go do pierwszej dziesiątki, jednak brakuje im precyzji strukturalnej (którą posiada LightGCN), aby wywindować obiekt na wyższe miejsce w rankingu.
+Zwycięstwo algorytmu LightGCN we wskaźnikach uwzględniających pozycje w rankingu (NDCG@10 na poziomie 0.3021 oraz MRR@10 wynoszące 0.4835) bezpośrednio udowadnia, że jawne włączenie struktury grafu dwudzielnego do procesu uczenia pozwala na najtrafniejsze ułożenie samej czołówki listy rekomendacji. Jest to zjawisko wysoce pożądane w systemach VOD, gdzie uwaga widza skupia się na pierwszych kilku propozycjach wyświetlanych na ekranie telewizora. Interesującą obserwacją okazał się jednak wynik wskaźnika HR@10, w którym to głęboka architektura NeuMF (0.7720) zdołała nieznacznie wyprzedzić wariant grafowy (0.7678). Sugeruje to, że nieliniowe sieci wielowarstwowe wykazują zdolność do odnajdywania jakiegokolwiek trafnego obiektu i wyprowadzania go do pierwszej dziesiątki, jednak brakuje im precyzji strukturalnej (którą posiada LightGCN), aby wywindować obiekt na wyższe miejsce w rankingu.
 
-Z inżynieryjnego i biznesowego punktu widzenia ostateczne wnioski z badań nie są jednak tak jednoznaczne, jak wskazywałyby na to same miary trafności. Analiza relacji kosztów do jakości (zob. Rysunek \ref{fig:time_vs_ndcg}) pokazała, że zastosowanie najnowocześniejszych rozwiązań opartych na propagacji wiadomości w grafie powoduje drastyczny wzrost czasu uczenia. Fakt, iż trening modelu LightGCN wymagał nieporównywalnie więcej nakładów niż optymalizacja wariantu NeuMF, a tym bardziej klasycznego BPR, stanowi zauważalną barierę wdrożeniową. Na wielkoskalowych platformach streamingowych generujących setki milionów logów dziennie proces ten może okazać się problematyczny.
+Z inżynieryjnego i biznesowego punktu widzenia ostateczne wnioski z badań nie są jednak tak jednoznaczne, jak wskazywałyby na to same miary trafności. Analiza relacji kosztów do jakości (zob. Rysunek \ref{fig:time_vs_ndcg}) pokazała, że zastosowanie najnowocześniejszych rozwiązań opartych na propagacji wiadomości w grafie powoduje znaczny wzrost czasu uczenia. Fakt, iż trening modelu LightGCN wymagał nieporównywalnie więcej nakładów niż optymalizacja wariantu NeuMF, a tym bardziej klasycznego BPR, stanowi zauważalną barierę wdrożeniową. Na wielkoskalowych platformach streamingowych generujących setki milionów logów dziennie proces ten może okazać się problematyczny.
 
 Podsumowując, problematyka wyboru optymalnego algorytmu na rynku komercyjnych usług dostarczania treści wideo nie powinna sprowadzać się wyłącznie do bezwzględnego pościgu za metryką NDCG. Uzyskane wyniki eksperymentalne wskazują, że chociaż grafowe sieci neuronowe bez wątpienia dostarczają obecnie najlepsze wyniki, to w realiach ograniczonego budżetu operacyjnego, drogiej infrastruktury chmurowej oraz wymogu wysokiej responsywności, rozwiązania klasyczne, takie jak zoptymalizowane podejście parowe (BPR) lub architektury hybrydowe (NeuMF), wciąż stanowią niezwykle opłacalną alternatywę.

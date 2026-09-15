@@ -76,6 +76,18 @@
   isbn = {978-83-8030-664-6}
 }
 
+@book{bollenUnderstandingChoiceOverload2010,
+  title = {Understanding Choice Overload in Recommender Systems},
+  author = {Bollen, Dirk and Knijnenburg, Bart and Willemsen, Martijn and Graus, Mark},
+  year = 2010,
+  month = sep,
+  journal = {ACM Transactions on Algorithms - TALG},
+  pages = {70},
+  doi = {10.1145/1864708.1864724},
+  abstract = {Even though people are attracted by large, high quality recommendation sets, psychological research on choice overload shows that choosing an item from recommendation sets containing many attractive items can be a very difficult task. A web-based user experiment using a matrix factorization algorithm applied to the MovieLens dataset was used to investigate the effect of recommendation set size (5 or 20 items) and set quality (low or high) on perceived variety, recommendation set attractiveness, choice difficulty and satisfaction with the chosen item. The results show that larger sets containing only good items do not necessarily result in higher choice satisfaction compared to smaller sets, as the increased recommendation set attractiveness is counteracted by the increased difficulty of choosing from these sets. These findings were supported by behavioral measurements revealing intensified information search and increased acquisition times for these large attractive sets. Important implications of these findings for the design of recommender system user interfaces will be discussed.},
+  file = {C:\Users\jakub\Zotero\storage\D6GJ9V7L\Bollen et al. - 2010 - Understanding choice overload in recommender systems.pdf}
+}
+
 @misc{BookBeatONas,
   title = {{O nas -- BookBeat}},
   author = {{BookBeat}},
@@ -95,6 +107,8 @@
   month = nov,
   journal = {User Modeling and User-Adapted Interaction},
   volume = {12},
+  number = {4},
+  pages = {331--370},
   doi = {10.1023/A:1021240730564},
   abstract = {Recommender systems represent user preferences for the purpose of suggesting items to purchase or examine. They have become fundamental applications in electronic commerce and information access, providing suggestions that effectively prune large information spaces so that users are directed toward those items that best meet their needs and preferences. A variety of techniques have been proposed for performing recommendation, including content-based, collaborative, knowledge-based and other techniques. To improve performance, these methods have sometimes been combined in hybrid recommenders. This paper surveys the landscape of actual and possible hybrid recommenders, and introduces a novel hybrid, EntreeC, a system that combines knowledge-based recommendation and collaborative filtering to recommend restaurants. Further, we show that semantic ratings obtained from the knowledge-based part of the system enhance the effectiveness of collaborative filtering.},
   file = {C:\Users\jakub\Zotero\storage\7FD5XF4Z\Burke - 2002 - Hybrid Recommender Systems Survey and Experiments.pdf}
@@ -114,17 +128,19 @@
   file = {C:\Users\jakub\Zotero\storage\7MV58YKR\Burke - 2002 - Technology and the Customer Interface What Consumers Want in the Physical and Virtual Store.pdf}
 }
 
-@book{celmaMusicRecommendationDiscovery2010,
-  title = {Music {{Recommendation}} and {{Discovery}}: {{The Long Tail}}, {{Long Fail}}, and {{Long Play}} in the {{Digital Music Space}}},
-  shorttitle = {Music {{Recommendation}} and {{Discovery}}},
+@incollection{celmaMusicRecommendationDiscovery2010,
+  title = {Recommendation and {{Discovery}}: {{The Long Tail}}, {{Long Fail}}, and {{Long Play}} in the {{Digital Music Space}}},
+  booktitle = {Music {{Recommendation}}},
   author = {Celma, Oscar},
   year = 2010,
   month = jan,
-  journal = {Music Recommendation and Discovery: The Long Tail, Long Fail, and Long Play in the Digital Music Space},
+  pages = {43--85},
+  publisher = {Springer Berlin Heidelberg},
+  address = {Berlin, Heidelberg},
   doi = {10.1007/978-3-642-13287-2},
   abstract = {With so much more music available these days, traditional ways of finding music have diminished. Today radio shows are often programmed by large corporations that create playlists drawn from a limited pool of tracks. Similarly, record stores have been replaced by big-box retailers that have ever-shrinking music departments. Instead of relying on DJs, record-store clerks or their friends for music recommendations, listeners are turning to machines to guide them to new music. In this book, Oscar Celma guides us through the world of automatic music recommendation. He describes how music recommenders work, explores some of the limitations seen in current recommenders, offers techniques for evaluating the effectiveness of music recommendations and demonstrates how to build effective recommenders by offering two real-world recommender examples. He emphasizes the user's perceived quality, rather than the system's predictive accuracy when providing recommendations, thus allowing users to discover new music by exploiting the long tail of popularity and promoting novel and relevant material ("non-obvious recommendations"). In order to reach out into the long tail, he needs to weave techniques from complex network analysis and music information retrieval. Aimed at final-year-undergraduate and graduate students working on recommender systems or music information retrieval, this book presents the state of the art of all the different techniques used to recommend items, focusing on the music domain as the underlying application. \copyright{} Springer-Verlag Berlin Heidelberg 2010. All rights are reserved.},
   isbn = {978-3-642-13286-5},
-  file = {C:\Users\jakub\Zotero\storage\IM28STM9\Celma - 2010 - Music Recommendation and Discovery The Long Tail, Long Fail, and Long Play in the Digital Music Spa.pdf}
+  file = {C:\Users\jakub\Zotero\storage\IM28STM9\Celma - 2010 - Music Recommendation.pdf}
 }
 
 @article{checinskiSystemyRekomendacjiRemedium2023,
@@ -138,6 +154,22 @@
   urldate = {2026-07-13},
   langid = {polish},
   file = {C:\Users\jakub\Zotero\storage\T6I2JMJQ\Chęciński i Wawrzusiak - 2023 - Systemy rekomendacji. Remedium w cyfrowej klęsce urodzaju.pdf}
+}
+
+@article{deshpandeItembasedTopNRecommendationStyczen012004,
+  title = {Item-Based Top-{{N}} Recommendation Algorithms},
+  author = {Deshpande, Mukund and Karypis, George},
+  year = 2004,
+  month = jan,
+  journal = {ACM Transactions on Information Systems (TOIS)},
+  volume = {22},
+  number = {1},
+  pages = {143--177},
+  issn = {1046-8188},
+  doi = {10.1145/963770.963776},
+  urldate = {2026-09-15},
+  abstract = {The explosive growth of the world-wide-web and the emergence of e-commerce has led to the development of recommender systems---a personalized information filtering technology used to identify a set of items that will be of interest to a certain user. User-based collaborative filtering is the most successful technology for building recommender systems to date and is extensively used in many commercial recommender systems. Unfortunately, the computational complexity of these methods grows linearly with the number of customers, which in typical commercial applications can be several millions. To address these scalability concerns model-based recommendation techniques have been developed. These techniques analyze the user--item matrix to discover relations between the different items and use these relations to compute the list of recommendations.In this article, we present one such class of model-based recommendation algorithms that first determines the similarities between the various items and then uses them to identify the set of items to be recommended. The key steps in this class of algorithms are (i) the method used to compute the similarity between the items, and (ii) the method used to combine these similarities in order to compute the similarity between a basket of items and a candidate recommender item. Our experimental evaluation on eight real datasets shows that these item-based algorithms are up to two orders of magnitude faster than the traditional user-neighborhood based recommender systems and provide recommendations with comparable or better quality.},
+  file = {C:\Users\jakub\Zotero\storage\PDS5C4ZM\Deshpande i Karypis - 2004 - Item-based top-N recommendation algorithms.pdf}
 }
 
 @book{doligalskiPlatformyCyfroweModel2024,
@@ -385,10 +417,14 @@
 
 @incollection{malinowskiZastosowanieGrafowSieci2021,
   title = {Zastosowanie Graf\'ow i Sieci w Systemach Rekomendacji},
+  booktitle = {Przedsi\k ebiorstwo w Nowej Rzeczywisto\'sci Gospodarczej. {{Relacje}} -- Zmiany -- Strategie},
   author = {Malinowski, Micha{\l}},
   year = 2021,
   month = nov,
+  series = {1},
   pages = {77--96},
+  publisher = {Wydawnictwo Politechniki Cz\k estochowskiej},
+  address = {Cz\k estochowa},
   doi = {10.6084/m9.figshare.17024192},
   abstract = {Celem niniejszego rozdzia\l u jest przedstawienie wykorzystania teorii graf\'ow i sieci w obszarze rekomendacji, w tym modeli matematycznych stanowi\k acych podstaw\k e do konstruowanych na ich bazie algorytm\'ow i system\'ow rekomendacji. W pierwszej cz\k e\'sci rozdzia\l u zosta\l{} zawarty syntetyczny opis obszaru rekomendacji, ze szczeg\'olnym uwzgl\k ednieniem typ\'ow rozwi\k aza\'n rekomendacyjnych oraz matematycznego opisu problemu. W kolejnej cz\k e\'sci opracowania zosta\l y przedstawione modele i techniki wykorzystania graf\'ow i sieci oraz przyk\l adowe algorytmy zbudowane na ich bazie.},
   isbn = {978-83-7193-809-2},
@@ -411,6 +447,20 @@
   abstract = {In order to recommend products to users we must ultimately predict how a user will respond to a new product. To do so we must uncover the implicit tastes of each user as well as the properties of each product. For example, in order to predict whether a user will enjoy Harry Potter, it helps to identify that the book is about wizards, as well as the user's level of interest in wizardry. User feedback is required to discover these latent product and user dimensions. Such feedback often comes in the form of a numeric rating accompanied by review text. However, traditional methods often discard review text, which makes user and product latent dimensions difficult to interpret, since they ignore the very text that justifies a user's rating. In this paper, we aim to combine latent rating dimensions (such as those of latent-factor recommender systems) with latent review topics (such as those learned by topic models like LDA). Our approach has several advantages. Firstly, we obtain highly interpretable textual labels for latent rating dimensions, which helps us to `justify' ratings with text. Secondly, our approach more accurately predicts product ratings by harnessing the information present in review text; this is especially true for new products and users, who may have too few ratings to model their latent factors, yet may still provide substantial information from the text of even a single review. Thirdly, our discovered topics can be used to facilitate other tasks such as automated genre discovery, and to identify useful and representative reviews.},
   isbn = {978-1-4503-2409-0},
   file = {C:\Users\jakub\Zotero\storage\LYXA3BL8\McAuley i Leskovec - 2013 - Hidden factors and hidden topics understanding rating dimensions with review text.pdf}
+}
+
+@misc{MovieLens2013,
+  title = {{{MovieLens}}},
+  author = {{GroupLens}},
+  year = 2013,
+  month = sep,
+  journal = {GroupLens},
+  urldate = {2026-09-07},
+  abstract = {GroupLens Research has collected and made available rating data sets from the MovieLens web site ( The data sets were collected over various periods of time, depending on the size of the set.~\dots},
+  howpublished = {https://grouplens.org/datasets/movielens/},
+  langid = {english},
+  keywords = {internet},
+  file = {C:\Users\jakub\Zotero\storage\ECV7JZ9X\movielens.html}
 }
 
 @article{oliveiraRankAggregationEffective2020,
@@ -437,14 +487,18 @@
   file = {C:\Users\jakub\Zotero\storage\26SB5Z3X\stats.html}
 }
 
-@book{razaComprehensiveReviewRecommender2024,
+@misc{razaComprehensiveReviewRecommender2024,
   title = {A {{Comprehensive Review}} of {{Recommender Systems}}: {{Transitioning}} from {{Theory}} to {{Practice}}},
   shorttitle = {A {{Comprehensive Review}} of {{Recommender Systems}}},
   author = {Raza, Shaina and Rahman, Mizanur and Kamawal, Safiullah and Toroghi, Armin and Raval, Ananya and Navah, Farshad and Kazemeini, Amirmohammad},
   year = 2024,
   month = jul,
+  number = {2407.13699},
+  eprint = {2407.13699},
+  publisher = {arXiv},
   doi = {10.48550/arXiv.2407.13699},
   abstract = {Recommender Systems (RS) play an integral role in enhancing user experiences by providing personalized item suggestions. This survey reviews the progress in RS inclusively from 2017 to 2024, effectively connecting theoretical advances with practical applications. We explore the development from traditional RS techniques like content-based and collaborative filtering to advanced methods involving deep learning, graph-based models, reinforcement learning, and large language models. We also discuss specialized systems such as context-aware, review-based, and fairness-aware RS. The primary goal of this survey is to bridge theory with practice. It addresses challenges across various sectors, including e-commerce, healthcare, and finance, emphasizing the need for scalable, real-time, and trustworthy solutions. Through this survey, we promote stronger partnerships between academic research and industry practices. The insights offered by this survey aim to guide industry professionals in optimizing RS deployment and to inspire future research directions, especially in addressing emerging technological and societal trends},
+  archiveprefix = {arXiv},
   file = {C:\Users\jakub\Zotero\storage\K3K7IYFR\Raza et al. - 2024 - A Comprehensive Review of Recommender Systems Transitioning from Theory to Practice.pdf}
 }
 
@@ -468,25 +522,27 @@
 @inproceedings{rendleBPRBayesianPersonalized2009,
   title = {{{BPR}}: {{Bayesian Personalized Ranking}} from {{Implicit Feedback}}.},
   shorttitle = {{{BPR}}},
+  booktitle = {Proceedings of the {{Twenty-Fifth Conference}} on {{Uncertainty}} in {{Artificial Intelligence}}},
   author = {Rendle, Steffen and Freudenthaler, Christoph and Gantner, Zeno and {Schmidt-Thieme}, Lars},
   year = 2009,
   month = jan,
-  pages = {461},
+  pages = {452--461},
+  address = {Montreal, Quebec, Canada},
+  doi = {10.48550/arXiv.1205.2618},
   file = {C:\Users\jakub\Zotero\storage\D4BAVF2J\Rendle et al. - 2009 - BPR Bayesian Personalized Ranking from Implicit Feedback..pdf}
 }
 
 @incollection{ricciRecommenderSystemsHandbook2010,
-  title = {Recommender {{Systems Handbook}}},
+  title = {Introduction to {{Recommender SystemsHandbook}}},
   booktitle = {Recommender {{Systems Handbook}}},
   author = {Ricci, Francesco and Rokach, Lior and Shapira, Bracha},
   year = 2010,
   month = oct,
-  volume = {1--35},
   pages = {1--35},
   doi = {10.1007/978-0-387-85820-3_1},
   abstract = {Recommender Systems (RSs) are software tools and techniques providing suggestions for items to be of use to a user. In this introductory chapter we briefly discuss basic RS ideas and concepts. Our main goal is to delineate, in a coherent and structured way, the chapters included in this handbook and to help the reader navigate the extremely rich and detailed content that the handbook offers.},
   isbn = {978-0-387-85819-7},
-  file = {C:\Users\jakub\Zotero\storage\7K3JQHSW\Ricci et al. - 2010 - Recommender Systems Handbook.pdf}
+  file = {C:\Users\jakub\Zotero\storage\7K3JQHSW\Ricci et al. - 2010 - Introduction to Recommender SystemsHandbook.pdf}
 }
 
 @article{sakuraiControllableMusicPlaylist2022,
@@ -516,6 +572,7 @@
   month = aug,
   journal = {Proceedings of ACM World Wide Web Conference},
   volume = {1},
+  pages = {285--295},
   doi = {10.1145/371920.372071},
   abstract = {Recommender systems apply knowledge discovery techniques to the problem of making personalized recommendations for information, products or services during a live interaction. These systems, especially the k-nearest neighbor collaborative filtering based ones, are achieving widespread success on the Web. The tremendous growth in the amount of available information and the number of visitors to Web sites in recent years poses some key challenges for recommender systems. These are: producing high quality recommendations, performing many recommendations per second for millions of users and items and achieving high coverage in the face of data sparsity. In traditional collaborative filtering systems the amount of work increases with the number of participants in the system. New recommender system technologies are needed that can quickly produce high quality recommendations, even for very large-scale problems. To address these issues we have explored item-based collaborative filtering techniques. Itembased techniques first analyze the user-item matrix to identify relationships between different items, and then use these relationships to indirectly compute recommendations for users. In this paper we analyze different item-based recommendation generation algorithms. We look into different techniques for computing item-item similarities (e.g., item-item correlation vs. cosine similarities between item vectors) and different techniques for obtaining recommendations from them (e.g., weighted sum vs. regression model). Finally, we experimentally evaluate our results and compare them to the basic k-nearest neighbor approach. Our experiments suggest that item-based algorithms provide dramatically better performance than user-based algorithms, while at the same time p...},
   file = {C:\Users\jakub\Zotero\storage\EN9EAZ4P\Sarwar et al. - 2001 - Item-based Collaborative Filtering Recommendation Algorithms.pdf}
@@ -531,14 +588,14 @@
   file = {C:\Users\jakub\Zotero\storage\62J2C46N\Schwartz - 2005 - Basic human values Their content and structure across countries.pdf}
 }
 
-@article{schwartzParadoxChoiceWhy2005,
-  title = {The {{Paradox}} of {{Choice}}: {{Why More}} Is {{Less}}},
-  shorttitle = {The {{Paradox}} of {{Choice}}},
+@book{schwartzParadoxChoiceWhy2005,
+  title = {{The Paradox of Choice: Why More is Less}},
+  shorttitle = {{The Paradox of Choice}},
   author = {Schwartz, Barry},
-  year = 2005,
-  month = jan,
-  volume = {82},
-  pages = {605--610}
+  year = 2004,
+  publisher = {Harper Perennial},
+  isbn = {0-06-000568-8},
+  langid = {angielski}
 }
 
 @incollection{shaniEvaluatingRecommendationSystems2011,
@@ -566,13 +623,13 @@
   file = {C:\Users\jakub\Zotero\storage\6MJTQ94L\Steck - 2018 - Calibrated recommendations.pdf}
 }
 
-@book{steckEvaluationRecommendationsRatingprediction2013,
+@inproceedings{steckEvaluationRecommendationsRatingprediction2013,
   title = {Evaluation of Recommendations: {{Rating-prediction}} and Ranking},
   shorttitle = {Evaluation of Recommendations},
+  booktitle = {{{RecSys}} 2013 - {{Proceedings}} of the 7th {{ACM Conference}} on {{Recommender Systems}}},
   author = {Steck, Harald},
   year = 2013,
   month = oct,
-  journal = {RecSys 2013 - Proceedings of the 7th ACM Conference on Recommender Systems},
   pages = {220},
   doi = {10.1145/2507157.2507160},
   abstract = {The literature on recommender systems distinguishes typically between two broad categories of measuring recommendation accuracy: rating prediction, often quantified in terms of the root mean square error (RMSE), and ranking, measured in terms of metrics like precision and recall, among others. In this paper, we examine both approaches in detail, and find that the dominating difference lies instead in the training and test data considered: rating prediction is concerned with only the observed ratings, while ranking typically accounts for all items in the collection, whether the user has rated them or not. Furthermore, we show that predicting observed ratings, while popular in the literature, only solves a (small) part of the rating prediction task for any item in the collection, which is a common real-world problem. The reasons are selection bias in the data, combined with data sparsity. We show that the latter rating-prediction task involves the prediction task 'Who rated What' as a sub-problem, which can be cast as a classification or ranking problem. This suggests that solving the ranking problem is not only valuable by itself, but also for predicting the rating value of any item.},
@@ -679,10 +736,7 @@
   author = {Zhao, Wayne Xin and Mu, Shanlei and Hou, Yupeng and Lin, Zihan and Chen, Yushuo and Pan, Xingyu and Li, Kaiyuan and Lu, Yujie and Wang, Hui and Tian, Changxin and Min, Yingqian and Feng, Zhichao and Fan, Xinyan and Chen, Xu and Wang, Pengfei and Ji, Wendi and Li, Yaliang and Wang, Xiaoling and Wen, Ji-Rong},
   year = 2021,
   month = oct,
-  series = {{{CIKM}} '21},
   pages = {4653--4664},
-  publisher = {Association for Computing Machinery},
-  address = {New York, NY, USA},
   doi = {10.1145/3459637.3482016},
   urldate = {2026-08-15},
   abstract = {In recent years, there are a large number of recommendation algorithms proposed in the literature, from traditional collaborative filtering to deep learning algorithms. However, the concerns about how to standardize open source implementation of recommendation algorithms continually increase in the research community. In the light of this challenge, we propose a unified, comprehensive and efficient recommender system library called RecBole (pronounced as [rEk'boUl@r]), which provides a unified framework to develop and reproduce recommendation algorithms for research purpose. In this library, we implement 73 recommendation models on 28 benchmark datasets, covering the categories of general recommendation, sequential recommendation, context-aware recommendation and knowledge-based recommendation. We implement the RecBole library based on PyTorch, which is one of the most popular deep learning frameworks. Our library is featured in many aspects, including general and extensible data structures, comprehensive benchmark models and datasets, efficient GPU-accelerated execution, and extensive and standard evaluation protocols. We provide a series of auxiliary functions, tools, and scripts to facilitate the use of this library, such as automatic parameter tuning and break-point resume. Such a framework is useful to standardize the implementation and evaluation of recommender systems. The project and documents are released at https://recbole.io/.},
