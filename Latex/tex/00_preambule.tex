@@ -2,7 +2,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[english,polish]{babel} 
+\usepackage[english,polish]{babel}
 \usepackage[T1]{polski}
 \usepackage{lmodern} % Wymagane przez microtype do działania ze skalowalnymi fontami w kodowaniu T1
 \usepackage{mathptmx}
@@ -50,18 +50,18 @@
 \DeclareFieldFormat[article]{number}{nr~#1}
 
 \renewbibmacro*{journal+issuetitle}{%
-  \usebibmacro{journal}%
-  \setunit*{\addcomma\space}%
-  \usebibmacro{date}%
-  \setunit{\addcomma\space}%
-  \printfield{volume}%
-  \setunit{\addcomma\space}%
-  \printfield{number}%
-  \setunit{\addcomma\space}%
-  \printfield{eid}%
-  \setunit{\addcomma\space}%
-  \usebibmacro{issue}%
-  \newunit}
+    \usebibmacro{journal}%
+    \setunit*{\addcomma\space}%
+    \usebibmacro{date}%
+    \setunit{\addcomma\space}%
+    \printfield{volume}%
+    \setunit{\addcomma\space}%
+    \printfield{number}%
+    \setunit{\addcomma\space}%
+    \printfield{eid}%
+    \setunit{\addcomma\space}%
+    \usebibmacro{issue}%
+    \newunit}
 \renewbibmacro*{issue+date}{}
 
 % 2. Prace zbiorowe: (w:) Tytuł książki
@@ -69,7 +69,7 @@
 \DeclareFieldFormat[incollection]{booktitle}{#1}
 
 % 3. Formatowanie stron, dat i symboli w przypisach
-\AtEveryBibitem{\clearfield{month}\clearfield{day}}
+\AtEveryBibitem{\clearfield{month}\clearfield{day}\clearfield{pages}}
 \DeclareFieldFormat{postnote}{s.~#1}
 \DeclareFieldFormat{pages}{s.~#1}
 
@@ -77,9 +77,9 @@
 \renewcommand*{\newunitpunct}{\addcomma\space}
 
 \DefineBibliographyStrings{polish}{
-  ibidem = {Ibidem},
-  loccit = {Ibidem},
-  andothers = {i~in\adddot}
+    ibidem = {Ibidem},
+    loccit = {Ibidem},
+    andothers = {i~in\adddot}
 }
 
 % Usunięcie "W:" lub "(w:)" przed tytułami czasopism i prac zbiorowych
@@ -87,33 +87,33 @@
 
 % --- ZARZĄDZANIE ŹRÓDŁAMI INTERNETOWYMI ---
 \DeclareSourcemap{
-  \maps[datatype=bibtex]{
-    \map{
-      \pertype{misc}
-      \step[fieldsource=howpublished, match=\regexp{^https?://}, final]
-      \step[fieldset=keywords, fieldvalue=internet, append]
-      \step[typesource=misc, typetarget=online]
+    \maps[datatype=bibtex]{
+        \map{
+            \pertype{misc}
+            \step[fieldsource=howpublished, match=\regexp{^https?://}, final]
+            \step[fieldset=keywords, fieldvalue=internet, append]
+            \step[typesource=misc, typetarget=online]
+        }
+        \map{
+            \pertype{misc}
+            \step[fieldsource=url, match=\regexp{^https?://}, final]
+            \step[fieldset=keywords, fieldvalue=internet, append]
+            \step[typesource=misc, typetarget=online]
+        }
     }
-    \map{
-      \pertype{misc}
-      \step[fieldsource=url, match=\regexp{^https?://}, final]
-      \step[fieldset=keywords, fieldvalue=internet, append]
-      \step[typesource=misc, typetarget=online]
-    }
-  }
 }
 
 \DeclareFieldFormat[online]{urldate}{\mkbibparens{\bibstring{urlseen}\space#1}}
 
 \DeclareBibliographyDriver{online}{%
-  \iffieldundef{howpublished}
+    \iffieldundef{howpublished}
     {\printfield{url}}
     {\printfield{howpublished}}%
-  \setunit{\space}%
-  \iffieldundef{urlyear}
+    \setunit{\space}%
+    \iffieldundef{urlyear}
     {}
     {\printurldate}%
-  \finentry
+    \finentry
 }
 
 
@@ -146,4 +146,4 @@
 \usepackage{titlesec}
 \titlelabel{\thetitle.\quad}
 
-\input{tex/01_titlePage} 
+\input{tex/01_titlePage}
